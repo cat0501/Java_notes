@@ -24,15 +24,16 @@ public class A01 {
 
     public static void main(String[] args) throws NoSuchFieldException, IllegalAccessException, IOException {
 
-        // 返回的就是spring容器：可配置的ApplicationContext
+        // 返回的就是spring容器：可配置的 ApplicationContext
         // ConfigurableApplicationContext 是 ApplicationContext的子接口
         // 通过option+command+U查看类图
         ConfigurableApplicationContext context = SpringApplication.run(A01.class, args);
         /*
             1. 到底什么是 BeanFactory
                 - 它是 ApplicationContext 的父接口
-                - 它才是 Spring 的核心容器, 主要的 ApplicationContext 实现都【组合】了它的功能（BeanFactory是ApplicationContext的一个成员变量）
+                - 它才是 Spring 的核心容器, 主要的 ApplicationContext 实现【组合】了它的功能
          */
+        // BeanFactory是ApplicationContext的一个成员变量
         System.out.println(context);
 
 
