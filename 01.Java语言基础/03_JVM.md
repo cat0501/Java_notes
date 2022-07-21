@@ -4,21 +4,27 @@
 
 ### 视频
 
-[尚硅谷宋红康JVM全套教程（详解java虚拟机）](https://www.bilibili.com/video/BV1PJ411n7xZ?p=1)
+- [尚硅谷宋红康JVM全套教程（详解java虚拟机）](https://www.bilibili.com/video/BV1PJ411n7xZ?p=1)
 
-- 内存与垃圾回收篇
-- 字节码与类的加载篇
-- 性能监控与调优篇
+  - 内存与垃圾回收篇
+
+  - 字节码与类的加载篇
+
+  - 性能监控与调优篇
+
 
 
 
 ### 书籍
 
-《offer 来了》
+- 《offer 来了》
+
+- 《深入理解java虚拟机》（周志明）
+  - Java内存区域与内存溢出异常
 
 ### 博客
 
-[宋红康JVM语雀笔记📒](https://www.yuque.com/u21195183/jvm/lep6m9)
+- [宋红康JVM语雀笔记📒](https://www.yuque.com/u21195183/jvm/lep6m9)
 
 
 
@@ -26,11 +32,15 @@
 
 
 
+<hr>
 
 
 
+# 🎈🎈🎈尚硅谷宋红康JVM部分
 
-# 内存与垃圾回收篇
+
+
+# 内存与垃圾回收篇（上）
 
 ## 1 JVM与Java体系结构
 
@@ -1190,15 +1200,25 @@ java内存分配 jvm的永久代中会发生垃圾回收吗？
 
 
 
-# 字节码与类的加载篇
+# 字节码与类的加载篇（中）
 
-# 性能监控与调优篇
-
-
+# 性能监控与调优篇（下）
 
 
 
 
+
+
+
+
+
+
+
+![文字图1](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/文字图1.jpg)
+
+
+
+# 🎈🎈🎈《Offer来了》JVM部分
 
 
 
