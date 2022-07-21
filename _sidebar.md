@@ -1,3 +1,7 @@
+<h1><a class="app-name-link" data-nosearch="" href="/">📙 张建琳的学习笔记</a></h1>
+
+<title>XiaoJ's 学习笔记</title>
+
 - [Java学习笔记](README.md)
 
 - **01.Java 语言基础**

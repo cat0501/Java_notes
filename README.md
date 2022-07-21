@@ -18,15 +18,15 @@
 
 
 
-## 推荐
+## 推荐⭐
 
-[bugstack 虫洞栈（小傅哥）](https://bugstack.cn/)
+- [bugstack 虫洞栈（小傅哥）](https://bugstack.cn/)
 
 ![](./img/小傅哥.png)
 
 
 
-[陌溪的学习笔记](https://gitee.com/moxi159753/LearningNotes)
+- [陌溪的学习笔记](https://gitee.com/moxi159753/LearningNotes)
 
 
 
@@ -115,8 +115,8 @@
 
 ### 笔记
 
-- 00_Typora使用
-- 01_Java基础-总
+- [00_Typora使用](01.Java语言基础/00_Typora使用.md)
+- [01_Java基础-总](01.Java语言基础/01_Java基础-总.md)
 - 02_并发编程juc
 - 03_JVM
 - 04_设计模式
@@ -334,6 +334,16 @@ Jdbc
 
 
 MySQL
+
+## 九、面试
+
+
+
+
+
+
+
+
 
 
 

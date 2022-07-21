@@ -12,15 +12,17 @@
 
 如果笔记对您有帮助的话，欢迎star支持，谢谢~
 
-[[()(https://img.shields.io/badge/Github-@cat0501-red.svg)]](https://github.com/cat0501)
 
-<a href='https://github.com/cat0501/Java_notes/stargazers'><img src='https://gitee.com/moxi159753/LearningNotes/badge/star.svg?theme=dark' alt='star'></img></a>
+
+<object data="https://img.shields.io/badge/Github-@cat0501-blue?logo=GitHub&link=https://github.com/cat0501">
+</object>
+
 <a href='https://gitee.com/moxi159753/LearningNotes/members'><img src='https://gitee.com/moxi159753/LearningNotes/badge/fork.svg?theme=dark' alt='fork'></img></a>
 
 :rocket: 本站访问数：<span id="busuanzi_value_site_pv"></span>次
 
-[Gitee](<https://gitee.com/moxi159753/LearningNotes>)
-[Github](<https://github.com/moxi624/LearningNotes>)
+[Gitee](<https://gitee.com/Lemonade19>)
+[Github](<https://github.com/cat0501/Java_notes>)
 [开始阅读](README.md)
 
 
