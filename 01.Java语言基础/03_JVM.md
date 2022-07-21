@@ -1214,7 +1214,7 @@ java内存分配 jvm的永久代中会发生垃圾回收吗？
 
 
 
-![文字图1](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/文字图1.jpg)
+![](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/文字图1.jpg)
 
 
 
