@@ -1,4 +1,6 @@
-<img width="180px" style="border-radius: 50%" bor src="./img/pikaqiu.jpeg">
+<img width="180px" style="border-radius: 50%" bor src="https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/pikaqiu.png">
+
+
 
 #   📙zhangjianlin的学习笔记
 
