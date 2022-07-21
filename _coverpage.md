@@ -1,4 +1,4 @@
-<img width="180px" style="border-radius: 50%" bor src="./doc/icon/favicon2.ico">
+<img width="180px" style="border-radius: 50%" bor src="./img/pikaqiu.jpeg">
 
 #   📙zhangjianlin的学习笔记
 
