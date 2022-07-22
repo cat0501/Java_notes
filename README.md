@@ -22,6 +22,8 @@
 
 ## 推荐⭐
 
+- [Java 学习 + 面试指南（JavaGuide）](https://javaguide.cn/)
+
 - [bugstack 虫洞栈（小傅哥）](https://bugstack.cn/)
 
 ![](./img/小傅哥.png)
