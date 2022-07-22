@@ -26,7 +26,7 @@ C语言中文网：http://c.biancheng.net/
 
 
 
-# Java技能点
+# Java技能
 
 Spring高级（黑马）（强烈推荐）：https://www.bilibili.com/video/BV1P44y1N7QG?p=36
 
