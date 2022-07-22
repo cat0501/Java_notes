@@ -1,6 +1,50 @@
 
 
-# 写在前面
+## 面试资料
+
+语雀《Java面试指北》：https://www.yuque.com/books/share/04ac99ea-7726-4adb-8e57-bf21e2cc7183/rq5rzo
+
+JavaGuide（Java学习&&面试指南）：https://javaguide.cn/
+
+
+
+## 关于简历
+
+木及简历：https://www.mujicv.com/home/
+
+
+
+## Java技能
+
+Spring高级（黑马）（强烈推荐）：https://www.bilibili.com/video/BV1P44y1N7QG?p=36
+
+SpringCloud+RabbitMQ+Docker+Redis+搜索+分布式（黑马）：https://www.bilibili.com/video/BV1LQ4y127n4?p=1
+
+
+
+MySQL（黑马）：https://www.bilibili.com/video/BV1Kr4y1i7ru?p=168&spm_id_from=pageDriver
+
+MySQL（尚硅谷宋红康）：https://www.bilibili.com/video/BV1iq4y1u7vj/?spm_id_from=333.788.recommend_more_video.1
+
+Mycat官网：http://www.mycat.org.cn/mycat1.html
+
+
+
+## 项目
+
+尚融宝（尚硅谷）：https://www.bilibili.com/video/BV1VV411n7nR?p=85&spm_id_from=pageDriver
+
+
+
+ruoyi-vue-pro 开发指南：https://doc.iocoder.cn/intro/
+
+品达通用权限（黑马）：https://www.bilibili.com/video/BV1tw411f79E?p=148
+
+mall项目：http://www.macrozheng.com/#/README
+
+
+
+## 学习平台
 
 
 
@@ -26,55 +70,7 @@ C语言中文网：http://c.biancheng.net/
 
 
 
-# Java技能
-
-Spring高级（黑马）（强烈推荐）：https://www.bilibili.com/video/BV1P44y1N7QG?p=36
-
-SpringCloud+RabbitMQ+Docker+Redis+搜索+分布式（黑马）：https://www.bilibili.com/video/BV1LQ4y127n4?p=1
-
-
-
-MySQL（黑马）：https://www.bilibili.com/video/BV1Kr4y1i7ru?p=168&spm_id_from=pageDriver
-
-MySQL（尚硅谷宋红康）：https://www.bilibili.com/video/BV1iq4y1u7vj/?spm_id_from=333.788.recommend_more_video.1
-
-Mycat官网：http://www.mycat.org.cn/mycat1.html
-
-
-
-
-
-# 面试
-
-木及简历：https://www.mujicv.com/home/
-
-<br>
-
-语雀《Java面试指北》：https://www.yuque.com/books/share/04ac99ea-7726-4adb-8e57-bf21e2cc7183/rq5rzo
-
-JavaGuide（Java学习&&面试指南）：https://javaguide.cn/
-
-
-
-
-
-
-
-# 项目
-
-尚融宝（尚硅谷）：https://www.bilibili.com/video/BV1VV411n7nR?p=85&spm_id_from=pageDriver
-
-
-
-ruoyi-vue-pro 开发指南：https://doc.iocoder.cn/intro/
-
-品达通用权限（黑马）：https://www.bilibili.com/video/BV1tw411f79E?p=148
-
-mall项目：http://www.macrozheng.com/#/README
-
-
-
-# 写在后面
+## 写在后面
 
 
 
