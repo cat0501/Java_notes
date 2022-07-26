@@ -1,12 +1,10 @@
-# 精进Git面试题
+# 
 
-
+# Git
 
 ## 日常使用
 
-
-
-
+- 提交
 
 ```bash
 # 本地库同步Github
@@ -23,11 +21,17 @@ git add .
 git commit -m "github";
 # 推送
 git push github master
+git push origin master
+
+# 修改最后一次 commit 的注释信息
+git commit --amend 
+# 修改某几次 commit 的信息
+git rebase -i HEAD~2
+// 或者
+git rebase -i {commitID} // 例如 git rebase -i d95ddfb
 ```
 
-
-
-
+- 分支
 
 ```bash
 # 列出本地分支
@@ -40,19 +44,15 @@ git branch (branchname)
 
 
 
+- 整体流程
+
+![](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/image-20220327224143107.png)
 
 
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220327224143107.png)
-
-
-
-
-
-<hr>
 
 ## Git 的一些常用命令？
 
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220327231015557.png)
+![](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/image-20220327231015557.png)
 
 
 
@@ -98,8 +98,6 @@ git branch (branchname)
 
 
 
-
-
 ## 平时使用什么 Git 工具？
 
 **1）命令行**
@@ -130,7 +128,7 @@ IDEA Git 插件越来越强大，很多时候，我们日常使用 Git ，更多
 
 ## Git 和 SVN 的优缺点？
 
-Git 是分布式版本控制系统，SVN 是集中式版本控制系统。
+**Git 是分布式版本控制系统，SVN 是集中式版本控制系统。**
 
 1）SVN 的优缺点
 
@@ -199,11 +197,7 @@ tag ，指向一次 commit 的 id ，通常用来给分支做一个标记。
 
 
 
-
-
 ## Git 服务器
-
-Git 服务器的选择，实际上是比较多的。
 
 - 公有服务方案
   - Github
@@ -229,17 +223,7 @@ Git 服务器的选择，实际上是比较多的。
 
 
 
-
-
-
-
-
-
-<hr>
-
-## 最后
-
-参考与推荐如下文章：
+## 参考与推荐
 
 - [《Git 面試題》](https://gitbook.tw/interview)
 
@@ -253,11 +237,10 @@ Git 服务器的选择，实际上是比较多的。
 
 - [《面试中的那些 Git 问题 - 基础部分》](http://www.cocoachina.com/ios/20171023/20873.html)
 
+- 关于分支：https://blog.csdn.net/guo_qiangqiang/article/details/88020656
 
 
 
-
-<hr>
 
 ## 一个本地库能不能既关联 GitHub，又关联 Gitee 呢？
 
@@ -355,11 +338,11 @@ git push gitee master
 
 
 
-![image-20211230222850270](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20211230222850270.png)
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20211230222850270.png)
 
 
 
-![image-20211230222954724](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20211230222954724.png)
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20211230222954724.png)
 
 
 
@@ -465,6 +448,7 @@ origin	https://gitee.com/code0002/Java_notes.git (push)
 
 
 git remote add GitHub git@github.com:xcalan/learn_git.git
+
 git remote add Gitee git@gitee.com:xcalan/learn_git.git
 
 
@@ -521,15 +505,8 @@ https://blog.csdn.net/COCO56/article/details/103818543?utm_medium=distribute.pc_
 
 
 
-# git命令
+## 终端配置
 
-
-
-分支
-
-https://blog.csdn.net/guo_qiangqiang/article/details/88020656
-
-# 终端配置
 更新完 zsh 说我目录权限问题的解决   https://www.jianshu.com/p/f2545c1feaec
 
 报错内容如下：
