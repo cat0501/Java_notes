@@ -26,7 +26,7 @@
 
 - 可从六个方面展开
 
-  ![](./img/kafka.png)
+  ![](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/kafka.png)
 
   - 1、介绍消息引擎这类系统大致的原理和用途，以及作为优秀消息引擎代表的 Kafka 在这方面的表现。
   - 2、重点探讨 Kafka 如何用于生产环境，特别是线上环境方案的制定。
