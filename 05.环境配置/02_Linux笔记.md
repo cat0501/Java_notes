@@ -1,6 +1,8 @@
-# 写在前面
+# 
 
-## 常用命令
+# Linux
+
+## 1 常用命令
 
 ```sh
 # 查看端口占用情况（用kill pid来杀掉进程）
@@ -36,7 +38,7 @@ cat *.sql > merge.sql
 
 mv 
 
-# linux下常用的故障排查命令行
+# linux下常用的故障排查命令
 生产环境服务器变慢，诊断思路和性能评估谈谈
 整机：top——看CPU和内存
 内存：free
@@ -44,41 +46,74 @@ mv
 
 
 
+## 2 简介与安装Linux环境（含虚拟机配置）
 
+- Linux 的发行版：简单来说，就是将 Linux 内核与应用软件做一个打包。
 
-## 推荐
+- 目前市面上较知名的发行版有
+  - Ubuntu、RedHat、CentOS
+  - Debian、Fedora、SuSE、OpenSUSE、Arch Linux、SolusOS 等
 
-
-
-https://www.runoob.com/linux/linux-tutorial.html
-
-
-
-# 一、简介
-
-Linux 的发行版说简单点就是将 Linux 内核与应用软件做一个打包。
-
-目前市面上较知名的发行版有：Ubuntu、RedHat、CentOS、Debian、Fedora、SuSE、OpenSUSE、Arch Linux、SolusOS 等。
-
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20211208113912602.png)
+![](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/image-20211208113912602.png)
 
 
 
-# 二、安装、启动过程与关机
+- Linux 的安装步骤比较繁琐，现在其实云服务器挺普遍的，价格也便宜。
+  - 如果自己不想搭建，也可以直接买一台学习用用，参考[各大云服务器比较](https://www.runoob.com/linux/linux-cloud-server.html)。
 
-Linux 的安装步骤比较繁琐，现在其实云服务器挺普遍的，价格也便宜，如果自己不想搭建，也可以直接买一台学习用用，参考[各大云服务器比较](https://www.runoob.com/linux/linux-cloud-server.html)。
-
-虚拟机安装后占用空间，也会有些卡顿，我们作为程序员其实可以选择购买一台自己的服务器，这样的话更加接近真实线上工作。
-
+- 虚拟机安装后占用空间，也会有些卡顿，我们作为程序员其实可以选择购买一台自己的服务器，这样的话更加接近真实线上工作。
 
 
-### 安装VMware虚拟机来安装Linux系统
+
+### 2.1安装VMware虚拟机来安装Linux系统
 
 https://www.runoob.com/w3cnote/vmware-install-centos7.html
 
 安装 VMware 虚拟机软件，然后使用镜像，配置网卡！
 
-### 购买云服务器(Elastic Compute Service, ECS)
+
+
+#### 虚拟机配置（重要！）
+
+- VMware Fusion 12.1.2
+- Centos 7.6
+
+
+```bash
+# 宿主机IP
+ifconfig
+192.168.1.10
+
+# 虚拟机1
+网络适配器——桥接模式——wifi
+[cat@172 ~]$ su root
+Password: 
+[root@localhost cat]#
+## 分配IP
+[root@localhost cat]# dhclient
+[root@localhost cat]# ifconfig
+192.168.1.6
+
+## IP固定下来，重启网卡
+vim /etc/sysconfig/network-scripts/ifcfg-ens33
+systemctl restart network.service
+
+
+# 虚拟机2
+dhclient(2926) is already running - exiting.
+## 查找dhclient进程
+ps -ef | grep dhclient
+kill -9 xxx
+
+192.168.1.7
+```
+
+
+
+### 2.2购买云服务器(Elastic Compute Service, ECS)
+
+- 阿里云
+- 腾讯云
 
 ```sh
 1、阿里云购买服务器：https://www.aliyun.com/minisite/goods?userCode=0phtycgr
@@ -90,11 +125,7 @@ https://www.runoob.com/w3cnote/vmware-install-centos7.html
 
 
 
-### 启动过程
-
-
-
-### 关机
+### 2.3 关机
 
 在linux领域内大多用在服务器上，很少遇到关机的操作。毕竟服务器上跑一个服务是永无止境的，除非特殊情况下，不得已才会关机。
 
@@ -105,13 +136,14 @@ https://www.runoob.com/w3cnote/vmware-install-centos7.html
 ```bash
 # 将数据由内存同步到硬盘中
 sync
+
 # 关机指令
 shutdown
 ```
 
 
 
-# 三、Linux系统目录结构
+## 3 Linux系统目录结构
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20211207142241892-20220212171125315.png)
 
@@ -127,7 +159,7 @@ shutdown
 /bin, /sbin, /usr/bin, /usr/sbin: 这是系统预设的执行文件的放置目录，比如 ls 就是在 /bin/ls 目录下的。
 值得提出的是，/bin, /usr/bin 是给系统用户使用的指令（除root外的通用户），而/sbin, /usr/sbin 则是给 root 使用的指令。
 
-/var： 这是一个非常重要的目录，系统上跑了很多程序，那么每个程序都会有相应的日志产生，而这些日志就被记录到这个目录下，具体在 /var/log 目录下，另外 mail 的预设放置也是在这里。
+/var： 各个程序产生的日志被记录到这个目录下，具体在 /var/log 目录下，另外 mail 的预设放置也是在这里。
 
 # 在Linux文件系统中有两个特殊的目录
 一个用户所在的工作目录，也叫当前目录，可以使用一个点 . 来表示；
@@ -179,15 +211,17 @@ shutdown
 
 
 
-# 四、Linux远程登录
+## 4 Linux远程登录（工具）
 
 > Linux 系统中是通过 ssh 服务实现的远程登录功能，默认 ssh 服务端口号为 22。
 
-Window 系统上 Linux 远程登录客户端有 SecureCRT, Putty, SSH Secure Shell 等，本文以 Putty 为例来登录远程服务器。
+- Windows 
+  -  SecureCRT, Putty, SSH Secure Shell 等
 
+- mac
+  - electerm（推荐）
 
-
-# 五、Linux文件
+## 5 Linux文件
 
 ### 基本属性
 
@@ -258,7 +292,7 @@ cat -b 文件名
 
 
 
-# 六、Linux用户（组）管理
+## 6 Linux用户（组）管理
 
 ### 添加用户
 
@@ -268,7 +302,7 @@ useradd 选项 用户名
 
 
 
-# 七、Linux磁盘管理
+## 7 Linux磁盘管理
 
 > Linux 磁盘管理常用三个命令为 **df**、**du** 和 **fdisk**。
 >
@@ -291,7 +325,7 @@ du [-ahskm] 文件或目录名称
 
 
 
-# 八、Linux yum/apt 命令
+## 8 Linux yum/apt 命令
 
 
 
@@ -627,6 +661,10 @@ tar -czvf dist.tar.gz dist
 
 
 
+
+## 参考与推荐
+
+https://www.runoob.com/linux/linux-tutorial.html
 
 
 
