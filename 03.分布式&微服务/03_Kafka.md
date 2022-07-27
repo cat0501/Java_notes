@@ -122,8 +122,8 @@
   - 消费者组之间互不影响。
   - 所有的消费者都属于某个消费者组，即**消费者组是逻辑上的一个订阅者**。
 
-- Broker：一台 Kafka 服务器就是一个 broker。
-  - 一个集群由多个 broker 组成。一个broker 可以容纳多个 topic。
+- Broker：一台 `Kafka` 服务器就是一个 `broker`。
+  - 一个集群由多个 broker 组成。一个`broker` 可以容纳多个 `topic`。
 
 - Topic：可以理解为一个队列，**生产者和消费者面向的都是一个 topic**。
 - Partition：为了实现扩展性，一个非常大的 topic 可以分布到多个 broker（即服务器）上，一个 topic 可以分为多个 partition，每个 partition 是一个有序的队列。
@@ -215,14 +215,14 @@ Apache Kafka 是消息引擎系统，也是一个分布式流处理平台（Dist
 
 | 参数名称                              | 描述                                                         |
 | ------------------------------------- | ------------------------------------------------------------ |
-| bootstrap.servers                     | 生产者连接集群所需的 broker 地 址 清 单 。 <br/>例 如 hadoop102:9092,hadoop103:9092,hadoop104:9092，可以设置 1 个或者多个，中间用逗号隔开。注意这里并非需要所有的 broker 地址，因为生产者从给定的 broker里查找到其他 broker 信息。 |
+| bootstrap.servers                     | 生产者连接集群所需的 broker 地 址 清 单 。 <br/>例如 hadoop102:9092,hadoop103:9092,hadoop104:9092，可以设置 1 个或者多个，中间用逗号隔开。注意这里并非需要所有的 broker 地址，因为生产者从给定的 broker里查找到其他 broker 信息。 |
 | key.serializer 和 value.serializer    | 指定发送消息的 key 和 value 的序列化类型。一定要写全类名。   |
 | buffer.memory                         | RecordAccumulator 缓冲区总大小，默认 32m。                   |
 | batch.size                            | 缓冲区一批数据最大值，默认 16k。适当增加该值，可以提高吞吐量，但是如果该值设置太大，会导致数据传输延迟增加。 |
 | linger.ms                             | 如果数据迟迟未达到 batch.size，sender 等待 linger.time之后就会发送数据。单位 ms，默认值是 0ms，表示没有延迟。生产环境建议该值大小为 5-100ms 之间。 |
 | acks                                  | 0：生产者发送过来的数据，不需要等数据落盘应答。<br/>1：生产者发送过来的数据，Leader 收到数据后应答。<br/>-1（all）：生产者发送过来的数据，Leader+和 isr 队列里面的所有节点收齐数据后应答。默认值是-1，-1 和all 是等价的。 |
 | max.in.flight.requests.per.connection | 允许最多没有返回 ack 的次数，默认为 5，开启幂等性要保证该值是 1-5 的数字。 |
-| retries                               | 当消息发送出现错误的时候，系统会重发消息。<br/>retries表示重试次数。默认是 int 最大值，2147483647。<br/>如果设置了重试，还想保证消息的有序性，需要设置MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION=1<br/>否则在重试此失败消息的时候，其他的消息可能发送成功了。 |
+| retries                               | 当消息发送出现错误的时候，系统会重发消息。<br/>retries表示重试次数。默认是 int 最大值，2147483647。<br/>如果设置了重试，还想保证消息的有序性，需要设置MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION=1，否则在重试此失败消息的时候，其他的消息可能发送成功了。 |
 | retry.backoff.ms                      | 两次重试之间的时间间隔，默认是 100ms。                       |
 | enable.idempotence                    | 是否开启幂等性，默认 true，开启幂等性。                      |
 | compression.type                      | 生产者发送的所有数据的压缩方式。默认是 none，也就是不压缩。<br/>支持压缩类型：none、gzip、snappy、lz4 和 zstd。 |
@@ -312,13 +312,228 @@ public class CustomProducer {
 
 #### 带回调函数的异步发送
 
-- 
+- 回调函数会在 `producer` 收到 `ack` 时调用，为异步调用
+  - 该方法有两个参数，分别是元数据信息（RecordMetadata）和异常信息（Exception）
+  - 如果 `Exception` 为 `null`，说明消息发送成功，如果 Exception 不为 null，说明消息发送失败。
+
+```java
+package com.atguigu.kafka.producer;
+import org.apache.kafka.clients.producer.*;
+import org.apache.kafka.common.serialization.StringSerializer;
+
+import java.util.Properties;
+
+public class CustomProducerCallback {
+
+    public static void main(String[] args) throws InterruptedException {
+
+        // 0 配置
+        Properties properties = new Properties();
+
+        // 连接集群 bootstrap.servers
+        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"hadoop102:9092,hadoop103:9092");
+
+        // 指定对应的key和value的序列化类型 key.serializer
+        // properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.StringSerializer");
+        properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,StringSerializer.class.getName());
+
+        // 1 创建kafka生产者对象
+        // "" hello
+        KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(properties);
+
+        // 2 发送数据
+        for (int i = 0; i < 500; i++) {
+            kafkaProducer.send(new ProducerRecord<>("first", "atguigu" + i), new Callback() {
+                @Override
+                public void onCompletion(RecordMetadata metadata, Exception exception) {
+
+                    if (exception == null){
+                        System.out.println("主题： "+metadata.topic() + " 分区： "+ metadata.partition());
+                    }
+                }
+            });
+
+            Thread.sleep(2);
+        }
+
+        // 3 关闭资源
+        kafkaProducer.close();
+    }
+}
+```
 
 
 
+- 测试
 
+  - ①在 hadoop102 上开启 Kafka 消费者。
+  - ②在 IDEA 中执行代码，观察 hadoop102 控制台中是否接收到消息。
+
+  ```bash
+  [atguigu@hadoop102 kafka]$ bin/kafka-console-consumer.sh --bootstrap-server hadoop102:9092 --topic first
+  atguigu 0
+  atguigu 1
+  atguigu 2
+  atguigu 3
+  atguigu 4
+  ```
+
+  - ③在 IDEA 控制台观察回调信息。
+
+  ```bash
+  主题：first->分区：0
+  主题：first->分区：0
+  主题：first->分区：1
+  主题：first->分区：1
+  主题：first->分区：1
+  ```
+
+  
 
 ### 同步发送 API
+
+- 只需在异步发送的基础上，再调用一下 `get()` 方法即可。
+
+```java
+package com.atguigu.kafka.producer;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.serialization.StringSerializer;
+
+import java.util.Properties;
+import java.util.concurrent.ExecutionException;
+
+public class CustomProducerSync {
+
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+
+        // 0 配置
+        Properties properties = new Properties();
+
+        // 连接集群 bootstrap.servers
+        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"hadoop102:9092,hadoop103:9092");
+
+        // 指定对应的key和value的序列化类型 key.serializer
+//        properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.StringSerializer");
+        properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,StringSerializer.class.getName());
+
+        // 1 创建kafka生产者对象
+        // "" hello
+        KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(properties);
+
+        // 2 发送数据
+        for (int i = 0; i < 5; i++) {
+            kafkaProducer.send(new ProducerRecord<>("first","atguigu"+i)).get();
+        }
+
+        // 3 关闭资源
+        kafkaProducer.close();
+    }
+}
+```
+
+
+
+### 生产者分区
+
+- 分区好处
+  - 便于合理使用存储资源
+  - 提高并行度：生产者可以以分区为单位发送数据；消费者可以以分区为单位进行消费数据。
+
+
+
+- 生产者发送消息的分区策略
+
+### 生产经验——生产者如何提高吞吐量
+
+```java
+public class CustomProducerParameters {
+
+    public static void main(String[] args) {
+
+        // 0 配置
+        Properties properties = new Properties();
+
+        // 连接kafka集群
+        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"hadoop102:9092,hadoop103:9092");
+
+        // 序列化
+        properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,StringSerializer.class.getName());
+
+        // 缓冲区大小（默认32M）
+        properties.put(ProducerConfig.BUFFER_MEMORY_CONFIG,33554432);
+
+        // 批次大小（默认16K）
+        properties.put(ProducerConfig.BATCH_SIZE_CONFIG,16384);
+
+        // linger.ms（等待时间，默认0）
+        properties.put(ProducerConfig.LINGER_MS_CONFIG, 1);
+
+        // 压缩（默认 none，可配置值 gzip、snappy、lz4 和 zstd）
+        properties.put(ProducerConfig.COMPRESSION_TYPE_CONFIG,"snappy");
+
+
+        // 1 创建生产者
+        KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(properties);
+
+        // 2 发送数据
+        for (int i = 0; i < 5; i++) {
+            kafkaProducer.send(new ProducerRecord<>("first","atguigu"+i));
+        }
+
+        // 3 关闭资源
+        kafkaProducer.close();
+    }
+}
+```
+
+- 测试
+
+  - ①在 hadoop102 上开启 Kafka 消费者。
+  - ②在 IDEA 中执行代码，观察 hadoop102 控制台中是否接收到消息。
+
+  ```bash
+  [atguigu@hadoop102 kafka]$ bin/kafka-console-consumer.sh --bootstrap-server hadoop102:9092 --topic first
+  atguigu 0
+  atguigu 1
+  atguigu 2
+  atguigu 3
+  atguigu 4
+  ```
+
+  
+
+### 生产经验——数据可靠性
+
+
+
+
+
+
+
+
+
+### 生产经验——数据去重
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
