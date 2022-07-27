@@ -127,9 +127,9 @@
 
 - Topic：可以理解为一个队列，**生产者和消费者面向的都是一个 topic**。
 - Partition：为了实现扩展性，一个非常大的 topic 可以分布到多个 broker（即服务器）上，一个 topic 可以分为多个 partition，每个 partition 是一个有序的队列。
-- Replica：副本。一个 topic 的每个分区都有若干个副本，一个 Leader 和若干个Follower。
-- Leader：每个分区多个副本的“主”，生产者发送数据的对象，以及消费者消费数据的对象都是 Leader。
-- Follower：每个分区多个副本中的“从”，实时从 Leader 中同步数据，保持和Leader 数据的同步。Leader 发生故障时，某个Follower 会成为新的 Leader。
+- Replica：副本。一个 topic 的每个分区都有若干个副本，一个 `Leader` 和若干个 `Follower`。
+- Leader：每个分区多个**副本的“主”**，生产者发送数据的对象，以及消费者消费数据的对象都是 Leader。
+- Follower：每个分区多个**副本中的“从**”，实时从 Leader 中同步数据，保持和Leader 数据的同步。Leader 发生故障时，某个Follower 会成为新的 Leader。
 
 
 
@@ -164,17 +164,37 @@ Apache Kafka 是消息引擎系统，也是一个分布式流处理平台（Dist
 
 
 
+## 5 聊聊Kafka的版本号
 
+- Kafka 版本命名：大版本号 - 小版本号 - Patch 号，如 kafka-2.11-2.1.1
+  - 2.11是 `Scala` 编译器版本
+  - 真正的 `Kafka` 版本号实际上是 2.1.1
+    - 前面的 2 表示大版本号，即 `Major Version`；中间的 1 表示小版本号或次版本号，即 `Minor Version`；最后的 1 表示修订版本号，也就是 `Patch` 号。
 
+- Kafka 版本演进
 
+  - 0.7版本：只提供最基础的消息队列功能
+  - 0.8版本
+    - 引入了副本机制（成为了一个真正意义上完备的分布式高可靠消息队列解决方案）（较好地做到消息无丢失）
+    - 0.8.2.0 版本社区引入了新版本 `Producer API`，即需要指定 Broker 地址的 Producer
 
+  - 0.9版本
+    - 增加了基础的安全认证 / 权限功能，Java重写了新的consumer API；（不建议使用consumer API）
+    - 引入了 Kafka Connect 组件用于实现高性能的数据抽取； 
+  - 0.10版本（里程碑式的大版本）
+    - 引入Kafka Streams功能（Kafka 正式升级成分布式流处理平台）；
+    - 建议版本0.10.2.2；建议使用新版consumer API 
+  - 0.11版本（2017 年 6 月）
+    - 提供幂等性 Producer API 以及事务（Transaction） API；
+    - 对 Kafka 消息格式做了重构。
+    - 建议版本0.11.0.3（目前最主流的版本之一）。
 
+  - 1.0 和 2.0 版本：主要还是 Kafka Streams 的各种改进，在消息引擎方面并未引入太多的重大功能特性。
+    - 如果你是 Kafka Streams 的用户，至少选择 2.0.0 版本吧。
+    - 如果你在意的依然是消息引擎，那么这两个大版本都是适合于生产环境的。
+  - 3.0版本
 
-
-
-
-
-
+- 最后建议，不论你用的是哪个版本，都请尽量保持服务器端版本和客户端版本一致，否则你将损失很多 Kafka 为你提供的性能优化收益。
 
 
 
