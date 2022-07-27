@@ -521,6 +521,7 @@ public class CustomProducerParameters {
 
 
 
+#### 数据传递语义
 
 
 
@@ -528,8 +529,34 @@ public class CustomProducerParameters {
 
 
 
+#### 幂等性
+
+- 所谓幂等性，指Producer不论向Broker发送多少次重复数据，Broker端都只会持久化一条，保证了不重复。
+
+- 如何使用
+  - 开启参数 `enable.idempotence` 默认为 true，false 关闭。
+
+#### 生产者事务
 
 
+
+
+
+### 生产经验——数据有序
+
+
+
+### 生产经验——数据乱序
+
+
+
+
+
+## 7 Kafka Broker
+
+### Kafka Broker 工作流程
+
+### 生产经验——节点服役和退役
 
 
 
