@@ -207,7 +207,7 @@ Apache Kafka 是消息引擎系统，也是一个分布式流处理平台（Dist
   - main 线程将消息发送给 RecordAccumulator，
   - `Sender` 线程不断从 RecordAccumulator 中拉取消息发送到 `Kafka Broker`。
 
-![](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/image-20220727104134706.png)
+![](./img/kafka_send.png)
 
 
 
