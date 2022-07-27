@@ -207,29 +207,118 @@ Apache Kafka 是消息引擎系统，也是一个分布式流处理平台（Dist
   - main 线程将消息发送给 RecordAccumulator，
   - `Sender` 线程不断从 RecordAccumulator 中拉取消息发送到 `Kafka Broker`。
 
-![](./img/kafka_send.png)
+![](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/kafka_send.png)
 
 
 
 - 生产者重要参数列表
 
-| 参数名称          | 描述                                                         |
-| ----------------- | ------------------------------------------------------------ |
-| bootstrap.servers | 生产者连接集群所需的 broker 地 址 清 单 。 例 如hadoop102:9092,hadoop103:9092,hadoop104:9092，可以设置 1 个或者多个，中间用逗号隔开。注意这里并非需要所有的 broker 地址，因为生产者从给定的 broker里查找到其他 broker 信息。 |
-|                   |                                                              |
-|                   |                                                              |
-|                   |                                                              |
-|                   |                                                              |
-|                   |                                                              |
-|                   |                                                              |
-|                   |                                                              |
-|                   |                                                              |
-|                   |                                                              |
-|                   |                                                              |
+| 参数名称                              | 描述                                                         |
+| ------------------------------------- | ------------------------------------------------------------ |
+| bootstrap.servers                     | 生产者连接集群所需的 broker 地 址 清 单 。 <br/>例 如 hadoop102:9092,hadoop103:9092,hadoop104:9092，可以设置 1 个或者多个，中间用逗号隔开。注意这里并非需要所有的 broker 地址，因为生产者从给定的 broker里查找到其他 broker 信息。 |
+| key.serializer 和 value.serializer    | 指定发送消息的 key 和 value 的序列化类型。一定要写全类名。   |
+| buffer.memory                         | RecordAccumulator 缓冲区总大小，默认 32m。                   |
+| batch.size                            | 缓冲区一批数据最大值，默认 16k。适当增加该值，可以提高吞吐量，但是如果该值设置太大，会导致数据传输延迟增加。 |
+| linger.ms                             | 如果数据迟迟未达到 batch.size，sender 等待 linger.time之后就会发送数据。单位 ms，默认值是 0ms，表示没有延迟。生产环境建议该值大小为 5-100ms 之间。 |
+| acks                                  | 0：生产者发送过来的数据，不需要等数据落盘应答。<br/>1：生产者发送过来的数据，Leader 收到数据后应答。<br/>-1（all）：生产者发送过来的数据，Leader+和 isr 队列里面的所有节点收齐数据后应答。默认值是-1，-1 和all 是等价的。 |
+| max.in.flight.requests.per.connection | 允许最多没有返回 ack 的次数，默认为 5，开启幂等性要保证该值是 1-5 的数字。 |
+| retries                               | 当消息发送出现错误的时候，系统会重发消息。<br/>retries表示重试次数。默认是 int 最大值，2147483647。<br/>如果设置了重试，还想保证消息的有序性，需要设置MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION=1<br/>否则在重试此失败消息的时候，其他的消息可能发送成功了。 |
+| retry.backoff.ms                      | 两次重试之间的时间间隔，默认是 100ms。                       |
+| enable.idempotence                    | 是否开启幂等性，默认 true，开启幂等性。                      |
+| compression.type                      | 生产者发送的所有数据的压缩方式。默认是 none，也就是不压缩。<br/>支持压缩类型：none、gzip、snappy、lz4 和 zstd。 |
+
+
+
+### 异步发送 API
+
+#### 普通异步发送
+
+需求：创建 Kafka 生产者，采用异步的方式发送到 Kafka Broker。
+
+- 创建工程 kafka
+- 导入依赖
+
+```java
+<dependencies>
+ 	<dependency>
+ 		<groupId>org.apache.kafka</groupId>
+ 		<artifactId>kafka-clients</artifactId>
+ 		<version>3.0.0</version>
+ 	</dependency>
+</dependencies>
+```
+
+- 创建包名：com.atguigu.kafka.producer
+- 编写不带回调函数的 API 代码
+
+```java
+package com.atguigu.kafka.producer;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.serialization.StringSerializer;
+
+import java.util.Properties;
+
+public class CustomProducer {
+
+    public static void main(String[] args) {
+
+        // 0 配置
+        Properties properties = new Properties();
+
+        // 连接集群 bootstrap.servers
+        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"hadoop102:9092,hadoop103:9092");
+
+        // 指定对应的key和value的序列化类型 key.serializer
+        properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,StringSerializer.class.getName());
+
+        // 1 创建kafka生产者对象
+        // "" hello
+        KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(properties);
+
+        // 2 发送数据
+        for (int i = 0; i < 5; i++) {
+            kafkaProducer.send(new ProducerRecord<>("first","atguigu"+i));
+        }
+
+        // 3 关闭资源
+        kafkaProducer.close();
+    }
+}
+```
+
+- 测试
+
+  - ①在 hadoop102 上开启 Kafka 消费者。
+
+  ```bash
+  [atguigu@hadoop103 kafka]$ bin/kafka-console-consumer.sh --bootstrap-server hadoop102:9092 --topic first
+  ```
+
+  - ②在 IDEA 中执行代码，观察 hadoop102 控制台中是否接收到消息。
+
+  ```bash
+  [atguigu@hadoop102 kafka]$ bin/kafka-console-consumer.sh --bootstrap-server hadoop102:9092 --topic first
+  atguigu 0
+  atguigu 1
+  atguigu 2
+  atguigu 3
+  atguigu 4
+  ```
+
+
+
+#### 带回调函数的异步发送
+
+- 
 
 
 
 
+
+### 同步发送 API
 
 
 
