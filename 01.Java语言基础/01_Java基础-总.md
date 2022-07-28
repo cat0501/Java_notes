@@ -1844,18 +1844,34 @@ public abstract class Person
 
 
 
-- Throwable 顶级父类
-  - **Error**（Java虚拟机无法解决的严重问题，如 StackOverflowError 和 OOM）
-  - Exception（可以使用针对性的代码进行处理）
+- `java.lang.Throwable` 顶级父类
+  - `java.lang.Error`（Java虚拟机无法解决的严重问题，如 StackOverflowError 和 OOM）
+  - `java.lang.Exception`（可以使用针对性的代码进行处理，使程序继续运行，是必须要处理的。）
     - **RuntimeException**（运行时异常，程序员应积极避免）
     - 受检异常（编译器要求必须处置的异常）
 
 
 
-- 异常可分为受检异常与非受检异常（Error 和 RuntimeException类及其子类 ）
-  - RuntimeException是非受检异常的子集
+- 分类：异常可分为受检异常与非受检异常（Error 和 RuntimeException类及其子类 ）
+  - RuntimeException 是非受检异常的子集
+- 理解
+  - 异常处理的根本目的，还是想让程序继续运行下去，比如，某一块代码出现了异常，但是我想看一下后面的代码运行情况，就可以先处理掉异常，让后面的程序继续运行。
+
 
 ![](./img/异常体系结构.png)
+
+
+
+- 常用方法
+  - `public void printStackTrace()`：打印异常的详细信息。异常的类型,异常的原因,还包括异常出现的位置,在开发和调试阶段,都得使用printStackTrace。
+  - 
+
+| 方法                          | 描述                                                         |
+| ----------------------------- | ------------------------------------------------------------ |
+| public void printStackTrace() | 打印异常的详细信息。异常的类型,异常的原因,还包括异常出现的位置,在开发和调试阶段,都得使用printStackTrace。 |
+|                               |                                                              |
+|                               |                                                              |
+|                               |                                                              |
 
 
 
