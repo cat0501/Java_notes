@@ -2508,7 +2508,7 @@ class Season{
 
 # 八、Collection接口系列集合、Map接口系列集合
 
-## 1 Collection接口方法🎈
+## 1 Collection接口🎈
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220411224715970.png)
 
@@ -3271,9 +3271,8 @@ Java的IO流共涉及 40 多个类，实际上非常规则，都是从如下4个
 
 - IO 流体系
 
-|            |                      |                       |                   |                    |
-| ---------- | -------------------- | --------------------- | ----------------- | ------------------ |
 | 分类       | 字节输入流           | 字节输出流            | 字符输入流        | 字符输出流         |
+| ---------- | -------------------- | --------------------- | ----------------- | ------------------ |
 | 抽象基类   | InputStream          | OutputStream          | Reader            | Writer             |
 | 访问文件   | FileInputStream      | FileOutputStream      | FileReader        | FileWriter         |
 | 访问数组   | ByteArraylnputStream | ByteArrayOutputStream | CharArrayReader   | CharArrayWriter    |
