@@ -3625,13 +3625,14 @@ https://blog.csdn.net/weixin_45630258/article/details/121575795
 - 使用它可以写出更简洁、更灵活的代码。作为一种更紧凑的代码风格，使Java的语言表达能力得到了提升。
 
 ```java
+// 传统写法
 Arrays.sort(planets, new Comparator<String>(){
   @Override
   public int compare(String o1, String o2) {
     return o1.length() - o2.length();
   }
 });
-
+// Lambda写法
 Arrays.sort(planets, (first, second) -> first.length() - second.length());
 ```
 
@@ -3686,7 +3687,11 @@ public class LambdaTest
 
 
 
-上述 Lambda 表达式中的参数类型都是由编译器推断得出的。Lambda 表达式中无需指定类型，程序依然可以编译，这是因为 javac 根据程序的上下文，在后台推断出了参数的类型。Lambda 表达式的类型依赖于上下文环境，是由编译器推断出来的，这就是所谓的“类型推断”。
+上述 Lambda 表达式中的参数类型都是由编译器推断得出的。
+
+Lambda 表达式中无需指定类型，程序依然可以编译，这是因为 `javac` 根据程序的上下文，在后台推断出了参数的类型。
+
+Lambda 表达式的类型依赖于上下文环境，是由编译器推断出来的，这就是所谓的“类型推断”。
 
 
 
@@ -3696,17 +3701,14 @@ public class LambdaTest
 
 [Java 函数式编程](https://blog.csdn.net/hua226/article/details/124409889)
 
-
-
-只包含一个抽象方法的接口，称为函数式接口。
-
-在 `java.util.function `包下定义了Java 8 的丰富的函数式接口  
+- 只包含一个抽象方法的接口，称为函数式接口。
+  - 在 `java.util.function `包下定义了Java 8 的丰富的函数式接口  
 
 
 
-Java 内置四大核心函数式接口
+- Java 内置四大核心函数式接口
 
-![](./img/函数式接口.png)
+![](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3.png)
 
 
 
@@ -4236,6 +4238,10 @@ public Son() {
 
 
 
+
+# 参考与推荐
+
+- [JDK8新特性详解](https://blog.csdn.net/LXYDSF/article/details/125919046)
 
 
 
