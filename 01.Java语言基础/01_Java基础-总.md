@@ -1858,7 +1858,7 @@ public abstract class Person
   - 异常处理的根本目的，还是想让程序继续运行下去，比如，某一块代码出现了异常，但是我想看一下后面的代码运行情况，就可以先处理掉异常，让后面的程序继续运行。
 
 
-![](./img/异常体系结构.png)
+![](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/%E5%BC%82%E5%B8%B8%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84.png)
 
 
 
