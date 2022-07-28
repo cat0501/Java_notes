@@ -2708,7 +2708,7 @@ public LinkedList() {
 
 
 
-![](./img/linkedlist_node.png)
+![](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/linkedlist_node.png)
 
 
 
@@ -2720,7 +2720,7 @@ Vector 是一个古老的集合，JDK1.0就有了。大多数操作与ArrayList�
 
 ### 面试题
 
-![](./img/list_vs.png)
+![](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/list_vs.png)
 
 
 
