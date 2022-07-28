@@ -2888,11 +2888,11 @@ Map接口的常用实现类：HashMap（使用频率最高）、TreeMap、Linked
 
 <br>
 
-![](./img/hashmap.png)
+![](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/hashmap.png)
 
 <br>
 
-![](./img/hashmap7.png)
+![](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/hashmap7.png)
 
 
 
