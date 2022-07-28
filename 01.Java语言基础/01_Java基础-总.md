@@ -1790,7 +1790,7 @@ public abstract class Person
 
 
 
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220426123554399.png)
+![](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/image-20220426123554399.png)
 
 
 
