@@ -2882,7 +2882,7 @@ Map接口的常用实现类：`HashMap`（使用频率最高）、`TreeMap`、`L
 
 <br>
 
-![](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/hashmap7.png)
+![](./img/hashmap7.png)
 
 
 
