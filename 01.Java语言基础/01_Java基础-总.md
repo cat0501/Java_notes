@@ -2508,9 +2508,7 @@ class Season{
 
 # 八、Collection接口系列集合、Map接口系列集合
 
-## 上半部分
-
-## 1 Collection接口方法
+## 1 Collection接口方法🎈
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220411224715970.png)
 
@@ -2816,11 +2814,7 @@ HashSet(int initialCapacity, float loadFactor, boolean dummy) {
 
 
 
-
-
-## 下半部分
-
-## 5 map接口
+## 5 map接口🎈
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220411225519826.png?w=600)
 
@@ -2828,19 +2822,15 @@ HashSet(int initialCapacity, float loadFactor, boolean dummy) {
 
 ### 概述
 
+- 与 `Collection` 接口并列存在。用于保存具有**映射关系**的 `key-value` 数据。
 
+- key 和 value 可以是任何引用类型的数据。常用 `String` 类作为Map的“键”。
+- key 用Set来存放，**不允许重复**。
+  - 即同一个 Map 对象所对应的类，须重写 hashCode() 和 equals() 方法。
 
-Map与Collection并列存在。用于保存具有**映射关系**的数据: key-value
+- key 和 value 之间存在单向一对一关系，即通过指定的 key 总能找到唯一的、确定的 value。
 
-<br>
-
-Map 中的 key 和 value 都可以是任何引用类型的数据。常用String类作为Map的“键”。
-
-Map 中的 key 用Set来存放，**不允许重复**，即同一个 Map 对象所对应的类，须重写hashCode()和equals()方法。
-
-key 和 value 之间存在单向一对一关系，即通过指定的 key 总能找到唯一的、确定的 value。
-
-Map接口的常用实现类：HashMap（使用频率最高）、TreeMap、LinkedHashMap和Properties。
+Map接口的常用实现类：`HashMap`（使用频率最高）、`TreeMap`、`LinkedHashMap` 和 `Properties`。
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220416100809318.png)
 
@@ -2879,10 +2869,10 @@ Map接口的常用实现类：HashMap（使用频率最高）、TreeMap、Linked
 <br>
 
 - 所有的 key 和 value
-  - 所有的key构成的集合是Set：无序的、不可重复的。所以，key所在的类要重写：equals()和hashCode()
-  - 所有的value构成的集合是Collection：无序的、可以重复的。所以，value所在的类要重写：equals()
-  - 一个key-value构成一个entry，所有的entry构成的集合是Set（无序的、不可重复的）。
-- 判断 key 或 value相等
+  - 所有的key构成的集合是 `Set`：无序的、不可重复的。所以，key所在的类要重写：equals()和hashCode()
+  - 所有的value构成的集合是 `Collection`：无序的、可以重复的。所以，value所在的类要重写：equals()
+  - 一个key-value构成一个 `entry`，所有的entry构成的集合是Set（无序的、不可重复的）。
+- 判断 key 或 value 相等
   - HashMap **判断两个** **key** **相等的标准**是：两个 key 通过 equals() 方法返回 true，hashCode 值也相等。
   - HashMap **判断两个** **value相等的标准**是：两个 value 通过 equals() 方法返回 true。
 
@@ -3260,13 +3250,11 @@ Java程序中，对于数据的输入/输出操作以“流(stream)” 的方式
 
 `java.io` 包下提供了各种“流”类和接口，用以获取不同种类的数据，并通过标准的方法输入或输出数据。
 
-<br>
+## 分类
 
-分类：
+- 按操作数据单位不同分为：字节流(8 bit)（以字节为单位），字符流(16 bit)（以字符为单位）
 
-- 按操作数据单位不同分为：字节流(8 bit)，字符流(16 bit)
-
-- 按数据流的流向不同分为：输入流，输出流
+- 按数据流的流向不同分为：输入流（数据从其他设备上读取到内存），输出流
 
 - 按流的角色的不同分为：节点流，处理流
 
@@ -3281,9 +3269,25 @@ Java的IO流共涉及 40 多个类，实际上非常规则，都是从如下4个
 | 输入流   | InputStream  | Reader |
 | 输出流   | OutputStream | Writer |
 
+- IO 流体系
+
+|            |                      |                       |                   |                    |
+| ---------- | -------------------- | --------------------- | ----------------- | ------------------ |
+| 分类       | 字节输入流           | 字节输出流            | 字符输入流        | 字符输出流         |
+| 抽象基类   | InputStream          | OutputStream          | Reader            | Writer             |
+| 访问文件   | FileInputStream      | FileOutputStream      | FileReader        | FileWriter         |
+| 访问数组   | ByteArraylnputStream | ByteArrayOutputStream | CharArrayReader   | CharArrayWriter    |
+| 访问管道   | PipedlnputStream     | PipedOutputStream     | PipedReader       | PipedWriter        |
+| 访问字符串 |                      |                       | StringReader      | StringWriter       |
+| 缓冲流     | BufferedlnputStream  | BufferedOutputStream  | BufferedReader    | BufferedWriter     |
+| 转换流     |                      |                       | lnputStreamReader | OutputStreamWriter |
+| 对象流     | ObjectlnputStream    | ObjectOutputStream    |                   |                    |
+|            | FilterlnputStream    | FilterOutputStream    | FilterReader      | FilterWriter       |
+| 打印流     |                      | PrintStream           |                   | PrintWriter        |
+| 推回输入流 | PushbackInputStream  |                       | PushbackReader    |                    |
+| 数据流     | DatalnputStream      | DataOutputStream      |                   |                    |
+
 <br>
-
-
 
 | 方法                                   | 说明                                                         |
 | -------------------------------------- | ------------------------------------------------------------ |
@@ -3291,6 +3295,141 @@ Java的IO流共涉及 40 多个类，实际上非常规则，都是从如下4个
 | int read(byte[] b)                     | 从此输入流中将最多 b.length 个字节的数据读入一个 byte 数组中。 |
 | int read(byte[] b, int off,int len)    | 将输入流中最多 len 个数据字节读入 byte 数组。                |
 | public void close() throws IOException | 关闭此输入流并释放与该流关联的所有系统资源。                 |
+
+
+
+## 字节流
+
+### 字节
+
+- 一切文件数据(文本、图片、视频等)在存储时，都是以二进制数字的形式保存，都是一个一个的字节，那么传输时一样如此。所以，字节流可以传输任意文件数据。
+  - 在操作流的时候，我们要时刻明确，无论使用什么样的流对象，底层传输的始终为二进制数据。
+
+
+
+### 字节输出流
+
+- java.io.OutputStream 抽象类是所有字节输出流的超类，将指定的字节信息写出到目的地。它定义了字节输出流的一些功能方法。
+- 一连串的 0 1 二进制数据字节序列，以字节为单位，如0000 0000八位。
+
+- 常用方法
+
+| 方法                                          | 说明                                                         |
+| --------------------------------------------- | ------------------------------------------------------------ |
+| public void close() ★                         | 关闭此输出流并释放与此流相关联的任何系统资源。               |
+| public void flush()                           | 刷新此输出流并强制任何缓冲的输出字节被写出。                 |
+| public void write(byte[] b)                   | 将 b.length字节从指定的字节数组写入此输出流。                |
+| public void write(byte[] b, int off, int len) | 从指定的字节数组写入 len字节，从偏移量 off开始输出到此输出流。 |
+| public abstract void write(int b)             | 将指定的字节输出流。                                         |
+
+
+
+### FileOutputStream类（文件输出流，用于将数据写出到文件。）
+
+- 构造方法写入文件
+  - public FileOutputStream(File file) ：创建文件输出流 以写入由指定的 `File` 对象表示的文件。
+  - public FileOutputStream(String name) ： 创建文件输出流以指定的名称写入文件。
+
+- 构造方法续写文件
+
+  - public FileOutputStream(File file, boolean append) ： 创建文件输出流以写入由指定的 File对象表示的文件。
+
+  - public FileOutputStream(String name, boolean append) ： 创建文件输出流以指定的名称写入文件。
+
+```java
+// 常用方法
+public class FOSWrite {
+    //虽然参数为int类型四个字节，但是只会保留一个字节的信息写出。
+    //流操作完毕后，必须释放系统资源，调用close方法，千万记得
+    public static void main(String[] args) throws IOException {
+        // 使用文件名称创建流对象
+        //创建一个流对象时，必须传入一个文件路径。该路径下，如果没有这个文件，会创建该文件。如果有这个文件，会清空这个文件的数据。
+        FileOutputStream fos = new FileOutputStream("C:\\fos.txt");
+        // 写出数据
+        fos.write(97); // 写出第1个字节
+        fos.write(98); // 写出第2个字节
+        fos.write(99); // 写出第3个字节  //abc
+
+        byte[] b1 = "黑马程序员".getBytes();
+        // 写出字节数组数据
+        fos.write(b1);  //abc黑马程序员
+
+        byte[] b2 = "abcde".getBytes();
+        // 写出从索引2开始，2个字节。索引2是c，两个字节，也就是cd。
+        fos.write(b2, 2, 2);    //abc黑马程序员cd
+        // 关闭资源
+        fos.close();
+
+
+        FileOutputStream fos1 = new FileOutputStream("C:\\fos.txt", true);
+        // 字符串转换为字节数组
+        byte[] b3 = "cd".getBytes();
+        fos1.write(b3);  //abc黑马程序员cdcd
+        // 关闭资源
+        fos1.close();
+
+
+        FileOutputStream fos2 = new FileOutputStream("fos.txt");
+        // 定义字节数组
+        byte[] words = {97, 98, 99, 100, 102};
+        // 遍历数组
+        for (int i = 0; i < words.length; i++) {
+            // 写出一个字节
+            fos2.write(words[i]);
+            // 写出一个换行, 换行符号转成数组写出
+            fos2.write("\r\n".getBytes());
+        }
+        //a
+        //b
+        //c
+        //d
+        //f
+
+        // 关闭资源
+        fos2.close();
+    }
+}
+```
+
+- 异常处理
+
+```java
+public static void main(String[] args) {
+    FileOutputStream out = null;
+    try {
+        out = new FileOutputStream("a.txt");
+        out.write("hello world".getBytes());
+    } catch (IOException e) {
+    	e.printStackTrace();
+    } finally { // 为什么finally? 前面代码有问题 开启的io一定要关闭
+        try {
+            // 不等于null才关闭
+            if (out != null) {
+            	out.close();
+        	}
+        } catch (IOException e) {
+        	e.printStackTrace();
+        }
+    }
+}
+```
+
+
+
+
+
+
+
+## 字符流
+
+### 字符
+
+- Java提供一些字符流类，以字符为单位读写数据，专门用于处理文本文件。
+  - 当使用字节流读取文本文件时，可能会有一个小问题。就是遇到中文字符时，可能不会显示完整的字符，那是因为一个中文字符可能占用多个字节存储。
+
+### 字符输出流
+
+
 
 
 
