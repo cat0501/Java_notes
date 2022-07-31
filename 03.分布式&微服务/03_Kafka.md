@@ -562,6 +562,22 @@ public class CustomProducerParameters {
 
 
 
+## 8 Kafka 消费者
+
+
+
+## 9 安装
+
+- 下载：https://kafka.apache.org/downloads.html
+
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220729214407826.png)
+
+
+
+
+
+
+
 
 
 
