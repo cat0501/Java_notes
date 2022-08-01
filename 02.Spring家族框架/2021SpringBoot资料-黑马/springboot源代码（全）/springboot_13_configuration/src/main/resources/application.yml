@@ -1,0 +1,23 @@
+servers:
+#  ipAddress: 192.168.0.2       # \u9A7C\u5CF0
+#  ipaddress: 192.168.0.2
+#  ip_address: 192.168.0.2      # unline
+  ip-address: 192.168.0.2       # \u70E4\u8089\u4E32\u6A21\u5F0F  0-0-0-0---------
+#  IPADDRESS: 192.168.0.2
+#  IP_ADDRESS: 192.168.0.2      # \u5E38\u91CF
+#  IP_ADD_R-E_SS: 192.168.0.2
+  port: 2345
+  timeout: -1
+  serverTimeOut: 3
+  dataSize: 10MB
+  host:
+    ipAddress: 192.168.1.1
+    port: 4567
+
+dataSource:
+  driverClassName: com.mysql.jdbc.Driver789
+  password: 0127
+
+
+#  0(0-7)
+#  0x(0-9,a-f)

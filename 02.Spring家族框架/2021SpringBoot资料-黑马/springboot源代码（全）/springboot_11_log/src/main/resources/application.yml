@@ -1,0 +1,25 @@
+# debug: true
+
+logging:
+  # 设置分组
+  group:
+    ebank: com.itheima.controller,com.itheima.service,com.itheima.dao
+    iservice: com.alibaba
+  level:
+    root: info
+    # 设置某个包的日志级别
+#    com.itheima.controller: debug
+    # 设置分组，对某个组设置日志级别
+    ebank: warn
+
+  # 设置日志模板格式
+  pattern:
+#    console: "%d - %m %n"
+    console: "%d %clr(%5p) --- [%16t] %clr(%-40.40c){cyan} : %m %n"
+  file:
+    name: server.log
+  logback:
+    rollingpolicy:
+      max-file-size: 4KB
+      file-name-pattern: server.%d{yyyy-MM-dd}.%i.log
+

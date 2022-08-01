@@ -1,0 +1,5 @@
+# 应用环境
+spring:
+  profiles:
+    active: test
+

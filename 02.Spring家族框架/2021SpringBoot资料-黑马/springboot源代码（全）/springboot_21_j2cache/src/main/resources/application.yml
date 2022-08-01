@@ -1,0 +1,5 @@
+server:
+  port: 80
+
+j2cache:
+  config-location: j2cache.properties

@@ -29,6 +29,13 @@ git commit --amend
 git rebase -i HEAD~2
 // 或者
 git rebase -i {commitID} // 例如 git rebase -i d95ddfb
+
+# git配置大小写敏感
+$ git config core.ignorecase
+true
+# 下面设置大小写敏感为敏感
+$ git config core.ignorecase false
+
 ```
 
 - 分支

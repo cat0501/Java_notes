@@ -1,0 +1,78 @@
+country: china
+province: beijing
+city: beijing
+area: haidian
+
+port: 8080
+
+party: true
+
+birthday: 1949-10-01
+
+user:
+  name: itcast
+  age: 16
+
+user2:
+  name: itheima
+  age: 16
+
+
+a:
+  b:
+    c:
+      d:
+        e: 123
+
+likes:
+  - game
+  - music
+  - sleep
+
+likes2: [game,music,sleep]
+
+users:
+  - name: zhangsan
+    age: 18
+  - name: lisi
+    age: 17
+
+users3: [{name:zhangsan,age:18},{name:lisi,age:17}]
+
+users2:
+  -
+    name: zhangsan
+    age: 18
+  -
+    name: lisi
+    age: 17
+
+
+
+baseDir: c:\win10
+
+#使用${属性名}引用数据
+tempDir: ${baseDir}\temp
+#使用引号包裹的字符串，其中的转义字符可以生效
+tempDir2: "${baseDir}\temp \t1 \t2 \t3"
+
+
+# 创建类，用于封装下面的数据
+# 由spring帮我们去加载数据到对象中，一定要告诉spring加载这组信息
+# 使用时候从spring中直接获取信息使用
+
+datasource:
+  driver: com.mysql.jdbc.Driver
+  url: jdbc:mysql://localhost/springboot_db
+  username: root
+  password: root666123
+server:
+  port: 80
+  servlet:
+    context-path: /test123
+
+
+
+
+
+

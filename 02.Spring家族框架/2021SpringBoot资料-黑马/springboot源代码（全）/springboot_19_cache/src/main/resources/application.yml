@@ -1,0 +1,52 @@
+server:
+  port: 80
+
+mybatis-plus:
+  global-config:
+    db-config:
+      table-prefix: tbl_
+      id-type: auto
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+spring:
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/ssm_db?serverTimezone=UTC
+      username: root
+      password: root
+#--redis--
+#  cache:
+#    type: redis
+#    redis:
+#      use-key-prefix: false
+#      key-prefix: sms_
+#      cache-null-values: false
+#      time-to-live: 10s
+#
+#  redis:
+#    host: localhost
+#    port: 6379
+
+
+#--ehcache--
+# ehcache
+#  cache:
+#    type: ehcache
+#    ehcache:
+#      config: ehcache.xml
+
+memcached:
+  servers: localhost:11211
+  poolSize: 10
+  opTimeout: 3000
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,7 @@
+spring:
+  task:
+    scheduling:
+      thread-name-prefix: spring_tasks_
+      shutdown:
+        await-termination: false
+        await-termination-period: 10s
