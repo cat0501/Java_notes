@@ -1,0 +1,43 @@
+itheima:
+  resource:
+    systemcode: gateway-handler
+  framework:
+    jwt:
+      base64-encoded-secret-key: sdfdsfdsfdsfdsfdsf
+    shiro:
+      redis:
+        nodes: redis://192.168.1.112:6379,redis://192.168.1.112:6380,redis://192.168.1.112:6381,redis://192.168.1.112:7379,redis://192.168.1.112:7380,redis://192.168.1.112:7381
+        connect-timeout: 6000
+        connect-pool-size: 150
+        connection-minimumidle-size: 30
+        timeout: 6000
+        global-session-timeout: 25200000
+spring:
+  aop:
+    auto: true
+    proxy-target-class: true
+  http:
+    encoding:
+      charset: utf-8
+      force: true
+      enabled: true
+  jta:
+    atomikos:
+      properties:
+        log-base-dir: D:/logs/gateway
+        transaction-manager-unique-name: gateway
+dubbo:
+  application:
+    name: gateway-01
+    id: gateway-01
+    logger: log4j2
+  registry:
+    address: zookeeper://192.168.1.111:2181
+  protocol:
+    name: dubbo
+    port: 21199
+    threads: 200
+    accesslog: D:/logs/gateway.log
+server:
+  tomcat:
+    uri-encoding: utf-8

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.shiro.mappercustom.RoleServiceMapper">
+
+	
+	<resultMap id="RoleResultMap" type="com.itheima.shiro.pojo.Role">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="ENABLE_FLAG" jdbcType="VARCHAR" property="enableFlag" />
+    <result column="ROLE_NAME" jdbcType="VARCHAR" property="roleName" />
+    <result column="LABEL" jdbcType="VARCHAR" property="label" />
+    <result column="DESCRIPTION" jdbcType="VARCHAR" property="description" />
+    <result column="SORT_NO" jdbcType="INTEGER" property="sortNo" />
+  </resultMap>
+
+	<select id="findRoleHasResourceIds" parameterType="java.util.Map"
+		resultType="String">
+		select srr.resource_id from sh_role_resource srr
+		left join sh_role sr on srr.role_id =sr.id
+		where srr.enable_flag=#{enableFlag}
+		and sr.id=#{id}
+	</select>
+	
+	<select id="findRoleDetailByLenderId" parameterType="java.util.Map" 
+		resultMap="RoleResultMap">
+		select sr.role_name,sr.label,sr.description from sh_user_role sur
+		left join sh_role sr on sur.role_id= sr.id
+		left join sh_lender su on sur.user_id = su.id
+		where su.id=#{lenderId}
+	</select>
+
+</mapper>
+

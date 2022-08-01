@@ -1,0 +1,343 @@
+/*----------------------------------------------------------------------*/
+/*                                                                      */
+/*                               基本样式                               */
+/*                                                                      */
+/*----------------------------------------------------------------------*/
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    color: #222;
+    font-family: "宋体", Arial, Helvetica, sans-serif;
+    font-size: 12px;
+}
+
+ul, li {
+    list-style: none;
+    list-style-image: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+.clear {
+    clear: both;
+    height: 0;
+    font-size: 0;
+    overflow: hidden;
+}
+
+a {
+    color: #e6effe;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a img {
+    border: 0;
+}
+
+img {
+    border: 0;
+}
+
+
+/*            输入框样式               		 */
+.txtbox {
+    border-left: 1px solid #4980b7;
+    border-top: 1px solid #4980b7;
+    border-right: 1px solid #b4d1f2;
+    border-bottom: 1px solid #b4d1f2;
+    height: 20px;
+    line-height: 20px;
+    color: #014fa6;
+}
+
+/*            添加表单样式               		 */
+
+.add_tab {
+    border-right: 1px solid #a7d6fe;
+    border-bottom: 1px solid #a7d6fe;
+    margin: 10px auto;
+}
+
+.add_tab td {
+    border-left: 1px solid #a7d6fe;
+    border-top: 1px solid #a7d6fe;
+    padding: 3px 6px;
+}
+
+.add_tab caption {
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    padding-bottom: 8px;
+}
+
+.add_tab th {
+    text-align: right;
+    border-left: 1px solid #9091d6;
+    border-top: 1px solid #9091d6;
+    background: #dae6f4;
+    color: #000;
+}
+
+.add_tab .save_td {
+    text-align: center;
+    padding: 3px;
+    background: #fdf9f0;
+}
+
+.left_right_margin {
+    width: 874px;
+    margin: 0 auto;
+}
+
+.td_title {
+    background: #eaf2fe;
+    text-align: right;
+    height: 30px
+}
+
+/*            首页样式               		 */
+.sy_left_bg {
+    background: url(../images/top_left_bg.png) repeat-x #307edd;
+    width: 654px;
+    height: 49px;
+    padding-top: 23px;
+}
+
+.top_tb01 {
+    background: url(../images/index_ioc.png) no-repeat 5px 3px;
+    height: 18px;
+}
+
+.top_tb02 {
+    background: url(../images/setting_ioc.png) no-repeat 13px 3px;
+    height: 18px;
+}
+
+.top_tb03 {
+    background: url(../images/logout_ioc.png) no-repeat 13px 3px;
+    height: 18px;
+}
+
+.top_tb04 {
+    background: url(../images/tub_tx.png) no-repeat;
+    height: 14px;
+}
+
+.top_tb05 {
+    background: url(../images/login_ioc.png) no-repeat 2px 3px;
+    height: 17px;
+}
+
+.new_a_l02 {
+    width: auto;
+    float: left;
+    background: url(../images/tub_tx.png) no-repeat 0px 5px;
+    padding-left: 17px;
+    line-height: 25px;
+    padding-bottom: 5px;
+}
+
+.nr-logo3 {
+    background: url(../images/logo.png) repeat-y #307edd;
+    height: 65px;
+    width: 100%;
+    white-space: nowrap;
+    background-size: 100% 100%;
+}
+
+.newlogo_right {
+    float: right;
+    width: 30%;
+    line-height: 21px;
+    padding-top: 12px;
+    overflow: hidden;
+}
+
+.newblack12px {
+    color: #fff;
+    font-size: 12px;
+}
+
+.newnav {
+    background: url(../images/nav_bg.png) repeat-x;
+    height: 32px;
+    line-height: 28px;
+}
+
+#css3menu li {
+    float: left;
+    font-weight: bold;
+    text-align: center;
+    width: 100px;
+    height: 32px;
+}
+
+.list_h li a:hover {
+    color: #15428b;
+    width: 100px;
+    height: 32px;
+    display: block;
+}
+
+.list_h li a:-webkit-any-link {
+    display: block;
+}
+
+
+/***查询按钮**/
+.new_but {
+    width: 60px;
+    height: 23px; /* border:1px #93b8d8 solid; */
+    cursor: pointer;
+    padding-left: 28px;
+    padding-right: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    background: url(../images/sousuo.png) left no-repeat;
+    color: #000;
+}
+
+.new_but_1 {
+    width: 60px;
+    height: 23px; /*border:1px #039 solid;*/
+    cursor: pointer;
+    padding-left: 28px;
+    padding-right: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    background: url(../images/sousuo02.png) left no-repeat;
+    color: #000;
+}
+
+/***重置按钮**/
+.new_b {
+    width: 60px;
+    height: 23px; /*border:1px #93b8d8 solid;*/
+    cursor: pointer;
+    padding-left: 28px;
+    padding-right: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    background: url(../images/chongzhi.png) left no-repeat;
+    color: #000;
+}
+
+.new_b_1 {
+    width: 60px;
+    height: 23px; /* border:1px #039 solid;*/
+    cursor: pointer;
+    padding-left: 28px;
+    padding-right: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    background: url(../images/chongzhi02.png) left no-repeat;
+    color: #000;
+}
+
+/***保存按钮**/
+.new_c {
+    width: 60px;
+    height: 23px; /*border:1px #93b8d8 solid;*/
+    cursor: pointer;
+    padding-left: 28px;
+    padding-right: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    background: url(../images/baocun.png) left no-repeat;
+    color: #000;
+}
+
+.new_c_1 {
+    width: 60px;
+    height: 23px; /* border:1px #039 solid;*/
+    cursor: pointer;
+    padding-left: 28px;
+    padding-right: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    background: url(../images/baocun02.png) left no-repeat;
+    color: #000;
+}
+
+/***选择按钮**/
+.new_d {
+    width: 60px;
+    height: 23px; /*border:1px #93b8d8 solid;*/
+    cursor: pointer;
+    padding-left: 28px;
+    padding-right: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    background: url(../images/xuanze.png) left no-repeat;
+    color: #000;
+}
+
+.new_d_1 {
+    width: 60px;
+    height: 23px; /* border:1px #039 solid;*/
+    cursor: pointer;
+    padding-left: 28px;
+    padding-right: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    background: url(../images/xuanze02.png) left no-repeat;
+    color: #000;
+}
+
+/***上传按钮**/
+.new_e {
+    width: 60px;
+    height: 23px; /*border:1px #93b8d8 solid;*/
+    cursor: pointer;
+    padding-left: 28px;
+    padding-right: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    background: url(../images/shangchuan.png) left no-repeat;
+    color: #000;
+}
+
+.new_e_1 {
+    width: 60px;
+    height: 23px; /* border:1px #039 solid;*/
+    cursor: pointer;
+    padding-left: 28px;
+    padding-right: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    background: url(../images/shangchuan02.png) left no-repeat;
+    color: #000;
+}
+
+.new_b_2 {
+    border: 1px #039 solid;
+    cursor: pointer;
+    background: #6cb3f9;
+    color: #000;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.new_b_3 {
+    border: 1px #039 solid;
+    cursor: pointer;
+    background: #e1f2fc;
+    color: #000;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+

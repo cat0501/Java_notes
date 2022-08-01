@@ -1,0 +1,51 @@
+itheima:
+  resource:
+    systemcode: shiro-mgt
+  framework:
+    shiro:
+      redis:
+        nodes: redis://192.168.1.112:6379,redis://192.168.1.112:6380,redis://192.168.1.112:6381,redis://192.168.1.112:7379,redis://192.168.1.112:7380,redis://192.168.1.112:7381
+        connect-timeout: 6000
+        connect-pool-size: 150
+        connection-minimumidle-size: 30
+        timeout: 6000
+        global-session-timeout: 360000
+  datasource:
+    shiro:
+      work-id: 10
+      primary-key: id
+      data-source-name: shiro-data-source
+      xa-data-source-class-name: com.alibaba.druid.pool.xa.DruidXADataSource
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://127.0.0.1:3306/shiro
+      password: root
+      username: root
+      initial-size: 20
+      max-active: 200
+      max-life-time: 3600000
+      min-idle: 10
+      max-wait: 6000
+      validation-query: select 1
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      remove-abandoned: false
+      remove-abandoned-timeout: 60000
+      log-abandoned: true
+      filters: mergeStat
+      type-aliases-package: com.itheima.shiro.pojo
+      mapper-locations: classpath*:shiro/sqlmap*/*.xml
+spring:
+  aop:
+    auto: true
+    proxy-target-class: true
+  http:
+    encoding:
+      charset: utf-8
+      force: true
+      enabled: true
+  jta:
+    atomikos:
+      properties:
+        log-base-dir: D:/logs/spring-shiro-B
+        transaction-manager-unique-name: spring-shiro-B

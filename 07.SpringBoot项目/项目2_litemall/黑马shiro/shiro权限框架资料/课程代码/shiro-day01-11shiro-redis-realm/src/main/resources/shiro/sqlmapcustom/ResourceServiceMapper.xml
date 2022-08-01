@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.shiro.mappercustom.ResourceServiceMapper">
+
+	<resultMap id="BaseResultMap" type="com.itheima.shiro.pojo.Resource">
+		<id column="ID" jdbcType="VARCHAR" property="id" />
+		<result column="ENABLE_FLAG" jdbcType="VARCHAR" property="enableFlag" />
+		<result column="PARENT_ID" jdbcType="VARCHAR" property="parentId" />
+		<result column="RESOURCE_NAME" jdbcType="VARCHAR" property="resourceName" />
+		<result column="REQUEST_PATH" jdbcType="VARCHAR" property="requestPath" />
+		<result column="LABEL" jdbcType="VARCHAR" property="label" />
+		<result column="ICON" jdbcType="VARCHAR" property="icon" />
+		<result column="IS_LEAF" jdbcType="VARCHAR" property="isLeaf" />
+		<result column="RESOURCE_TYPE" jdbcType="VARCHAR" property="resourceType" />
+		<result column="SORT_NO" jdbcType="DECIMAL" property="sortNo" />
+		<result column="DESCRIPTION" jdbcType="VARCHAR" property="description" />
+		<result column="SYSTEM_CODE" jdbcType="VARCHAR" property="systemCode" />
+		<result column="IS_SYSTEM_ROOT" jdbcType="VARCHAR" property="isSystemRoot" />
+	</resultMap>
+
+
+
+	<select id="findResourceTreeVoByParentId" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select t.* from sh_resource t
+			where t.enable_flag =#{enableFlag}
+			and (t.is_system_root =#{isSystemRoot} or t.parent_id in(select rh.id from sh_resource rh where rh.is_system_root =#{isSystemRoot} and rh.enable_flag=#{enableFlag}))
+			order by t.sort_no asc
+	</select>
+
+</mapper>
+

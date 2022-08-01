@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.shiro.mappercustom.MenusServiceMapper">
+
+	<resultMap id="ResourceResultMap" type="com.itheima.shiro.pojo.Resource">
+		<id column="ID" jdbcType="VARCHAR" property="id" />
+		<result column="ENABLE_FLAG" jdbcType="VARCHAR" property="enableFlag" />
+		<result column="PARENT_ID" jdbcType="VARCHAR" property="parentId" />
+		<result column="RESOURCE_NAME" jdbcType="VARCHAR" property="resourceName" />
+		<result column="REQUEST_PATH" jdbcType="VARCHAR" property="requestPath" />
+		<result column="LABEL" jdbcType="VARCHAR" property="label" />
+		<result column="ICON" jdbcType="VARCHAR" property="icon" />
+		<result column="IS_LEAF" jdbcType="VARCHAR" property="isLeaf" />
+		<result column="RESOURCE_TYPE" jdbcType="VARCHAR" property="resourceType" />
+		<result column="SORT_NO" jdbcType="DECIMAL" property="sortNo" />
+		<result column="DESCRIPTION" jdbcType="VARCHAR" property="description" />
+		<result column="SYSTEM_CODE" jdbcType="VARCHAR" property="systemCode" />
+		<result column="IS_SYSTEM_ROOT" jdbcType="VARCHAR" property="isSystemRoot" />
+	</resultMap>
+	
+	<resultMap id="MenuVoResultMap" type="com.itheima.shiro.vo.MenuVo">
+		<id column="ID" jdbcType="VARCHAR" property="menuid" />
+		<result column="ICON" jdbcType="VARCHAR" property="icon" />
+		<result column="RESOURCE_NAME" jdbcType="VARCHAR" property="menuname" />
+		<result column="REQUEST_PATH" jdbcType="VARCHAR" property="url" />
+	</resultMap>
+
+
+	
+	<select id="findTopLevel" parameterType="java.util.Map" resultMap="ResourceResultMap">
+		select t.* from sh_resource t
+		where t.parent_id =(select st.id from sh_resource st where st.system_code=#{systemCode} and st.is_system_root=#{isSystemRoot})
+		and t.resource_type =#{resourceType}
+		<if test="resourceIdList != null">
+			and t.id in
+			<foreach collection="resourceIdList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		and t.is_system_root <![CDATA[ <> ]]> #{isSystemRoot}
+		and t.enable_flag=#{enableFlag}
+		order by t.sort_no asc
+	</select>
+	
+	<select id="findByResourceType" parameterType="java.util.Map" resultMap="MenuVoResultMap">
+		select id,icon,resource_name,request_path from sh_resource
+		where parent_id = #{parentId} 
+		and resource_type =#{resourceType}
+		<if test="resourceIdList != null">
+			and id in
+				<foreach collection="resourceIdList" index="index" item="item" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+		</if>
+		and enable_flag=#{enableFlag} 
+		order by sort_no asc
+	</select>
+
+</mapper>
+

@@ -1,0 +1,55 @@
+itheima:
+  datasource:
+    dubbo:
+      work-id: 10
+      primary-key: id
+      data-source-name: dubbo-data-source
+      xa-data-source-class-name: com.alibaba.druid.pool.xa.DruidXADataSource
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://127.0.0.1:3306/dubbo-app
+      password: root
+      username: root
+      initial-size: 20
+      max-active: 200
+      max-life-time: 3600000
+      min-idle: 10
+      max-wait: 6000
+      validation-query: select 1
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      remove-abandoned: false
+      remove-abandoned-timeout: 60000
+      log-abandoned: true
+      filters: mergeStat
+      type-aliases-package: com.itheima.shiro.pojo
+      mapper-locations: classpath*:dubbo-app/sqlmap*/*.xml
+spring:
+  aop:
+    auto: true
+    proxy-target-class: true
+  http:
+    encoding:
+      charset: utf-8
+      force: true
+      enabled: true
+  jta:
+    atomikos:
+      properties:
+        log-base-dir: D:/logs/dubbo-app
+        transaction-manager-unique-name: dubbo-app
+dubbo:
+  application:
+    name: dubbo-app-01
+    id: dubbo-app-01
+    logger: log4j2
+  registry:
+    address: zookeeper://192.168.1.111:2181
+  protocol:
+    name: dubbo
+    port: 21177
+    threads: 200
+    accesslog: D:/logs/dubbo-app.log
+server:
+  tomcat:
+    uri-encoding: utf-8

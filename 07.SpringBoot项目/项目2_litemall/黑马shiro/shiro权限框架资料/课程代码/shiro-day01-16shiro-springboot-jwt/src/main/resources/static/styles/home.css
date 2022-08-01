@@ -1,0 +1,61 @@
+
+
+
+*{margin:0px; padding:0px;}
+
+
+/******隔行变色*******/
+
+.yellow{ background:#fbffd9;}
+
+
+.title_font{color:#15428b; font-family:"宋体"; font-size:12px; font-weight:bold; line-height:30px;}
+.more_font{color:#7b7b7b; font-family:"宋体"; font-size:12px; line-height:30px; }
+.more_font a{text-decoration:none;color:#7b7b7b;}
+.more_font a:link{text-decoration:none;color:#7b7b7b;}
+.more_font a:hover{text-decoration:none;color:#7b7b7b;}
+
+.hui_font{ color:#4a4a4a; font-size:12px; font-family:"宋体";}
+.hui_font a{text-decoration:none;color:#4a4a4a;}
+.hui_font a:link{text-decoration:none;color:#4a4a4a;}
+.hui_font a:hover{text-decoration:underline; color:#15428b;}
+
+
+.hui_font02{ color:#4a4a4a; font-size:12px; font-family:"宋体";}
+.hui_font02 a{text-decoration:none;color:#4a4a4a;}
+.hui_font02 a:link{text-decoration:none;color:#4a4a4a;}
+.hui_font02 a:hover{text-decoration:none; color:#4a4a4a;}
+
+.bt_lan{color:#15428b; font-family:"宋体"; font-size:14px; font-weight:bold; }
+.zi_blod{font-family:"宋体"; font-size:12px; color:#000; font-weight:bold;}
+.zi_chang{font-family:"宋体"; font-size:12px; color:#000; }
+.zi_chang a{text-decoration:none; color:#000;}
+.zi_chang a:link{text-decoration:none; color:#000;}
+.zi_chang a:hover{ text-decoration:none; color:#000;}
+
+
+.time_font{ color:#7d7d7d;font-size:12px; font-family:"宋体"; width:60px; text-align:center;}
+
+/*******修改两侧宽度*****/
+.message{width:260px; border:solid 1px #8db3e2; margin-bottom:10px;}
+/**************/
+
+.message_nav{ width:auto; height:30px; background:url(../images/qs_nav.png) repeat-x;}
+.message_main{ width:auto; height:240px; padding-top:5px;}
+.message_main ul li{list-style:none; background:url(../images/jt.png) no-repeat 8px 12px; padding-left:20px; line-height:33px; color:#4a4a4a; font-size:12px; font-family:"宋体"; }
+.message_main ul li a{text-decoration:none; color:#4a4a4a; }
+.message_main ul li a:link{ text-decoration:none; color:#4a4a4a; }
+.message_main ul li a:hover{ text-decoration:underline; color:#15428b;}
+
+
+.tzgg_main{width:auto; height:240px; padding-top:5px;}
+.tzgg_main ul{list-style:none; }
+.tzgg_main ul li{line-height:33px; float:left;background:url(../images/jt.png) no-repeat 8px 12px; list-style:none; padding-left:20px;}
+.tzgg_width{ width:172px;  white-space:nowrap;  text-overflow:ellipsis; overflow:hidden; }
+.tzgg_widths{ width:210px;  white-space:nowrap;  text-overflow:ellipsis; overflow:hidden; }
+.zuo{float:left;}
+.you{float:right;}
+
+.table_l{ border-bottom:solid 1px #ccc; border-right:solid 1px #ccc;}
+.table_r{border-bottom:solid 1px #ccc;}
+.table_b{ border-right:solid 1px #ccc; }

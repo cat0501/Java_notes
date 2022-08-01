@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+		PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+		"http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+	<classPathEntry
+			location="D://Java/maven/repository2/mysql/mysql-connector-java/5.1.44/mysql-connector-java-5.1.44.jar"/>
+
+	<context id="message" targetRuntime="MyBatis3">
+
+		<plugin type="com.itheima.framework.mybatis.generator.MysqlPaginationPlugin"/>
+		<plugin type="com.itheima.framework.mybatis.generator.ResultColumnPlugin"/>
+		<plugin type="com.itheima.framework.mybatis.generator.MysqlBatchPlugin"/>
+		<plugin type="com.itheima.framework.mybatis.generator.ToStringPlugin"/>
+		<plugin type="com.itheima.framework.mybatis.generator.CriteriaLikePlugin"/>
+		<plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+		<plugin type="com.itheima.framework.mybatis.generator.LombokPlugin"/>
+
+		<commentGenerator type="com.itheima.framework.mybatis.generator.CommentGeneratorExt">
+			<property name="suppressAllComments" value="false" />
+		</commentGenerator>
+
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+						connectionURL="jdbc:mysql://127.0.0.1:3306/dubbo-app"
+						userId="root"
+						password="root" />
+
+		<javaModelGenerator targetPackage="com.itheima.shiro.pojo"
+			targetProject="src/main/java">
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+
+		<sqlMapGenerator targetPackage="dubbo-app/sqlmap" targetProject="src/main/resources" />
+
+		<javaClientGenerator targetPackage="com.itheima.shiro.mapper"
+			targetProject="src/main/java" type="XMLMAPPER" />
+
+
+ 		<table tableName="tp_company" domainObjectName="Company">
+ 		</table>
+
+
+	</context>
+</generatorConfiguration>

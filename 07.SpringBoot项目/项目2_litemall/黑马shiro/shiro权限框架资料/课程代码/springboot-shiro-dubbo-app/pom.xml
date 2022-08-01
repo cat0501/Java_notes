@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+    <modules>
+        <module>springboot-shiro-dubbo-app-core</module>
+        <module>springboot-shiro-dubbo-app-service</module>
+        <module>springboot-shiro-dubbo-app-face</module>
+        <module>springboot-shiro-dubbo-app-handler</module>
+    </modules>
+    <parent>
+        <groupId>com.itheima.shiro</groupId>
+        <artifactId>springboot-shiro-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <groupId>com.itheima.shiro.dubbo</groupId>
+    <artifactId>springboot-shiro-dubbo-app</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <name>springboot-shiro-dubbo-app</name>
+    <!-- FIXME change it to the project's website -->
+    <url>http://www.example.com</url>
+
+    <build>
+        <plugins>
+            <!-- compiler插件, 设定JDK版本 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                    <showWarnings>true</showWarnings>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
