@@ -30,12 +30,15 @@ git rebase -i HEAD~2
 // 或者
 git rebase -i {commitID} // 例如 git rebase -i d95ddfb
 
+
 # git配置大小写敏感
 $ git config core.ignorecase
 true
 # 下面设置大小写敏感为敏感
 $ git config core.ignorecase false
 
+# cmd git页面中文显示为数字,不是乱码
+git config --global core.quotepath false
 ```
 
 - 分支
