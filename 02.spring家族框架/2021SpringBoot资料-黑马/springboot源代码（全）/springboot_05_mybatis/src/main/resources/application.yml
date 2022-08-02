@@ -1,7 +1,0 @@
-#2.配置相关信息
-spring:
-  datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/ssm_db?serverTimezone=UTC
-    username: root
-    password: root
