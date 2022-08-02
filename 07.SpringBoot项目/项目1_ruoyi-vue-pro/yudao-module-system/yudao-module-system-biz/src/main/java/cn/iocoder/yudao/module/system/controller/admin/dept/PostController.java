@@ -91,8 +91,11 @@ public class PostController {
     @OperateLog(type = EXPORT)
     public void export(HttpServletResponse response, @Validated PostExportReqVO reqVO) throws IOException {
         List<PostDO> posts = postService.getPosts(reqVO);
+
+        // ① 将从数据库中查询出来的列表，转换成对应的 PostExcelVO 列表。
         List<PostExcelVO> data = PostConvert.INSTANCE.convertList03(posts);
         // 输出
+        // ExcelUtils 的 #write(...)方法，将列表以 Excel 响应给前端
         ExcelUtils.write(response, "岗位数据.xls", "岗位列表", PostExcelVO.class, data);
     }
 
