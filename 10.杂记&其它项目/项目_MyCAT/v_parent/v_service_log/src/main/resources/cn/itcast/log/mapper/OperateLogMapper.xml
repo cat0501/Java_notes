@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.itcast.log.mapper.OperateLogMapper" >
+
+    <resultMap id="operateLogResultMap" type="cn.itcast.model.TbOperatelog">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="model_name" jdbcType="VARCHAR" property="modelName" />
+        <result column="model_value" jdbcType="VARCHAR" property="modelValue" />
+        <result column="return_value" jdbcType="VARCHAR" property="returnValue" />
+        <result column="return_class" jdbcType="VARCHAR" property="returnClass" />
+        <result column="operate_user" jdbcType="VARCHAR" property="operateUser" />
+        <result column="operate_time" jdbcType="VARCHAR" property="operateTime" />
+        <result column="param_and_value" jdbcType="VARCHAR" property="paramAndValue" />
+        <result column="operate_class" jdbcType="VARCHAR" property="operateClass" />
+        <result column="operate_method" jdbcType="VARCHAR" property="operateMethod" />
+        <result column="cost_time" jdbcType="BIGINT" property="costTime" />
+    </resultMap>
+
+
+    <insert id="insert" parameterType="cn.itcast.model.TbOperatelog">
+    insert into tb_operatelog (id, model_name, model_value,
+      return_value, return_class, operate_user,
+      operate_time, param_and_value, operate_class,
+      operate_method, cost_time)
+    values (#{id}, #{modelName}, #{modelValue},
+      #{returnValue}, #{returnClass}, #{operateUser},
+      #{operateTime}, #{paramAndValue}, #{operateClass},
+      #{operateMethod}, #{costTime})
+  </insert>
+
+
+    <select id="search" resultMap="operateLogResultMap">
+        select * from tb_operatelog
+        <where>
+            <if test="operateUser != null and operateUser != ''">
+                and operate_user = #{operateUser}
+            </if>
+            <if test="operateMethod != null and operateMethod != ''">
+                and operate_method = #{operateMethod}
+            </if>
+            <if test="returnClass != null and returnClass != ''">
+                and return_class = #{returnClass}
+            </if>
+            <if test="costTime != null and costTime != '' ">
+                and cost_time = #{costTime}
+            </if>
+        </where>
+    </select>
+
+</mapper>

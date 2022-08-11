@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.itcast.order.mapper.OrderMapper" >
+    <resultMap id="orderResultMap" type="cn.itcast.model.TbOrder">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="total_num" jdbcType="INTEGER" property="totalNum" />
+        <result column="total_money" jdbcType="INTEGER" property="totalMoney" />
+        <result column="pre_money" jdbcType="INTEGER" property="preMoney" />
+        <result column="post_fee" jdbcType="INTEGER" property="postFee" />
+        <result column="pay_money" jdbcType="INTEGER" property="payMoney" />
+        <result column="pay_type" jdbcType="VARCHAR" property="payType" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
+        <result column="consign_time" jdbcType="TIMESTAMP" property="consignTime" />
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+        <result column="close_time" jdbcType="TIMESTAMP" property="closeTime" />
+        <result column="shipping_name" jdbcType="VARCHAR" property="shippingName" />
+        <result column="shipping_code" jdbcType="VARCHAR" property="shippingCode" />
+        <result column="username" jdbcType="VARCHAR" property="username" />
+        <result column="buyer_message" jdbcType="VARCHAR" property="buyerMessage" />
+        <result column="buyer_rate" jdbcType="CHAR" property="buyerRate" />
+        <result column="receiver_contact" jdbcType="VARCHAR" property="receiverContact" />
+        <result column="receiver_mobile" jdbcType="VARCHAR" property="receiverMobile" />
+        <result column="receiver_province" jdbcType="VARCHAR" property="receiverProvince" />
+        <result column="receiver_city" jdbcType="VARCHAR" property="receiverCity" />
+        <result column="receiver_area" jdbcType="VARCHAR" property="receiverArea" />
+        <result column="receiver_address" jdbcType="VARCHAR" property="receiverAddress" />
+        <result column="source_type" jdbcType="CHAR" property="sourceType" />
+        <result column="transaction_id" jdbcType="VARCHAR" property="transactionId" />
+        <result column="order_status" jdbcType="CHAR" property="orderStatus" />
+        <result column="pay_status" jdbcType="CHAR" property="payStatus" />
+        <result column="consign_status" jdbcType="CHAR" property="consignStatus" />
+        <result column="is_delete" jdbcType="CHAR" property="isDelete" />
+    </resultMap>
+
+
+    <select id="search" resultType="cn.itcast.model.TbOrder">
+        SELECT
+        o.id ,
+        o.`create_time` createTime,
+        o.username ,
+        o.`total_money` totalMoney,
+        o.`total_num` totalNum,
+        o.`pay_type` payType,
+        o.`pay_status` payStatus,
+
+        p.`province` receiverProvince
+        FROM
+        tb_order o , tb_provinces p
+        WHERE
+        o.receiver_province = p.provinceid
+        <if test="orderId != null and orderId != ''">
+            and o.id = #{orderId}
+        </if>
+
+        <if test="payType != null and payType != ''">
+            and o.pay_type = #{payType}
+        </if>
+
+        <if test="username != null and username != ''">
+            and o.username = #{username}
+        </if>
+
+        <if test="payStatus != null and payStatus != ''">
+            and o.order_status = #{payStatus}
+        </if>
+    </select>
+</mapper>

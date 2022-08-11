@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>labs-parent</artifactId>
+        <groupId>cn.iocoder.springboot.labs</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>lab-01-spring-security</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <!--快速入门下 Spring Security ，实现访问 API 接口时，需要首先进行登录，才能进行访问。-->
+        <module>lab-01-springsecurity-demo</module>
+        <module>lab-01-springsecurity-demo-role</module>
+    </modules>
+
+
+</project>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.mybatis.mapper.UserMapper">
+
+    <!--int insertUser();-->
+    <insert id="insertUser">
+        insert into t_user values(null,'admin','123456',23,'男','12345@qq.com')
+    </insert>
+
+    <!--void updateUser();-->
+    <update id="updateUser">
+        update t_user set username = '张三' where id = 4
+    </update>
+
+    <!--void deleteUser();-->
+    <delete id="deleteUser">
+        delete from t_user where id = 5
+    </delete>
+
+    <!--User getUserById();-->
+    <!--
+        查询功能的标签必须设置resultType或resultMap
+        resultType：设置默认的映射关系
+        resultMap：设置自定义的映射关系
+    -->
+    <select id="getUserById" resultType="com.atguigu.mybatis.pojo.User">
+        select * from t_user where id = 3
+    </select>
+
+    <!--List<User> getAllUser();-->
+    <select id="getAllUser" resultType="com.atguigu.mybatis.pojo.User">
+        select * from t_user
+    </select>
+
+    <select id="getLikeUser" resultType="com.atguigu.mybatis.pojo.User">
+        <!--  方式1：使用${...}  可能会有sql注入的问题-->
+        <!-- select * from t_user where username like '%${username}';-->
+
+        <!-- 方式2：       -->
+        <!--select * from t_user-->
+        <!--<where>-->
+        <!--    <if test="username">-->
+        <!--        and t_user.username like "%"#{username}-->
+        <!--    </if>-->
+        <!--</where>-->
+
+        <!-- 方式3：使用concat()函数连接参数-->
+        select * from t_user where username like CONCAT("%", #{username}, "%")
+
+    </select>
+
+
+
+    <resultMap id="orderMap" type="com.lak.domain.Order">
+        <id column="oid" property="id"></id>
+        <result column="ordertime" property="ordertime"></result>
+        <result column="total" property="total"></result>
+        <association property="user" javaType="com.lak.domain.User">
+            <id column="uid" property="id"></id>
+            <result column="username" property="username"></result>
+            <result column="password" property="password"></result>
+        </association>
+    </resultMap>
+
+    <select id="findAllOrder" resultMap="orderMap">
+    select *, o.id oid from orders o,user u where
+        u.id=o.uid
+    </select>
+
+
+</mapper>

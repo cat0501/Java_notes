@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.itcast.goods.mapper.SpuMapper">
+
+    <resultMap id="spuResultMap" type="cn.itcast.model.TbSpu">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="sn" jdbcType="VARCHAR" property="sn"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="caption" jdbcType="VARCHAR" property="caption"/>
+        <result column="brand_id" jdbcType="INTEGER" property="brandId"/>
+        <result column="category1_id" jdbcType="INTEGER" property="category1Id"/>
+        <result column="category2_id" jdbcType="INTEGER" property="category2Id"/>
+        <result column="category3_id" jdbcType="INTEGER" property="category3Id"/>
+        <result column="template_id" jdbcType="INTEGER" property="templateId"/>
+        <result column="freight_id" jdbcType="INTEGER" property="freightId"/>
+        <result column="image" jdbcType="VARCHAR" property="image"/>
+        <result column="images" jdbcType="VARCHAR" property="images"/>
+        <result column="sale_service" jdbcType="VARCHAR" property="saleService"/>
+        <result column="spec_items" jdbcType="VARCHAR" property="specItems"/>
+        <result column="para_items" jdbcType="VARCHAR" property="paraItems"/>
+        <result column="sale_num" jdbcType="INTEGER" property="saleNum"/>
+        <result column="comment_num" jdbcType="INTEGER" property="commentNum"/>
+        <result column="is_marketable" jdbcType="CHAR" property="isMarketable"/>
+        <result column="is_enable_spec" jdbcType="CHAR" property="isEnableSpec"/>
+        <result column="is_delete" jdbcType="CHAR" property="isDelete"/>
+        <result column="status" jdbcType="CHAR" property="status"/>
+    </resultMap>
+
+    <select id="findById" parameterType="java.lang.String" resultMap="spuResultMap">
+
+                select
+                    *
+                from
+                    tb_spu
+                where
+                    id = #{spuId}
+
+    </select>
+
+    <select id="search" resultMap="spuResultMap">
+        select * from tb_spu
+        <where>
+            <if test="name != null and name != ''">
+                and name like '%${name}%'
+            </if>
+            <if test="caption != null and caption != ''">
+                and caption like '%${caption}%'
+            </if>
+            <if test="brandId != null">
+                and brand_id = #{brandId}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+
+</mapper>
+
