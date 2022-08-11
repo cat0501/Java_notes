@@ -22,6 +22,10 @@ git remote rm test1
 git log
 ## 只看某个人的提交记录
 git log --author=bob
+
+# 用户名和邮箱配置（项目级别）
+git config user.name Lemonade19
+git config user.email 17782975312@163.com
 ```
 
 - 提交更新到仓库（本地库同步到 Github、Gitee等）
