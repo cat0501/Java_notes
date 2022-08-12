@@ -678,13 +678,11 @@ Spring 框架并没有对[单例](http://howtodoinjava.com/2012/10/22/singleton-
 
 
 
-## 四、Spring 注解
+# 四、Spring 注解
 
 这块内容，实际写在 [「Spring Bean」](http://svip.iocoder.cn/Spring/Interview/#) 中比较合适，考虑到后续的问题，都是关于注解的，所以单独起一个大的章节。
 
-
-
-### 24. 什么是基于注解的容器配置？
+## 24. 什么是基于注解的容器配置？
 
 不使用 XML 来描述 Bean 装配，开发人员通过在相关的类，方法或字段声明上使用**注解**将配置移动到组件类本身。它可以作为 XML 设置的替代方案。例如：
 
@@ -693,26 +691,20 @@ Spring 的 Java 配置是通过使用 `@Bean` 和 `@Configuration` 来实现。
 - `@Bean` 注解，扮演与 `<bean />` 元素相同的角色。
 - `@Configuration` 注解的类，允许通过简单地调用同一个类中的其他 `@Bean` 方法来定义 Bean 间依赖关系。
 
-
-
 示例如下：
 ```java
 @Configuration
 public class StudentConfig {
-
     @Bean
     public StudentBean myStudent() {
         return new StudentBean();
     }
-    
 }
 ```
 
 
 
-
-
-### 25. 如何在 Spring 中启动注解装配？
+## 25. 如何在 Spring 中启动注解装配？
 
 默认情况下，Spring 容器中未打开注解装配。因此，要使用基于注解装配，我们必须通过配置 `<context：annotation-config />` 元素在 Spring 配置文件中启用它。
 
@@ -720,7 +712,7 @@ public class StudentConfig {
 
 
 
-### 26. @Component, @Controller, @Repository, @Service 有何区别？
+## 26. @Component, @Controller, @Repository, @Service 有何区别？
 
 - `@Component` ：它将 Java 类标记为 Bean 。它是任何 Spring 管理组件的**通用**构造型。
 - `@Controller` ：它将一个类标记为 Spring Web MVC **控制器**。
@@ -731,7 +723,7 @@ public class StudentConfig {
 
 
 
-### 27. @Required 注解有什么用？
+## 27. @Required 注解有什么用？
 
 `@Required` 注解，应用于 Bean 属性 setter 方法。
 
@@ -763,7 +755,7 @@ public class Employee {
 
 
 
-### 28. @Autowired 注解有什么用？
+## 28. @Autowired 注解有什么用？
 
 `@Autowired` 注解，可以更准确地控制应该在何处以及如何进行自动装配。
 
@@ -785,7 +777,7 @@ public class EmpAccount {
 
 
 
-### 29. @Qualifier 注解有什么用？
+## 29. @Qualifier 注解有什么用？
 
 当你创建多个**相同类型**的 Bean ，并希望仅使用属性装配**其中一个** Bean 时，您可以使用 `@Qualifier` 注解和 `@Autowired` 通过指定 ID 应该装配哪个**确切的** Bean 来消除歧义。
 
@@ -803,11 +795,9 @@ public class EmployeeAccount {
 
 
 
+# 五、Spring AOP
 
-
-## 五、Spring AOP
-
-> Spring AOP 的面试题中，大多数都是概念题，主要是对切面的理解。概念点主要有：
+> 多概念题，主要是对切面的理解。关键词：
 >
 > - AOP
 > - Aspect
@@ -820,10 +810,6 @@ public class EmployeeAccount {
 
 
 
-- 在阅读完 [「Spring AOP」](http://svip.iocoder.cn/Spring/Interview/#) 的面试题后，在回过头思考下这些概念点，到底理解了多少。注意，不是背，理解！
-
-
-
 非常推荐阅读如下两篇文章：
 
 - [《彻底征服 Spring AOP 之理论篇》](https://segmentfault.com/a/1190000007469968)
@@ -831,22 +817,16 @@ public class EmployeeAccount {
 
 
 
+## 30. 什么是 AOP ？
 
-
-<hr>
-
-
-
-### 30. 什么是 AOP ？
-
-AOP(Aspect-Oriented Programming)，即**面向切面编程**, 它与 OOP( Object-Oriented Programming, 面向对象编程) 相辅相成， 提供了与 OOP 不同的抽象软件结构的视角。
+AOP（Aspect-Oriented Programming），即**面向切面编程**, 它与 OOP( Object-Oriented Programming, 面向对象编程) 相辅相成， 提供了与 OOP 不同的抽象软件结构的视角。
 
 - 在 OOP 中，以类( Class )作为基本单元
 - 在 AOP 中，以**切面( Aspect )**作为基本单元。
 
 
 
-### 31. 什么是 Aspect ？
+## 31. 什么是 Aspect ？
 
 Aspect 由 **PointCut** 和 **Advice** 组成。
 
@@ -862,17 +842,11 @@ AOP 的工作重心在于如何将增强编织目标对象的连接点上, 这�
 1. 如何通过 PointCut 和 Advice 定位到特定的 **JoinPoint** 上。
 2. 如何在 Advice 中编写切面代码。
 
-
-
 **可以简单地认为, 使用 @Aspect 注解的类就是切面**
 
-![流程图](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/04.jpg)
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/04.jpg)
 
-
-
-
-
-### 32. 什么是 JoinPoint ?
+## 32. 什么是 JoinPoint ?
 
 JoinPoint ，**切点**，程序运行中的一些时间点, 例如：
 
@@ -885,31 +859,21 @@ JoinPoint ，**切点**，程序运行中的一些时间点, 例如：
 
 
 
-### 33. 什么是 PointCut ？
+## 33. 什么是 PointCut ？
 
 PointCut ，**匹配** JoinPoint 的谓词(a predicate that matches join points)。
 
-
-
 > 简单来说，PointCut 是匹配 JoinPoint 的条件。
-
-
 
 - Advice 是和特定的 PointCut 关联的，并且在 PointCut 相匹配的 JoinPoint 中执行。即 `Advice => PointCut => JoinPoint` 。
 - 在 Spring 中, 所有的方法都可以认为是 JoinPoint ，但是我们并不希望在所有的方法上都添加 Advice 。**而 PointCut 的作用**，就是提供一组规则(使用 AspectJ PointCut expression language 来描述) 来匹配 JoinPoint ，给满足规则的 JoinPoint 添加 Advice 。
 
-
-
-😈 是不是觉得有点绕，实际场景下，其实也不会弄的这么清楚~~
-
-### 34. 关于 JoinPoint 和 PointCut 的区别
+## 34. 关于 JoinPoint 和 PointCut 的区别
 
 JoinPoint 和 PointCut 本质上就是**两个不同纬度上**的东西。
 
 - 在 Spring AOP 中，所有的方法执行都是 JoinPoint 。而 PointCut 是一个描述信息，它修饰的是 JoinPoint ，通过 PointCut ，我们就可以确定哪些 JoinPoint 可以被织入 Advice 。
 - Advice 是在 JoinPoint 上执行的，而 PointCut 规定了哪些 JoinPoint 可以执行哪些 Advice 。
-
-
 
 或者，我们在换一种说法：
 
@@ -918,14 +882,10 @@ JoinPoint 和 PointCut 本质上就是**两个不同纬度上**的东西。
 
 
 
-### 35. 什么是 Advice ？
-
-Advice ，**通知**。
+## 35. 什么是 Advice（通知）？
 
 - 特定 JoinPoint 处的 Aspect 所采取的动作称为 Advice 。
 - Spring AOP 使用一个 Advice 作为拦截器，在 JoinPoint “周围”维护一系列的**拦截器**。
-
-
 
 **有哪些类型的 Advice？**
 
@@ -939,9 +899,7 @@ Advice ，**通知**。
 
 
 
-
-
-### 36. 什么是 Target ？
+## 36. 什么是 Target ？
 
 Target ，织入 Advice 的**目标对象**。目标对象也被称为 **Advised Object** 。
 
@@ -951,13 +909,9 @@ Target ，织入 Advice 的**目标对象**。目标对象也被称为 **Advised
 
 
 
-### 37. AOP 有哪些实现方式？
-
-实现 AOP 的技术，主要分为两大类：
+## 37. AOP 有哪些实现方式？（2）
 
 #### ① **静态代理** - 指使用 AOP 框架提供的命令进行编译，从而在编译阶段就可生成 AOP 代理类，因此也称为编译时增强。
-
-
 
 - 编译时编织（特殊编译器实现）
 - 类加载时编织（特殊的类加载器实现）。
@@ -966,7 +920,7 @@ Target ，织入 Advice 的**目标对象**。目标对象也被称为 **Advised
 
 > 例如，SkyWalking 基于 Java Agent 机制，配置上 ByteBuddy 库，实现类加载时编织时增强，从而实现链路追踪的透明埋点。
 >
-> 感兴趣的胖友，可以看看 [《SkyWalking 源码分析之 JavaAgent 工具 ByteBuddy 的应用》](http://www.kailing.pub/article/index/arcid/178.html) 。
+> 可以看看 [《SkyWalking 源码分析之 JavaAgent 工具 ByteBuddy 的应用》](http://www.kailing.pub/article/index/arcid/178.html) 。
 
 
 
@@ -976,8 +930,6 @@ Target ，织入 Advice 的**目标对象**。目标对象也被称为 **Advised
 - CGLIB
 
 那么 Spring 什么时候使用 JDK 动态代理，什么时候使用 CGLIB 呢？
-
-
 
 ```java
 // From 《Spring 源码深度解析》P172
@@ -994,7 +946,7 @@ Target ，织入 Advice 的**目标对象**。目标对象也被称为 **Advised
 
 
 
-- 实际上，Spring AOP 的代码量不大，与其在窗户外面不清不楚，不如捅破它！感兴趣的胖友，可以撸一撸 [《精尽 Spring 源码分析 —— AOP 源码简单导读》](http://svip.iocoder.cn/Spring/aop-simple-intro/) 。
+- 实际上，Spring AOP 的代码量不大，与其在窗户外面不清不楚，不如捅破它！ [《精尽 Spring 源码分析 —— AOP 源码简单导读》](http://svip.iocoder.cn/Spring/aop-simple-intro/) 。
 
 
 
@@ -1013,13 +965,7 @@ Spring AOP 中的动态代理主要有两种方式，
 
 
 
-
-
-
-
-
-
-### 38.Spring AOP and AspectJ AOP 有什么区别？
+## 38.Spring AOP and AspectJ AOP 有什么区别？
 
 - 代理方式不同
   - Spring AOP 基于动态代理方式实现。
@@ -1030,48 +976,32 @@ Spring AOP 中的动态代理主要有两种方式，
 
 
 
-
-
-
-
-### 39. 什么是编织（Weaving）？
-
-Weaving ，**编织**。
+## 39. 什么是编织（Weaving）？
 
 - 为了创建一个 Advice 对象而链接一个 Aspect 和其它应用类型或对象，称为编织（Weaving）。
 
 - 在 Spring AOP 中，编织在运行时执行，即动态代理。请参考下图：
 
-![Proxy](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/05.jpg)
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/05.jpg)
 
-
-
-### 40. Spring 如何使用 AOP 切面？
+## 40. Spring 如何使用 AOP 切面？
 
 在 Spring AOP 中，有两种方式配置 AOP 切面：
 
 - 基于 **XML** 方式的切面实现。
 - 基于 **注解** 方式的切面实现。
 
-
-
-目前，主流喜欢使用 **注解** 方式。胖友可以看看 [《彻底征服 Spring AOP 之实战篇》](https://segmentfault.com/a/1190000007469982) 。
+目前，主流喜欢使用 **注解** 方式。可以看看 [《彻底征服 Spring AOP 之实战篇》](https://segmentfault.com/a/1190000007469982) 。
 
 
 
-## 六、Spring Transaction
+# 六、Spring Transaction
 
 非常推荐阅读如下文章：
 
 - [《可能是最漂亮的 Spring 事务管理详解》](https://mp.weixin.qq.com/s?__biz=MzUzMTA2NTU2Ng==&mid=2247484702&idx=1&sn=c04261d63929db09ff6df7cadc7cca21&chksm=fa497aafcd3ef3b94082da7bca841b5b7b528eb2a52dbc4eb647b97be63a9a1cf38a9e71bf90&token=165108535&lang=zh_CN#rd)
 
-
-
-<hr>
-
-
-
-### 41. 什么是事务？
+## 41. 什么是事务？
 
 事务就是对一系列的数据库操作（比如插入多条数据）进行统一的提交或回滚操作，如果插入成功，那么一起成功，如果中间有一条出现异常，那么回滚之前的所有操作。
 
@@ -1079,121 +1009,87 @@ Weaving ，**编织**。
 
 
 
-### 42. 事务的特性指的是？
-
-指的是 **ACID** ，如下图所示：
+## 42. 事务的特性指的是？ACID
 
 ![事务的特性](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/06.jpeg)
 
 
 
-1. **原子性** Atomicity ：一个事务（transaction）中的所有操作，或者全部完成，或者全部不完成，不会结束在中间某个环节。事务在执行过程中发生错误，会被恢复（Rollback）到事务开始前的状态，就像这个事务从来没有执行过一样。即，事务不可分割、不可约简。
-2. **一致性** Consistency ：在事务开始之前和事务结束以后，数据库的完整性没有被破坏。这表示写入的资料必须完全符合所有的预设[约束](https://zh.wikipedia.org/wiki/数据完整性)、[触发器](https://zh.wikipedia.org/wiki/触发器_(数据库))、[级联回滚](https://zh.wikipedia.org/w/index.php?title=级联回滚&action=edit&redlink=1)等。
-3. **隔离性** Isolation ：数据库允许多个并发事务同时对其数据进行读写和修改的能力，隔离性可以防止多个事务并发执行时由于交叉执行而导致数据的不一致。事务隔离分为不同级别，包括读未提交（Read uncommitted）、读提交（read committed）、可重复读（repeatable read）和串行化（Serializable）。
-4. **持久性** Durability ：事务处理结束后，对数据的修改就是永久的，即便系统故障也不会丢失。
+1. **原子性（Atomicity ）** ：一个事务（transaction）中的所有操作，或者全部完成，或者全部不完成，不会结束在中间某个环节。事务在执行过程中发生错误，会被恢复（Rollback）到事务开始前的状态，就像这个事务从来没有执行过一样。即，事务不可分割、不可约简。
+2. **一致性（Consistency ）** ：在事务开始之前和事务结束以后，数据库的完整性没有被破坏。这表示写入的资料必须完全符合所有的预设[约束](https://zh.wikipedia.org/wiki/数据完整性)、[触发器](https://zh.wikipedia.org/wiki/触发器_(数据库))、[级联回滚](https://zh.wikipedia.org/w/index.php?title=级联回滚&action=edit&redlink=1)等。
+3. **隔离性（Isolation ）** ：数据库允许多个并发事务同时对其数据进行读写和修改的能力，隔离性可以防止多个事务并发执行时由于交叉执行而导致数据的不一致。事务隔离分为不同级别，包括读未提交（Read uncommitted）、读提交（read committed）、可重复读（repeatable read）和串行化（Serializable）。
+4. **持久性（Durability ）** ：事务处理结束后，对数据的修改就是永久的，即便系统故障也不会丢失。
 
 
 
-
-
-### 43. 列举 Spring 支持的事务管理类型？
+## 43. 列举 Spring 支持的事务管理类型？
 
 目前 Spring 提供两种类型的事务管理：
-
- 
 
 - **声明式**事务：通过使用注解或基于 XML 的配置事务，从而事务管理与业务代码分离。
 - **编程式**事务：通过编码的方式实现事务管理，需要在代码中显式的调用事务的获得、提交、回滚。它为您提供极大的灵活性，但维护起来非常困难。
 
 
 
-实际场景下，我们一般使用 Spring Boot + 注解的**声明式**事务。具体的示例，胖友可以看看 [《Spring Boot 事务注解详解》](https://www.jianshu.com/p/cddeca2c9245) 。
-
-
+实际场景下，我们一般使用 Spring Boot + 注解的**声明式**事务。可以看看 [《Spring Boot 事务注解详解》](https://www.jianshu.com/p/cddeca2c9245) 。
 
 另外，也推荐看看 [《Spring 事务管理 － 编程式事务、声明式事务》](https://blog.csdn.net/xktxoo/article/details/77919508) 一文。
 
 
 
-### 44. Spring 事务如何和不同的数据持久层框架做集成？
+## 44. Spring 事务如何和不同的数据持久层框架做集成？
 
+① 数据持久层框架，指的是 Spring JDBC、Hibernate、Spring JPA、MyBatis 等。
 
-
-① 首先，我们先明确下，这里数据持久层框架，指的是 Spring JDBC、Hibernate、Spring JPA、MyBatis 等等。
-
-② 然后，Spring 事务的管理，是通过 `org.springframework.transaction.PlatformTransactionManager` 进行管理，定义如下：
+② Spring 事务是通过 `org.springframework.transaction.PlatformTransactionManager` 进行管理，定义如下：
 
 ```java
-// PlatformTransactionManager.java
-
 public interface PlatformTransactionManager {
-
-    // 根据事务定义 TransactionDefinition ，获得 TransactionStatus 。 
+    // 根据事务定义 TransactionDefinition ，获得 TransactionStatus
     TransactionStatus getTransaction(@Nullable TransactionDefinition definition) throws TransactionException;
-
+    
     // 根据情况，提交事务
     void commit(TransactionStatus status) throws TransactionException;
-    
     // 根据情况，回滚事务
     void rollback(TransactionStatus status) throws TransactionException;
-    
 }
 ```
 
-
-
 - PlatformTransactionManager 是负责事务管理的接口，一共有三个接口方法，分别负责事务的获得、提交、回滚。
 
+  - `#getTransaction(TransactionDefinition definition)` 方法，根据事务定义 TransactionDefinition ，获得 TransactionStatus 。
 
+  > - 为什么不是创建事务呢？因为如果当前如果已经有事务，则不会进行创建，一般来说会跟当前线程进行绑定。如果不存在事务，则进行创建。
+  > - 为什么返回的是 TransactionStatus 对象？在 TransactionStatus 中，不仅仅包含事务属性，还包含事务的其它信息，例如是否只读、是否为新创建的事务等等。😈 下面，也会详细解析 TransactionStatus 。
+  > - 事务 TransactionDefinition 是什么？😈 下面，也会详细解析 TransactionStatus 。
 
-- `#getTransaction(TransactionDefinition definition)` 方法，根据事务定义 TransactionDefinition ，获得 TransactionStatus 。
+  - `#commit(TransactionStatus status)` 方法，根据 TransactionStatus 情况，提交事务。
 
-> - 为什么不是创建事务呢？因为如果当前如果已经有事务，则不会进行创建，一般来说会跟当前线程进行绑定。如果不存在事务，则进行创建。
-> - 为什么返回的是 TransactionStatus 对象？在 TransactionStatus 中，不仅仅包含事务属性，还包含事务的其它信息，例如是否只读、是否为新创建的事务等等。😈 下面，也会详细解析 TransactionStatus 。
-> - 事务 TransactionDefinition 是什么？😈 下面，也会详细解析 TransactionStatus 。
+  > 为什么根据 TransactionStatus 情况，进行提交？
+  >
+  > 例如说，带@Transactional 注解的的 A 方法，会调用 @Transactional 注解的的 B 方法。
+  >
+  > 在 B 方法结束调用后，会执行 PlatformTransactionManager#commit(TransactionStatus status) 方法，此处事务是不能、也不会提交的。而是在 A 方法结束调用后，执行 PlatformTransactionManager#commit(TransactionStatus status) 方法，提交事务。
 
+  - `#rollback(TransactionStatus status)` 方法，根据 TransactionStatus 情况，回滚事务。
 
+  > 原因同 `#commit(TransactionStatus status)` 方法。
 
-- `#commit(TransactionStatus status)` 方法，根据 TransactionStatus 情况，提交事务。
+③ PlatformTransactionManager 有**抽象子**类
 
-> 为什么根据 TransactionStatus 情况，进行提交？例如说，带@Transactional 注解的的 A 方法，会调用 @Transactional 注解的的 B 方法。
-> 在 B 方法结束调用后，会执行 PlatformTransactionManager#commit(TransactionStatus status) 方法，此处事务是不能、也不会提交的。
-> 而是在 A 方法结束调用后，执行 PlatformTransactionManager#commit(TransactionStatus status) 方法，提交事务。
-
-
-
-- `#rollback(TransactionStatus status)` 方法，根据 TransactionStatus 情况，回滚事务。
-
-> - 为什么根据 TransactionStatus 情况，进行回滚？原因同 `#commit(TransactionStatus status)` 方法。
-
-
-
-③ 再之后，PlatformTransactionManager 有**抽象子**类
-
-`org.springframework.transaction.support.AbstractPlatformTransactionManager` ，基于 [模板方法模式](https://blog.csdn.net/carson_ho/article/details/54910518) ，实现事务整体逻辑的骨架，而抽象 `#doCommit(DefaultTransactionStatus status)`、`#doRollback(DefaultTransactionStatus status)` 等等方法，交由子类类来实现。
-
-
-
-> 前方高能，即将进入关键的 ④ 步骤。
-
-
+- `org.springframework.transaction.support.AbstractPlatformTransactionManager` ，基于 [模板方法模式](https://blog.csdn.net/carson_ho/article/details/54910518) ，实现事务整体逻辑的骨架，而抽象 `#doCommit(DefaultTransactionStatus status)`、`#doRollback(DefaultTransactionStatus status)` 等等方法，交由子类类来实现。
 
 ④ 最后，不同的数据持久层框架，会有其对应的 PlatformTransactionManager 实现类，如下图所示：
 
 ![事务的特性](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/07.jpeg)
 
-
-
 - 所有的实现类，都基于 AbstractPlatformTransactionManager 这个骨架类。
-- HibernateTransactionManager ，和 Hibernate5 的事务管理做集成。
-- DataSourceTransactionManager ，和 JDBC 的事务管理做集成。所以，它也适用于 MyBatis、Spring JDBC 等等。
-- JpaTransactionManager ，和 JPA 的事务管理做集成。
+  - HibernateTransactionManager ，和 Hibernate5 的事务管理做集成。
+  - DataSourceTransactionManager ，和 JDBC 的事务管理做集成。所以，它也适用于 MyBatis、Spring JDBC 等等。
+  - JpaTransactionManager ，和 JPA 的事务管理做集成。
 
 
-
-如下，是一个比较常见的 XML 方式来配置的事务管理器，使用的是 DataSourceTransactionManager 。代码如下：
-
-
+- 如下，是一个比较常见的 XML 方式来配置的事务管理器，使用的是 DataSourceTransactionManager 。正如上文所说，它适用于 MyBatis、Spring JDBC 等等。
 
 ```xml
 <!-- 事务管理器 -->
@@ -1204,27 +1100,16 @@ class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 </bean>
 ```
 
+- 更多详细的解析，可见如下几篇文章：
+
+  - [《精尽 Spring 源码分析 —— Transaction 源码简单导读》](http://svip.iocoder.cn/categories/Spring/)
+
+  - [《精尽 MyBatis 源码分析 —— 事务模块》](http://svip.iocoder.cn/MyBatis/transaction-package/)
+
+  - [《精尽 MyBatis 源码解析 —— Spring 集成（四）之事务》](http://svip.iocoder.cn/MyBatis/Spring-Integration-4/)
 
 
-- 正如上文所说，它适用于 MyBatis、Spring JDBC 等等。
-
-
-
-<hr>
-
-
-
-😈 是不是很有趣，更多详细的解析，可见如下几篇文章：
-
- 
-
-- [《精尽 Spring 源码分析 —— Transaction 源码简单导读》](http://svip.iocoder.cn/categories/Spring/)
-- [《精尽 MyBatis 源码分析 —— 事务模块》](http://svip.iocoder.cn/MyBatis/transaction-package/)
-- [《精尽 MyBatis 源码解析 —— Spring 集成（四）之事务》](http://svip.iocoder.cn/MyBatis/Spring-Integration-4/)
-
-
-
-### 45. 为什么在 Spring 事务中不能切换数据源？
+## 45. 为什么在 Spring 事务中不能切换数据源？
 
 做过 Spring 多数据源的胖友，都会有个惨痛的经历，为什么在开启事务的 Service 层的方法中，无法切换数据源呢？因为，在 Spring 的事务管理中，**所使用的数据库连接会和当前线程所绑定**，即使我们设置了另外一个数据源，使用的还是当前的数据源连接。
 
@@ -1234,36 +1119,22 @@ class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 
 
 
-### 46. @Transactional 注解有哪些属性？如何使用？
+## 46. @Transactional 注解有哪些属性？如何使用？
 
-`@Transactional` 注解的**属性**如下：
+- `@Transactional` 注解的**属性**如下。
+  - 一般情况下，我们直接使用 `@Transactional` 的所有属性默认值即可。
 
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220325223819438.png?w=600)
-
-
-
-
-
-- 一般情况下，我们直接使用 `@Transactional` 的所有属性默认值即可。
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220325223819438.png)
 
 
 
-具体**用法**如下：
+- `@Transactional` 可以作用于接口、接口方法、类及类方法上。
+  - 当作用于类上时，该类的所有 `public` 方法将都具有该类型的事务属性，同时，我们也可以在方法级别使用该标注来覆盖类级别的定义。
+  - 虽然 `@Transactional` 注解可以作用于接口、接口方法、类以及类方法上，但是 Spring 建议不要在接口或者接口方法上使用该注解，因为这只有在使用基于接口的代理时它才会生效。
+  - 另外， **`@Transactional` 注解应该只被应用到 `public` 方法上，这是由 Spring AOP 的本质决定的**。如果你在 `protected`、`private` 或者默认可见性的方法上使用 `@Transactional` 注解，这将被忽略，也不会抛出任何异常。**这一点，非常需要注意**。
 
 
-
-- `@Transactional` 可以作用于接口、接口方法、类以及类方法上。当作用于类上时，该类的所有 `public` 方法将都具有该类型的事务属性，同时，我们也可以在方法级别使用该标注来覆盖类级别的定义。
-- 虽然 `@Transactional` 注解可以作用于接口、接口方法、类以及类方法上，但是 Spring 建议不要在接口或者接口方法上使用该注解，因为这只有在使用基于接口的代理时它才会生效。另外， **`@Transactional` 注解应该只被应用到 `public` 方法上，这是由 Spring AOP 的本质决定的**。如果你在 `protected`、`private` 或者默认可见性的方法上使用 `@Transactional` 注解，这将被忽略，也不会抛出任何异常。**这一点，非常需要注意**。
-
-
-
-<hr>
-
-下面，我们来简单说下**源码**相关的东西。
-
-`@Transactional` 注解的属性，会解析成 `org.springframework.transaction.TransactionDefinition` 对象，即事务定义。
-
-TransactionDefinition 代码如下：
+- `@Transactional` 注解的属性，会解析成 `org.springframework.transaction.TransactionDefinition` 对象，即事务定义。（源码相关）
 
 ```java
 public interface TransactionDefinition {
@@ -1274,58 +1145,39 @@ public interface TransactionDefinition {
 	boolean isReadOnly(); // 事务是否只读
 	@Nullable
 	String getName(); // 事务的名字
-
 }
 ```
 
-
-
-- 可能会胖友有以后，`@Transactional` 注解的`rollbackFor`、`rollbackForClassName`、`noRollbackFor`、`noRollbackForClassName` 属性貌似没体现出来？它们体现在 TransactionDefinition 的实现类 RuleBasedTransactionAttribute 中。
+- `@Transactional` 注解的`rollbackFor`、`rollbackForClassName`、`noRollbackFor`、`noRollbackForClassName` 属性貌似没体现出来？它们体现在 TransactionDefinition 的实现类 RuleBasedTransactionAttribute 中。
 - `#getPropagationBehavior()` 方法，返回事务的**传播行为**，该值是个枚举，在下面来说。
 - `#getIsolationLevel()` 方法，返回事务的**隔离级别**，该值是个枚举，在下面来说。
 
 
 
-
-
-### 47. 什么是事务的隔离级别？分成哪些隔离级别？
-
-关于这个问题，涉及的内容会比较多，胖友直接看如下两篇文章：
-
- 
+## 47. 什么是事务的隔离级别？分成哪些隔离级别？
 
 - [《数据库四大特性以及事务隔离级别》](https://zhuanlan.zhihu.com/p/25419593)
 - [《五分钟搞清楚 MySQL 事务隔离级别》](https://www.jianshu.com/p/4e3edbedb9a8)
 
-
-
-另外，有一点非常重要，不同数据库对四个隔离级别的支持和实现略有不同。因为我们目前互联网主要使用 MySQL 为主，所以至少要搞懂 MySQL 对隔离级别的支持和实现情况。
+不同数据库对四个隔离级别的支持和实现略有不同。至少要搞懂 MySQL 对隔离级别的支持和实现情况。
 
 在 TransactionDefinition 接口中，定义了“**四种**”的隔离级别枚举。代码如下：
 
 ```java
-// TransactionDefinition.java
-
 /**
  * 【Spring 独有】使用后端数据库默认的隔离级别
- *
  * MySQL 默认采用的 REPEATABLE_READ隔离级别
  * Oracle 默认采用的 READ_COMMITTED隔离级别
  */
 int ISOLATION_DEFAULT = -1;
 
-/**
- * 最低的隔离级别，允许读取尚未提交的数据变更，可能会导致脏读、幻读或不可重复读
- */
+// 最低的隔离级别，允许读取尚未提交的数据变更，可能会导致脏读、幻读或不可重复读
 int ISOLATION_READ_UNCOMMITTED = Connection.TRANSACTION_READ_UNCOMMITTED;
 
-/**
- * 允许读取并发事务已经提交的数据，可以阻止脏读，但是幻读或不可重复读仍有可能发生
- */
+// 允许读取并发事务已经提交的数据，可以阻止脏读，但是幻读或不可重复读仍有可能发生
 int ISOLATION_READ_COMMITTED = Connection.TRANSACTION_READ_COMMITTED;
-/**
- * 对同一字段的多次读取结果都是一致的，除非数据是被本身事务自己所修改，可以阻止脏读和不可重复读，但幻读仍有可能发生。
- */
+
+// 对同一字段的多次读取结果都是一致的，除非数据是被本身事务自己所修改，可以阻止脏读和不可重复读，但幻读仍有可能发生。
 int ISOLATION_REPEATABLE_READ = Connection.TRANSACTION_REPEATABLE_READ;
 /**
  * 最高的隔离级别，完全服从ACID的隔离级别。所有的事务依次逐个执行，这样事务之间就完全不可能产生干扰，也就是说，该级别可以防止脏读、不可重复读以及幻读。
@@ -1337,28 +1189,19 @@ int ISOLATION_SERIALIZABLE = Connection.TRANSACTION_SERIALIZABLE;
 
 
 
+## 48. 什么是事务的传播级别？分成哪些传播级别？
 
-
-
-
-### 48. 什么是事务的传播级别？分成哪些传播级别？
-
-事务的**传播行为**，指的是当前带有事务配置的方法，需要怎么处理事务。
+事务的传播行为，指的是当前带有事务配置的方法，需要怎么处理事务。
 
  
 
 - 例如：方法可能继续在现有事务中运行，也可能开启一个新事务，并在自己的事务中运行。
 - 有一点需要注意，事务的传播级别，并不是数据库事务规范中的名词，**而是 Spring 自身所定义的**。通过事务的传播级别，Spring 才知道如何处理事务，是创建一个新事务呢，还是继续使用当前的事务。
 
-
-
-在 TransactionDefinition 接口中，定义了**三类七种**传播级别。代码如下：
-
 ```java
-// TransactionDefinition.java
+// 在 TransactionDefinition 接口中，定义了三类七种传播级别。 
 
 // ========== 支持当前事务的情况 ========== 
-
 /**
  * 如果当前存在事务，则使用该事务。
  * 如果当前没有事务，则创建一个新的事务。
@@ -1376,7 +1219,6 @@ int PROPAGATION_SUPPORTS = 1;
 int PROPAGATION_MANDATORY = 2;
 
 // ========== 不支持当前事务的情况 ========== 
-
 /**
  * 创建一个新的事务。
  * 如果当前存在事务，则把当前事务挂起。
@@ -1394,7 +1236,6 @@ int PROPAGATION_NOT_SUPPORTED = 4;
 int PROPAGATION_NEVER = 5;
 
 // ========== 其他情况 ========== 
-
 /**
  * 如果当前存在事务，则创建一个事务作为当前事务的嵌套事务来运行。
  * 如果当前没有事务，则等价于 {@link TransactionDefinition#PROPAGATION_REQUIRED}
@@ -1404,7 +1245,7 @@ int PROPAGATION_NESTED = 6;
 
 
 
-- 分类之后，其实还是比较好记的。当然，绝大数场景，我们只用 `PROPAGATION_REQUIRED` 传播级别。
+- 分类之后，其实还是比较好记的。绝大数场景，我们只用 `PROPAGATION_REQUIRED` 传播级别。
 
 - 这里需要指出的是，前面的六种事务传播行为是 Spring 从 EJB 中引入的，他们共享相同的概念。而 `PROPAGATION_NESTED` 是 Spring 所特有的。
 
@@ -1413,36 +1254,28 @@ int PROPAGATION_NESTED = 6;
 
 
 
-
-
-
-
-### 49. 什么是事务的超时属性？
+## 49. 什么是事务的超时属性？
 
 所谓事务超时，就是指一个事务所允许执行的最长时间，如果超过该时间限制但事务还没有完成，则自动回滚事务。
 
 在 TransactionDefinition 中以 `int` 的值来表示超时时间，其单位是秒。
 
-当然，这个属性，貌似我们基本也没用过。
+这个属性，貌似我们基本也没用过。
 
 
 
-### 50. 什么是事务的只读属性？
+## 50. 什么是事务的只读属性？
 
 事务的只读属性是指，对事务性资源进行只读操作或者是读写操作。
 
- 
-
 - 所谓事务性资源就是指那些被事务管理的资源，比如数据源、JMS 资源，以及自定义的事务性资源等等。
 - 如果确定只对事务性资源进行只读操作，那么我们可以将事务标志为只读的，以提高事务处理的性能。感兴趣的胖友，可以看看 [《不使用事务和使用只读事务的区别 》](https://my.oschina.net/uniquejava/blog/80954) 。
-
-
 
 在 TransactionDefinition 中以 `boolean` 类型来表示该事务是否只读。
 
 
 
-### 51. 什么是事务的回滚规则？
+## 51. 什么是事务的回滚规则？
 
 回滚规则，定义了哪些异常会导致事务回滚而哪些不会。
 
@@ -1455,21 +1288,12 @@ int PROPAGATION_NESTED = 6;
 
 
 
-### 52. 简单介绍 TransactionStatus ？
-
-> 这个可能不是一个面试题，主要满足下大家的好奇心。
+## 52. 简单介绍 TransactionStatus ？
 
 TransactionStatus 接口，记录事务的状态，不仅仅包含事务本身，还包含事务的其它信息。代码如下：
 
-
-
-
-
 ```java
-// TransactionStatus.java
-
 public interface TransactionStatus extends SavepointManager, Flushable {
-
     /**
      * 是否是新创建的事务
      */
@@ -1501,7 +1325,6 @@ public interface TransactionStatus extends SavepointManager, Flushable {
      * 是否事务已经完成
      */
     boolean isCompleted();
-
 }
 ```
 
@@ -1510,26 +1333,19 @@ public interface TransactionStatus extends SavepointManager, Flushable {
 - 为什么没有事务对象呢？在 TransactionStatus 的实现类 DefaultTransactionStatus 中，有个 `Object transaction` 属性，表示事务对象。
 - `#isNewTransaction()` 方法，表示是否是新创建的事务。有什么用呢？答案结合 [「Spring 事务如何和不同的数据持久层框架做集成？」](http://svip.iocoder.cn/Spring/Interview/#) 问题，我们对 `#commit(TransactionStatus status)` 方法的解释。通过该方法，我们可以判断，当前事务是否当前方法所创建的，只有创建事务的方法，**才能且应该真正的提交事务**。
 
+## 53. 使用 Spring 事务有什么优点？
 
+- 通过 PlatformTransactionManager ，为不同的数据层持久框架提供统一的 API ，无需关心到底是原生 JDBC、Spring JDBC、JPA、Hibernate 还是 MyBatis 。
 
-### 53. 使用 Spring 事务有什么优点？
-
-1. 通过 PlatformTransactionManager ，为不同的数据层持久框架提供统一的 API ，无需关心到底是原生 JDBC、Spring JDBC、JPA、Hibernate 还是 MyBatis 。
-2. 通过使用声明式事务，使业务代码和事务管理的逻辑分离，更加清晰。
+- 通过使用声明式事务，使业务代码和事务管理的逻辑分离，更加清晰。
 
 从倾向上来说，比较喜欢**注解** + 声明式事务。
 
-​	
 
 
+# 七、Spring Data Access
 
-## 七、Spring Data Access
-
-> 这块的问题，感觉面试问的不多，至少我很少问。哈哈哈。就当做下了解，万一问了呢。
-
-
-
-### 54. Spring 支持哪些 ORM 框架？
+## 54. Spring 支持哪些 ORM 框架？
 
 - Hibernate
 - JPA
@@ -1537,63 +1353,44 @@ public interface TransactionStatus extends SavepointManager, Flushable {
 - [JDO](https://docs.spring.io/spring/docs/3.0.0.M4/reference/html/ch13s04.html)
 - [OJB](https://db.apache.org/ojb/docu/howtos/howto-use-spring.html)
 
+不是应该还有 Spring JDBC 吗。注意，Spring JDBC 不是 ORM 框架。
 
-
-可能会有胖友说，不是应该还有 Spring JDBC 吗。注意，Spring JDBC 不是 ORM 框架。
-
-
-
-### 55. 在 Spring 框架中如何更有效地使用 JDBC ？
+## 55. 在 Spring 框架中如何更有效地使用 JDBC ？
 
 Spring 提供了 Spring JDBC 框架，方便我们使用 JDBC 。
 
 对于开发者，只需要使用 `JdbcTemplate` 类，它提供了很多便利的方法解决诸如把数据库数据转变成基本数据类型或对象，执行写好的或可调用的数据库操作语句，提供自定义的数据错误处理。
 
-没有使用过的胖友，可以看看 [《Spring JDBC 访问关系型数据库》](https://www.tianmaying.com/tutorial/spring-jdbc-data-accessing) 文章。
+可以看看 [《Spring JDBC 访问关系型数据库》](https://www.tianmaying.com/tutorial/spring-jdbc-data-accessing) 文章。
 
 
 
-### 56. Spring 数据数据访问层有哪些异常？
+## 56. Spring 数据数据访问层有哪些异常？
 
 通过使用 Spring 数据数据访问层，它统一了各个数据持久层框架的不同异常，统一进行提供 
 
 `org.springframework.dao.DataAccessException` 异常及其子类。如下图所示：
 
-![流程图](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/09.jpg)
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/09.jpg)
 
 
 
-
-
-### 使用 Spring 访问 Hibernate 的方法有哪些？
-
-我们可以通过两种方式使用 Spring 访问 Hibernate：
+## 57 使用 Spring 访问 Hibernate 的方法有哪些？
 
 - 使用 Hibernate 模板和回调进行控制反转。
 - 扩展 HibernateDAOSupport 并应用 AOP 拦截器节点。
 
-
-
 > 不过我记得，12 年我用过 Spring JPA 的方式，操作 Hibernate 。具体可参考 [《一起来学 SpringBoot 2.x | 第六篇：整合 Spring Data JPA》](http://www.iocoder.cn/Spring-Boot/battcn/v2-orm-jpa/) 。
 
-
-
-当然，我们可以再来看一道 [《JPA 规范与 ORM 框架之间的关系是怎样的呢？》](https://www.cnblogs.com/xiaoheike/p/5150553.html) 。这个问题，我倒是问过面试的候选人，哈哈哈哈。
-
-
-
-## 八、最后
-
-整理 Spring 面试题的过程中，又把 Spring 的知识点又复习了一遍。我突然有点想念，那本被我翻烂的 [《Spring 实战》](https://book.douban.com/subject/26767354/) 。😈 我要买一本原版的！！！
+当然，我们可以再来看一道 [《JPA 规范与 ORM 框架之间的关系是怎样的呢？》](https://www.cnblogs.com/xiaoheike/p/5150553.html) 。
 
 
 
+# 八、最后
 
+整理 Spring 面试题的过程中，又把 Spring 的知识点又复习了一遍。我突然有点想念，那本被我翻烂的 [《Spring 实战》](https://book.douban.com/subject/26767354/) 。
 
 参考与推荐如下文章：
-
-<hr>
-
 
 
 - Java 架构 [《Spring 面试题》](https://yq.aliyun.com/articles/669702)

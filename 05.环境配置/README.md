@@ -8,6 +8,29 @@
 
 
 
+## 网站
+
+- 架构图 / 思维导图
+
+  - draw.io
+
+  - www.processon.com
+
+  - ppt
+
+- 全网盘资源检索网站
+  - 易搜：https://yiso.fun/
+  - 找资源（阿里云盘资源搜索引擎）：https://zhaoziyuan.me/
+  - 优聚搜：https://jujuso.com/
+  - 橘子盘搜（搜剧神器）：https://www.nmme.cc/
+  - 猫狸盘搜（阿里云盘搜索神器）：https://www.alipansou.com/
+  - UP云搜：https://www.upyunso.com/
+  - 小纸条：https://u.gitcafe.net/
+  - fastsoso：https://www.fastsoso.cn/
+  - 58网盘搜索：https://www.58wangpan.com/
+
+
+
 
 
 
