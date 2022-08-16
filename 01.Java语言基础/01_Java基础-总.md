@@ -4115,14 +4115,6 @@ Class<?> targetClass = Class.forName("cn.javaguide.TargetObject");
 
 
 
-
-
-
-
-
-
-
-
 # 十三、Java8 新特性
 
 Java 8 是oracle公司于2014年3月发布，可以看成是自Java 5 以来最具革命性的版本。
@@ -4143,10 +4135,6 @@ Stream API（核心2）⭐️
   allMatch
 方法引用  
 ```
-
-
-
-
 
 
 
@@ -4530,23 +4518,55 @@ public void test2() {
 
 # 十四、Java9&Java10&Java11新特性
 
-
-
 自从 2017 年 9 月 21 日 Java 9 正式发布之时，Oracle 就宣布今后会按照每六个月一次的节奏进行更新，在过去的几个月中，我们见证了其兑现了诺言，但万万没想到，苦了大批迎头而上的开发者们。
-
-
 
 
 
 ## Java9新特性
 
-经过4次跳票，历经曲折的Java 9 终于终于在2017年9月21日发布。 
+经过4次跳票，历经曲折的 Java 9 终于在2017年9月21日发布。 
 
+### 集合工厂方法
 
+- List，Set 和 Map 接口中，新的静态工厂方法可以创建这些集合的不可变实例。（以更简洁的方式来创建集合）
 
+```java
+static <E> List<E> of(E e1, E e2, E e3);
+static <E> Set<E>  of(E e1, E e2, E e3);
+static <K,V> Map<K,V> of(K k1, V v1, K k2, V v2, K k3, V v3);
+static <K,V> Map<K,V> ofEntries(Map.Entry<? extends K,? extends V>... entries)
+```
 
+- 实例
 
+```java
+public class Tester {
+ 
+   public static void main(String []args) {
+      Set<String> set = Set.of("A", "B", "C");      
+      System.out.println(set);
+      List<String> list = List.of("A", "B", "C");
+      System.out.println(list);
+      Map<String, String> map = Map.of("A","Apple","B","Boy","C","Cat");
+      System.out.println(map);
+  
+      Map<String, String> map1 = Map.ofEntries (
+         new AbstractMap.SimpleEntry<>("A","Apple"),
+         new AbstractMap.SimpleEntry<>("B","Boy"),
+         new AbstractMap.SimpleEntry<>("C","Cat"));
+      System.out.println(map1);
+   }
+}
+```
 
+打印结果
+
+```bash
+[A, B, C]
+[A, B, C]
+{A=Apple, B=Boy, C=Cat}
+{A=Apple, B=Boy, C=Cat}
+```
 
 
 
@@ -4556,8 +4576,6 @@ public void test2() {
 
 而未来的 **Java 11**，也就是 18.9 LTS，才是 Java 8 之后第一个 LTS 版本。
 
-<br>
-
 如果可以从变量的初始值推导出它们的类型，那么可以用var关键字声明局部变量，而无须指定类型。
 
 ```java
@@ -4566,13 +4584,7 @@ var harry = new Employee2("Carl Cracker", 75000, 1987, 12, 15);
 
 
 
-
-
-
-
-
-
-## Java11新特性
+## Java11新特性⭐️
 
 北京时间 2018年9 月 26 日，Oracle 官方宣布 Java 11 正式发布。这是 Java 大版本周期变化后的第一个长期支持版本，非常值得关注。
 

@@ -37,6 +37,9 @@ cat b1.sql b2.sql b3.sql > b_all.sql
 cat *.sql > merge.sql
 
 
+
+sudo su
+
 mv 
 
 # linux下常用的故障排查命令
