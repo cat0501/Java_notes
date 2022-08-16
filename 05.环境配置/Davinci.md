@@ -305,6 +305,8 @@ mv application.yml.example application.yml
 - 3-创建可视化组件
 - 4-创建可视化应用 Dashboard
 
+![](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/image-20220815102934665.png)
+
 
 
 ## 用户与权限

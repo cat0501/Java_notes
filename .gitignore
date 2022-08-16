@@ -1,6 +1,8 @@
 ##ignore this file##
 # 过滤此文件夹
 target/
+node_modules
+/dist
 
 # IDEA
 .idea/
