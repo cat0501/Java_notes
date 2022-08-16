@@ -95,95 +95,19 @@ SpringBoot 是由 `Pivotal` 团队提供的全新框架，其设计目的是用�
 
 ## 1. 四种创建方式
 
-> - 基于Idea创建SpringBoot工程
-> - 基于官网创建SpringBoot工程
-> - 基于阿里云创建SpringBoot工程
-> - 手工创建Maven工程修改为SpringBoot工程
+- （1）基于IDEA
 
+- （2）基于官网：https://start.spring.io/
 
+- （3）基于阿里云：https://start.aliyun.com
 
-### 1.1基于IDEA
+- （4）手工创建Maven工程修改为SpringBoot工程（推荐）
+  - 创建普通 Maven 工程
+  - 继承 `spring-boot-starter-parent`
+  - 添加依赖 `spring-boot-starter-web`
+  - 制作引导类 `Application`
 
-①：创建新模块，选择Spring Initializr，并配置模块相关基础信息
-
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220327162853957.png?w=600)
-
-
-
-②：选择当前模块需要使用的技术集
-
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220302125704010.png?w=600)
-
-
-
-③：开发控制器类
-
-```java
-//Rest模式
-@RestController
-@RequestMapping("/books")
-public class BookController {
-    @GetMapping
-    public String getById(){
-        System.out.println("springboot is running...");
-        return "springboot is running..."; 
-    } 
-}
-```
-
-
-
-④：运行自动生成的Application类
-
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220327162921543.png?w=550)
-
-
-
-```bash
-# 最简SpringBoot程序所包含的基础文件：
-- pom.xml文件
-- Application类
-```
-
-
-
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220302130025852.png?w=600)
-
-
-
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220302130040514.png?w=600)
-
-
-
-> Spring 程序与SpringBoot 程序对比
-
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220302130152848.png)
-
-
-
-### 1.2 基于官网：https://start.spring.io/
-
-- 打开SpringBoot官网，选择Quickstart Your Project
-- 创建工程，并保存项目
-- 解压项目，通过IDE导入项目
-
-### 1.3 基于阿里云：https://start.aliyun.com
-
-- 阿里云提供的坐标版本较低，如果需要使用高版本，进入工程后手工切换SpringBoot版本
-- 阿里云提供的工程模板与Spring官网提供的工程模板略有不同
-
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220302131047519.png?w=600)
-
-
-
-### 1.4 手工创建Maven工程修改为SpringBoot工程（推荐）
-
-- 创建普通 Maven 工程
-- 继承 `spring-boot-starter-parent`
-- 添加依赖 `spring-boot-starter-web`
-- 制作引导类 `Application`
-
-
+详见：https://juejin.cn/post/7132483144501952525
 
 ## 2. IDEA中隐藏指定文件/文件夹
 
