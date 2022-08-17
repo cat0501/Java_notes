@@ -350,7 +350,63 @@ class Springboot07JunitApplicationTests {
 
 
 
-### 4.2 整合Mybatis
+### 4.2 整合swagger
+
+- 官网：https://swagger.io/docs/
+
+- 实时接口文文档生成工具，方便前后端联调测试。
+- 参考
+  - https://blog.csdn.net/lsqingfeng/article/details/123678701
+- 访问地址
+  - http://localhost:8001/swagger-ui.html
+  - http://localhost:8001/swagger-ui/index.html#/
+
+#### swagger2
+
+- 添加依赖
+
+```xml
+<!--包含：springfox-swagger-ui、springfox-swagger2等-->
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-boot-starter</artifactId>
+    <version>3.0.0</version>
+</dependency>
+```
+
+- 引入配置
+  - 添加注解，开启Swagger的功能：@EnableSwagger2
+  - 定义配置类
+
+- 添加相应注解
+
+- 一个问题：SpringBoot2.6版本和Swagger2.9.2不兼容导致的。 也有人说是由于guava这个包的版本过低导致的。
+
+  - 解决：配置文件中添加配置
+
+  ```properties
+  # SpringBoot 2.6.X使用PathPatternMatcher匹配路径，Swagger引用的Springfox使用的路径匹配是基于AntPathMatcher的。
+  spring.mvc.pathmatch.matching-strategy=ANT_PATH_MATCHER
+  ```
+
+#### swagger3
+
+- 添加依赖
+
+```xml
+<!--包含：springfox-swagger-ui、springfox-swagger2等-->
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-boot-starter</artifactId>
+    <version>3.0.0</version>
+</dependency>
+```
+
+- 引入配置
+  - 添加注解：@EnableOpenApi
+  - 定义配置类
+
+### 4.3 整合Mybatis
 
 ```bash
 # 思考🤔
@@ -432,7 +488,7 @@ class Springboot08MybatisApplicationTests {
 
 
 
-### 4.3 整合Mybatis-Plus
+### 4.4 整合Mybatis-Plus
 
 ```bash
 # MyBatis-Plus与MyBatis区别
@@ -473,7 +529,7 @@ public interface UserDao extends BaseMapper<User> {
 
 
 
-### 4.4 整合Druid
+### 4.5 整合Druid
 
 ```bash
 # 整合步骤
@@ -525,7 +581,7 @@ spring:
 
 
 
-### 4.5 整合任意第三方技术
+### 4.6 整合任意第三方技术
 
 ```bash
 导入对应的starter
