@@ -1051,21 +1051,28 @@ spring:
 
 
 
-- 问题：cmd命令窗口和 IDEA中 RedisTemplate 操作的是同一个 Redis 吗？
-  - 是同一个。
-  - RedisTemplate<K, V>的 K,V 未指定都是 Object。客户端RedisTemplate以对象作为key和value，内部对数据进行序列化。
-  - StringRedisTemplate extends RedisTemplate<String, String>的K,V都是 `String`，和cmd命令窗口一致。客户端 StringRedisTemplate 以字符串作为 key 和 value，与 Redis客户端操作等效。
+- 🤔思考：cmd 命令窗口和 IDEA中 RedisTemplate 操作的是同一个 Redis 吗？
+  - 是
+  - `RedisTemplate<K, V>的 K,V` 未指定都是 Object。客户端 `RedisTemplate` 以对象作为key和value，内部对数据进行序列化。
+  - 客户端 `StringRedisTemplate extends RedisTemplate<String, String>` 以字符串作为 key 和 value，与 Redis客户端（cmd命令窗口）操作等效。
 
-- 开发
-  - RedisTemplate
-  - StringRedisTemplate（常用）
+- ⭐开发使用
+	- RedisTemplate
+	- StringRedisTemplate（常用）
+
+- ⚡Redis client
+
+```bash
+# lettuce（内部默认实现）（连接是基于 Netty 的，Netty 是一个多线程、事件驱动的 I/O 框架。）
+底层设计中采用 StatefulRedisConnection。
+StatefulRedisConnection 自身是线程安全的，可以保障并发访问安全问题，所以一个连接可以被多线程复用。
+当然lettcus也支持多连接实例一起工作。
+
+# jedis（直接连接Redis Server即直连模式，如果在多线程环境下使用 jedis是非线程安全的。）
+解决方案可以通过配置连接池使每个连接专用，这样整体性能就大受影响。
+```
 
 
-
-- SpringBoot 整合 Redis 客户端选择
-
-  - lettuce（内部默认实现）
-  - jedis
 
 - 选择 jedis
 
@@ -1080,32 +1087,25 @@ spring:
 
   - 配置
 
-```yaml
-spring:
-  redis:
-    host: localhost
-    port: 6379
-    client-type: jedis
-    lettuce:
-      pool:
-        max-active: 16
-    jedis:
-      pool:
-        max-active: 16
-```
+  ```yaml
+  spring:
+    redis:
+      host: localhost
+      port: 6379
+      client-type: jedis
+      lettuce:
+        pool:
+          max-active: 16
+      jedis:
+        pool:
+          max-active: 16
+  ```
 
-
-
-- `lettcus` 与 `jedis` 区别
-
-  - jedis 连接 Redis 服务器是直连模式，当**多线程模式下使用 jedis 会存在线程安全问题**，解决方案可以通过配置连接池使每个连接专用，这样整体性能就大受影响。
-
-  - lettcus 基于 Netty 框架进行与 Redis 服务器连接，底层设计中采用 StatefulRedisConnection。
-    - StatefulRedisConnection 自身是线程安全的，可以保障并发访问安全问题，所以一个连接可以被多线程复用。当然lettcus也支持多连接实例一起工作。
+  
 
 ### 13.5 Mongodb（NoSQL解决方案2）
 
-> MongoDB是一个开源、高性能、无模式的**文档型数据库**。NoSQL数据库产品中的一种，是**最像关系型数据库**的非关系型数据库。
+> MongoDB 是一个开源、高性能、无模式的**文档型数据库**。NoSQL数据库产品中的一种，是**最像关系型数据库**的非关系型数据库。
 
 
 
@@ -1115,32 +1115,33 @@ spring:
 
 
 
-#### 13.5.2 安装&启动&可视化客户端
+#### 13.5.2 安装、启动、可视化客户端
 
 - windows
 
 ```bash
-# 下载
-https://www.mongodb.com/try/download
-# 安装
-解压缩后设置数据目录
+# 下载 msi 文件、安装
+https://www.mongodb.com/try/download/community
+# 创建3个文件夹：/data、/log、/data/log/
 
-# 服务端启动
-mongod --dbpath=..\data\db
+
+# 服务端启动  C:\Program Files\MongoDB\Server\5.0\bin>
+mongod --dbpath C:\enviroment\mongodb\data\db
+
 # 客户端启动
-mongo --host=127.0.0.1 --port=27017
-
-# 可视化客户端——Robo 3T
+mongo
+# 配置环境变量
+# 可视化客户端——Robo 3T、Navicat
 ```
 
 - macos
 
 ```bash
 # 启动
-cat at zhangjianlindeMacBook-Pro in ~/environment/mongodb 
+in ~/environment/mongodb 
 $ mongod --fork --dbpath data --logpath log/mongodb.log --logappend
-
 $ mongo
+
 # 可视化客户端
 Robo 3T
 
@@ -1167,7 +1168,7 @@ switched to db admin
 ```sql
 # 基础操作CRUD
 // 添加数据（文档）
-// db.book.save({"name":"springboot",type:"springboot"})
+// db.book.save({"name":"springboot基础篇",type:"springboot"})
 
 // 删除操作
 // db.book.remove({type:"springboot"})
@@ -1186,7 +1187,7 @@ db.book.find()
 
 
 
-#### 13.5.3 springboot整合
+#### 13.5.3 springboot 整合
 
 - 依赖
 
