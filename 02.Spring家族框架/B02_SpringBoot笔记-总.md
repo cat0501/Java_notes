@@ -546,117 +546,16 @@ spring:
 
 > 分析：
 >
+> 0. 搭建SpringBoot应用
+>
 > 1. 实体类开发——使用 Lombok快速制作实体类
-> 2. Dao开发——整合 MyBatisPlus，制作数据层测试类
-> 3. Service开发——基于 MyBatisPlus 进行增量开发，制作业务层测试类
-> 4. Controller开发——基于 Restful 开发，使用 PostMan测试接口功能
-> 5. Controller开发——前后端开发协议制作
-> 6. 页面开发——基于 VUE+ElementUI 制作，前后端联调，页面数据处理，页面消息处理（列表、新增、修改、删除、分页、查询）
-> 7. 项目异常处理
-> 8. 按条件查询——页面功能调整、Controller修正功能、Service修正功能
+> 2. 数据层 Dao 开发——整合 MyBatisPlus、Druid（继承 BaseMapper、分页、条件查询）
+> 3. 业务层 Service 开发——基于 MyBatisPlus 进行增量开发（使用 ISerivce 和 ServiceImpl ）
+> 4. 表现层 Controller开发——基于 Restful 开发，使用 PostMan测试接口功能（统一返回值R、项目异常处理）
+> 5. 页面开发——基于 VUE+ElementUI 制作，（列表、新增、修改、删除、分页、查询）
+> 6. 前后端联调
 
-
-
-
-
-### 5.10 前后端协议联调
-
-
-
-#### 删除
-
-  
-
-
-
-> 1. 加载要修改数据通过传递当前行数据对应的id值到后台查询数据
-> 2. 利用前端数据双向绑定将查询到的数据进行回显
-
-
-
-#### 修改
-
-```bash
-1. 请求方式使用PUT调用后台对应操作
-2. 修改操作结束后动态刷新页面加载数据（同新增）
-3. 根据操作结果不同，显示对应的提示信息（同新增）
-```
-
-
-
-```js
-//修改
-handleEdit() {
-    axios.put("/books",this.formData).then((res)=>{
-        //如果操作成功，关闭弹层并刷新页面
-        if(res.data.flag){
-            this.dialogFormVisible4Edit = false;
-            this.$message.success("修改成功");
-        }else {
-            this.$message.error("修改失败，请重试");
-        }
-    }).finally(()=>{
-        this.getAll();
-    });
-},
-  
-// 取消添加和修改
-cancel(){
-    this.dialogFormVisible = false;
-    this.dialogFormVisible4Edit = false;
-    this.$message.info("操作取消");
-},
-```
-
-
-
-### 5.11 业务消息一致性处理
-
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220304095957398.png?w=600)
-
-
-
-- 对异常进行统一处理，出现异常后，返回指定信息
-  - 使用注解 `@RestControllerAdvice` 定义 SpringMVC 异常处理器用来处理异常的
-  - 异常处理器必须被扫描加载，否则无法生效
-  - 表现层返回结果的模型类中添加消息属性用来传递消息到页面
-
-```java
-// 作为springmvc的异常处理器
-@RestControllerAdvice
-public class ProjectExceptionAdvice {
-
-    // 拦截所有的异常信息
-    @ExceptionHandler(Exception.class)
-    public R doException(Exception e){
-        // 记录日志
-        // 通知运维
-        // 通知开发
-        e.printStackTrace();
-        return new R("服务器故障，请稍后重试哈！");
-    }
-}
-```
-
-
-
-### 5.12 分页功能
-
-- 页面使用 el 分页组件添加分页功能
-  - 定义分页组件需要使用的数据并将数据绑定到分页组件
-  - 替换查询全部功能为分页功能
-  - 加载分页数据
-  - 分页页码值切换
-
-
-
-- 使用el分页组件
-
-- 定义分页组件绑定的数据模型
-
-- 异步调用获取分页数据
-
-- 分页数据页面回显
+详见：https://juejin.cn/post/7132866171358937096
 
 ### 总结一下
 
@@ -677,11 +576,7 @@ public class ProjectExceptionAdvice {
 
 ## 6. 打包与运行
 
-- SpringBoot工程可以基于 `java` 环境下独立运行 `jar` 文件启动服务
-
-### 6.1 Windows
-
-- ① 打包
+- SpringBoot 打包插件，参考：https://blog.csdn.net/iss_jin/article/details/122463390
 
 ```xml
 <build>
@@ -694,25 +589,18 @@ public class ProjectExceptionAdvice {
 </build>
 ```
 
-
+- SpringBoot 应用可以基于 `java` 环境下独立运行 `jar` 文件启动服务
+- 一般流程
 
 ```bash
 mvn -v clean package -DskipTests
+
+java –jar xxx.jar
 ```
 
-- ② 运行
-
-```sh
-java –jar springboot.jar
-```
-
-
-
-#### 可执行jar包目录结构
+- 可执行 jar 包目录结构
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220304123510884.png?w=600)
-
-
 
 > jar包描述文件（MANIFEST.MF）
 
@@ -739,9 +627,7 @@ Created-By: Maven Jar Plugin 3.2.0
 Main-Class: org.springframework.boot.loader.JarLauncher   # jar启动器
 ```
 
-
-
-#### Windonws 端口被占用
+- Windonws 端口被占用
 
 ```bash
 # 查询端口
@@ -757,14 +643,6 @@ taskkill /F /PID "进程PID号"
 # 根据进程名称杀死任务
 taskkill -f -t -im "进程名称"
 ```
-
-
-
-### 6.2 Linux
-
-- 安装 JDK
-- 使用 `electerm` 等工具上传包
-- 执行 jar 命令：java –jar 工程名.jar
 
 
 
