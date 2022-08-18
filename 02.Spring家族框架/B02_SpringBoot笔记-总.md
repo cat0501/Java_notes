@@ -944,9 +944,7 @@ logging:
 
 > 通用配置无法设置具体的数据源配置信息，仅提供基本的连接相关配置，如需配置，在下一级配置中设置具体设定
 
-
-
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220304171048530.png)
+![](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/image-20220304171048530.png)
 
 
 
@@ -965,7 +963,7 @@ logging:
 
 
 
-- JdbcTemplate配置
+- JdbcTemplate 配置
 
 ```yaml
 spring: 
@@ -978,7 +976,7 @@ spring:
 
 
 
-### 13.3 内嵌数据库H2
+### 13.3 内嵌数据库 H2
 
 - SpringBoot提供了3种内嵌数据库供开发者选择，提高开发测试效率
   - H2
@@ -987,81 +985,13 @@ spring:
 
 
 
-- 导入H2相关坐标
-
-```xml
-<dependency>
-    <groupId>com.h2database</groupId>
-    <artifactId>h2</artifactId>
-</dependency>
-
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-data-jpa</artifactId>
-</dependency>
-```
-
-
-
-- 设置当前项目为web工程，并配置H2管理控制台参数（访问用户名sa，默认密码123456）
-
-```yaml
-server:
-  port: 80
-spring:
-    h2:
-	  console:
-		path: /h2
-		  enabled: true
-
-```
-
-- 操作数据库（创建表）
-
-```sql
-create table tbl_book (id int,name varchar,type varchar,description varchar)
-```
-
-- 设置访问数据源（SpringBoot可以根据url地址自动识别数据库种类，在保障驱动类存在的情况下，可以省略配置）
-
-```yaml
-server:
-  port: 80
-
-spring:
-  datasource:
-  	# 可省
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:~/test
-    username: sa
-    password: 123456
-  h2:
-    console:
-      path: /h2
-      enabled: true
-```
-
-- H2数据库控制台仅用于开发阶段，线上项目请务必关闭控制台功能
-
-```yaml
-server:
-  port: 80
-spring:
- 	h2:
- 	  console:
- 	    path: /h2
- 	    enabled: false
-```
-
-
-
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220304221121219.png)
 
 
 
-### 13.4 Redis_NoSQL解决方案1
+### 13.4 Redis（NoSQL解决方案1）
 
-> 市面上常见的NoSQL解决方案
+> 市面上常见的NoSQL解决方案：
 >
 > - Redis
 > - Mongo
@@ -1071,7 +1001,7 @@ spring:
 
 
 
-- Redis是一款key-value存储结构的内存级NoSQL数据库
+- Redis是一款 key-value 存储结构的内存级NoSQL数据库
   - 支持多种数据存储格式
   - 支持持久化
   - 支持集群
@@ -1089,7 +1019,7 @@ spring:
 
 - 整合
 
-> （1）导入SpringBoot整合 Redis 坐标
+> （1）导入坐标
 
 ```xml
 <dependency>
@@ -1117,7 +1047,7 @@ spring:
 
 > （3）`RedisTemplate` 提供操作各种数据存储类型的接口API
 
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220305115839226.png?w=600)
+![](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/image-20220305115839226.png)
 
 
 
@@ -1173,7 +1103,7 @@ spring:
   - lettcus 基于 Netty 框架进行与 Redis 服务器连接，底层设计中采用 StatefulRedisConnection。
     - StatefulRedisConnection 自身是线程安全的，可以保障并发访问安全问题，所以一个连接可以被多线程复用。当然lettcus也支持多连接实例一起工作。
 
-### 13.5 Mongodb_NoSQL解决方案2
+### 13.5 Mongodb（NoSQL解决方案2）
 
 > MongoDB是一个开源、高性能、无模式的**文档型数据库**。NoSQL数据库产品中的一种，是**最像关系型数据库**的非关系型数据库。
 
@@ -1305,7 +1235,7 @@ class Springboot17MongodbApplicationTests {
 
 
 
-### 13.6 NoSQL解决方案3_ElasticSearch（ES）
+### 13.6 ElasticSearch（ES）（NoSQL解决方案3）
 
 #### 13.6.1 应用场景&&相关概念
 
