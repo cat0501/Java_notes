@@ -203,7 +203,7 @@ public class Springboot01QuickstartApplication {
 
 ### 3.4 内嵌tomcat
 
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220326181954751.png?w=600)
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220326181954751.png)
 
 
 
@@ -211,7 +211,7 @@ public class Springboot01QuickstartApplication {
 
 > 使用maven依赖管理变更起步依赖项
 
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220302192727997.png?w=550)
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220302192727997.png)
 
 - Jetty 比 Tomcat 更轻量级，可扩展性更强（相较于 Tomcat），谷歌应用引擎（GAE）已经全面切换为 Jetty。
   - tomcat(默认)：apache出品，粉丝多，应用面广，负载了若干较重的组件
@@ -909,7 +909,7 @@ logging:
 
 # 三、实用篇之开发实用篇
 
-> 能够基于SpringBoot整合任意第三方技术
+> 10、11、12对应掘金博客：https://juejin.cn/post/7133126757812535304
 
 ## 10. 热部署
 
@@ -922,7 +922,21 @@ logging:
 
 ## 11. 配置高级
 
+### 11.1 @ConfigurationProperties
+
+### 11.2 数据校验
+
+
+
 ## 12. 测试
+
+- 加载测试专用属性
+- 加载测试专用配置
+- Web环境模拟测试
+- 数据层测试回滚
+- 测试用例数据设定
+
+
 
 ## 13. 数据层解决方案
 
@@ -1265,11 +1279,11 @@ DELETE	http://localhost:9200/books
 
 
 
-## 14. 整合第三方技术
+## 14 缓存
 
-### 14.1 缓存
+### 14.1 概述
 
-#### 缓存作用（数据库成为系统操作的瓶颈）&自定义缓存
+#### 缓存作用（数据库成为系统操作的瓶颈）& 自定义缓存
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220305230034516.png)
 
@@ -1297,7 +1311,6 @@ public Book getById(Integer id) {
 ```java
 @Service
 public class MsgServiceImpl implements MsgService {
-
     private HashMap<String ,String> cache = new HashMap<String,String>();
 
     @Override
@@ -1317,15 +1330,7 @@ public class MsgServiceImpl implements MsgService {
 
 
 
-#### springboot 缓存（专业的做法）
-
-> SpringBoot提供了缓存技术，方便缓存使用
->
-> - 启用缓存
-> - 设置缓存数据
-> - 读取缓存的数据
-
-
+#### springboot 提供的缓存（专业的做法）
 
 - 导入坐标，启用缓存 @EnableCaching、@Cacheable
 
@@ -1340,33 +1345,34 @@ public class MsgServiceImpl implements MsgService {
 
 
 ```java
-@SpringBootApplication
 //开启缓存功能
 @EnableCaching
+@SpringBootApplication
 public class Springboot19CacheApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(Springboot19CacheApplication.class, args);
     }
 }
 ```
 
-
+- 设置缓存数据
 
 ```java
-@Override
-@Cacheable(value="cacheSpace",key="#id")
 // 设置当前操作的结果数据进入缓存
+@Cacheable(value="cacheSpace",key="#id")
 public Book getById(Integer id) {
     return bookDao.selectById(id);
 }
 ```
 
+- 读取缓存的数据
+
+
+
 #### 多种缓存技术
 
 ```bash
-# SpringBoot 除了提供默认的缓存方案 Simple，
-# 还可以对其他缓存技术进行整合，统一接口，方便缓存技术的开发与管理。
+# SpringBoot 除了提供默认的缓存方案 Simple，还可以对其他缓存技术进行整合，统一接口，方便缓存技术的开发与管理。
 - Generic
 - JCache
 - [ Ehcache ]
@@ -1381,7 +1387,7 @@ public Book getById(Integer id) {
 
 
 
-#### 缓存使用案例——手机验证码
+### 14.2 缓存使用案例——手机验证码
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220305232200622.png?w=600)
 
@@ -1477,9 +1483,9 @@ public class SMSCode {
 }
 ```
 
+### 14.3 缓存供应商
 
-
-####  Ehcache 缓存供应商变更
+####  Ehcache
 
 ```xml
 <dependency>
@@ -1545,7 +1551,7 @@ spring:
 
 
 
-#### Redis 缓存供应商变更
+#### Redis
 
 ```xml
 <dependency>
@@ -1576,9 +1582,9 @@ spring:
 
 
 
-#### memcached 缓存供应商变更 
+#### memcached
 
-##### 安装&启动
+- 安装、启动
 
 ```bash
 # windows
@@ -1595,29 +1601,25 @@ $ brew install memcached
 
 
 
-#### jetcache（阿里）缓存供应商变更 
+#### jetcache（阿里）
 
 - jetCache对 SpringCache 进行了封装，在原有功能基础上实现了多级缓存、缓存统计、自动刷新、异步调用、数据报表等功能。
 
 - jetCache 设定了本地缓存与远程缓存的多级缓存解决方案。
 
-  - 本地缓存（local）
-    - LinkedHashMap
-    - Caffeine
-
-
-  - 远程缓存（remote）
-    - Redis
-    - Tair
+  - local 本地缓存：LinkedHashMap、Caffeine
+  - remote 远程缓存：Redis、Tair
 
 
 ```bash
-加入jetcache坐标
-配置远程缓存必要属性
-配置本地缓存必要属性
-开启jetcache注解支持
-声明缓存对象
-操作缓存
+# 加入jetcache坐标
+
+# 配置远程缓存必要属性
+# 配置本地缓存必要属性
+# 开启jetcache注解支持
+
+# 声明缓存对象
+# 操作缓存
 ```
 
 
@@ -1632,15 +1634,15 @@ $ brew install memcached
 
 
 
-####  j2cache 缓存供应商变更
+####  j2cache
 
 - j2cache是一个缓存整合框架，可以提供缓存的整合方案，使各种缓存搭配使用，自身不提供缓存功能
 
-- 基于 ehcache + redis 进行整合
+- 基于 `ehcache + redis` 进行整合
 
 
 
-### 14.2 任务
+## 15 任务
 
 ```bash
 # 定时任务是企业级应用中的常见操作
@@ -1655,7 +1657,7 @@ $ brew install memcached
 
 
 
-#### SpringBoot整合Quartz
+### SpringBoot整合Quartz
 
 ```bash
 # 相关概念
@@ -1672,7 +1674,7 @@ $ brew install memcached
 
 
 
-#### Spring Task
+### Spring Task
 
 ```bash
 1.开启定时任务功能
@@ -1684,19 +1686,19 @@ $ brew install memcached
 
 
 
-### 14.3 邮件
+## 16 邮件
 
 
 
 
 
-### 14.4 消息
+## 17 消息
 
 
 
-## 15. 监控
+## 18 监控
 
-### 15.1 监控的意义
+### 18.1 监控的意义
 
 ```bash
 监控服务状态是否宕机
@@ -1720,7 +1722,7 @@ $ brew install memcached
 
 
 
-### 15.2 可视化监控平台Admin
+### 18.2 可视化监控平台Admin
 
 > Spring Boot Admin，开源社区项目，用于管理和监控SpringBoot应用程序。 
 >
@@ -1797,7 +1799,7 @@ management:
 
 
 
-### 15.3 监控原理actuator
+### 18.3 监控原理actuator
 
 ```bash
 Actuator提供了SpringBoot生产就绪功能，通过端点的配置与访问，获取端点信息
@@ -1839,7 +1841,7 @@ Actuator提供了SpringBoot生产就绪功能，通过端点的配置与访问�
 
 
 
-### 15.4 自定义监控指标
+### 18.4 自定义监控指标
 
 
 
