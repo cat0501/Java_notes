@@ -1134,27 +1134,6 @@ mongo
 # 可视化客户端——Robo 3T、Navicat
 ```
 
-- macos
-
-```bash
-# 启动
-in ~/environment/mongodb 
-$ mongod --fork --dbpath data --logpath log/mongodb.log --logappend
-$ mongo
-
-# 可视化客户端
-Robo 3T
-
-# 退出
-# 验证权限；赋予权限；关闭
-> db.auth('root','123456')
-1
-> db.grantRolesToUser("root",[{role:"hostManager",db: "admin"}])
-> use admin
-switched to db admin
-> db.shutdownServer({force:true})
-```
-
 
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220305213734907.png)
@@ -1165,8 +1144,9 @@ switched to db admin
 
 
 
-```sql
+```bash
 # 基础操作CRUD
+
 // 添加数据（文档）
 // db.book.save({"name":"springboot基础篇",type:"springboot"})
 
@@ -1187,9 +1167,9 @@ db.book.find()
 
 
 
-#### 13.5.3 springboot 整合
+#### 13.5.3 与springboot 整合
 
-- 依赖
+- 坐标
 
 ```xml
 <dependency>
@@ -1238,11 +1218,13 @@ class Springboot17MongodbApplicationTests {
 
 ### 13.6 ElasticSearch（ES）（NoSQL解决方案3）
 
-#### 13.6.1 应用场景&&相关概念
+
+
+#### 13.6.1 概念、应用场景
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220305220531243.png)
 
-#### 13.6.2 安装&启动
+#### 13.6.2 安装、启动
 
 - windows
 
