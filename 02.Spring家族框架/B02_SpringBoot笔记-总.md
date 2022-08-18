@@ -124,8 +124,9 @@ Setting → File Types → Ignored Files and Folders
 
 ### 3.1 parent
 
+- 总结
+
 ```bash
-# 总结
 1. 开发 SpringBoot程序要继承 spring-boot-starter-parent，各版本间存在着诸多坐标版本不同。
 2. spring-boot-starter-parent中定义了若干个依赖管理（依赖管理，而非依赖）。
 3. 继承parent模块可以避免多个依赖使用相同技术时出现依赖版本冲突。
@@ -135,8 +136,10 @@ Setting → File Types → Ignored Files and Folders
 - 方式2：使用 <dependencyManagement> 依赖 spring-boot-dependencies
 ```
 
+- 如下两种方式效果相同
+
 ```xml
-<!-- 如下两种方式效果相同 -->
+<!-- 方式1 -->
 <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
@@ -144,7 +147,7 @@ Setting → File Types → Ignored Files and Folders
     <relativePath/> <!-- lookup parent from repository -->
 </parent>
 
-<!-- 因为继承只能一次，采用如下方式2同时可继承其它父模块 -->
+<!-- 方式2：因为继承只能一次，这样同时可继承其它父模块 -->
 <dependencyManagement>
     <dependencies>
       <dependency>
@@ -157,18 +160,6 @@ Setting → File Types → Ignored Files and Folders
     </dependencies>
 </dependencyManagement>
 ```
-
-
-
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220302152433847.png?w=600)
-
-
-
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220302152545767.png?w=600)
-
-
-
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220326182257433.png)
 
 
 
@@ -188,10 +179,12 @@ SpringBoot 中常见项目名称，定义了当前项目使用的所有依赖坐
 如发生坐标错误，再指定 Version（要小心版本冲突）。
 
 # starter
-1. 开发SpringBoot程序需要导入坐标时通常导入对应的 starter；
-2. 每个不同的 starter根据功能不同，通常包含多个依赖坐标；
-3. 使用 starter可以实现快速配置的效果，达到简化配置的目的。
+1. 开发 SpringBoot 程序需要导入坐标时通常导入对应的 starter；
+2. 每个不同的 starter 根据功能不同，通常包含多个依赖坐标；
+3. 使用 starter 可以实现快速配置的效果，达到简化配置的目的。
 ```
+
+
 
 ### 3.3 引导类
 
@@ -205,6 +198,8 @@ public class Springboot01QuickstartApplication {
     } 
 }
 ```
+
+
 
 ### 3.4 内嵌tomcat
 
@@ -221,10 +216,10 @@ public class Springboot01QuickstartApplication {
 - Jetty 比 Tomcat 更轻量级，可扩展性更强（相较于 Tomcat），谷歌应用引擎（GAE）已经全面切换为 Jetty。
   - tomcat(默认)：apache出品，粉丝多，应用面广，负载了若干较重的组件
   - jetty：更轻量级，负载性能远不及tomcat
-  - undertow：undertow，负载性能勉强跑赢tomcat
+  - undertow：undertow，负载性能勉强跑赢 tomcat
 - 总结
-  - 内嵌Tomcat服务器是SpringBoot辅助功能之一。
-  - 内嵌Tomcat工作原理是将Tomcat服务器作为对象运行，并将该对象交给Spring容器管理。
+  - 内嵌 Tomcat 服务器是 SpringBoot 辅助功能之一。
+  - 内嵌 Tomcat 工作原理是将 Tomcat 服务器作为对象运行，并将该对象交给 Spring 容器管理。
   - 变更内嵌服务器思想是去除现有服务器，添加全新的服务器。
 
 
@@ -674,7 +669,7 @@ taskkill -f -t -im "进程名称"
 
   
 
-- 配置文件分类&&自定义配置文件
+- 配置文件分类
 
 ```bash
 # SpringBoot中4级配置文件
@@ -691,8 +686,7 @@ taskkill -f -t -im "进程名称"
 
 - 配置文件加载
   - 通过启动参数加载配置文件（无需书写配置文件扩展名)
-  - 通过启动参数加载指定文件路径下的配置文件
-  - 通过启动参数加载指定文件路径下的配置文件时可以加载多个配置
+  - 通过启动参数加载指定文件路径下的配置文件（可以加载多个）
   - 多配置文件常用于将配置进行分类，进行独立管理，或将可选配置单独制作便于上线更新维护
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220304130940441.png?w=600)
@@ -701,10 +695,7 @@ taskkill -f -t -im "进程名称"
 
 ## 8. 多环境开发
 
-### 8.1 多环境开发（YAML版）
-
 - 多环境开发需要设置若干种常用环境，例如**开发、生产、测试环境**
-  - yaml 格式中设置多环境使用---区分环境设置边界
   - 每种环境的区别在于加载的配置属性不同
   - 指定启动时使用某种环境
 
@@ -712,41 +703,37 @@ taskkill -f -t -im "进程名称"
 
 
 
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220304132430520.png)
-
-
-
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220304132614555.png)
 
-
-
-![image-20220304132944416](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220304132944416.png)
-
-- 多环境开发配置文件书写
+- 配置文件书写
 
   - 主配置文件中设置公共配置（全局）
 
   - 环境分类配置文件中常用于设置冲突属性（局部）
 
-- 可以根据功能对配置文件中的信息进行拆分，并制作成独立的配置文件，如下
+- 配置文件可拆分：可以根据功能对配置文件中的信息进行拆分，并制作成独立的配置文件，
 
-```sh
-application-devDB.yml
-application-devRedis.yml
-application-devMVC.yml
-```
+  - 如下
 
-- 使用 `include` 属性在激活指定环境的情况下，同时对多个环境进行加载使其生效，多个环境间使用逗号分隔
+  ```bash
+  application-devDB.yml
+  application-devRedis.yml
+  application-devMVC.yml
+  ```
 
-```yaml
-spring:
-  profiles:
-    active: dev
-    include: devDB,devRedis,devMVC
-```
-- 当主环境dev与其他环境有相同属性时，主环境属性生效；其他环境中有相同属性时，最后加载的环境属性生效
+  - `include` 属性：在激活指定环境的情况下，使用 `include` 属性同时对多个环境进行加载使其生效，多个环境间使用逗号分隔
 
-- 从Spring2.4 版开始使用 group 属性替代 include 属性，降低了配置书写量，使用 group属性定义多种主环境与子环境的包含关系。多环境开发使用group属性设置配置文件分组，便于线上维护管理。
+  ```yaml
+  spring:
+    profiles:
+      active: dev
+      include: devDB,devRedis,devMVC
+  ```
+
+- 其它说明
+  - 当主环境dev与其他环境有相同属性时，主环境属性生效；其他环境中有相同属性时，最后加载的环境属性生效
+  - 从 Spring2.4  版开始使用 `group` 属性替代 `include` 属性，降低了配置书写量，使用 group属性定义多种主环境与子环境的包含关系。多环境开发使用 group 属性设置配置文件分组，便于线上维护管理。
+
 
 ```yaml
 spring:
@@ -760,13 +747,9 @@ spring:
 
 
 
-### 8.2 多环境开发（Properties版）
+### 8.1 多环境开发控制
 
-
-
-### 8.3 多环境开发控制
-
-- Maven 与 SpringBoot多环境兼容
+- Maven 与 SpringBoot 多环境兼容
 
   - 两者同时对多环境进行控制时，以Mavn为主。SpringBoot使用`@xxx@`占位符读取Maven对应的配置属性值。
 
