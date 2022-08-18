@@ -561,11 +561,8 @@ spring:
 
 # 二、实用篇之运维实用篇
 
-> - SpringBoot 程序多环境开发
->
-> - 基于 Linux 系统发布SpringBoot工程
->
-> - 解决线上灵活配置 SpringBoot 工程的需求
+- 关键词：多环境开发、打包和运行（Linux）、日志
+- 掘金地址：https://juejin.cn/post/7133051767918444557
 
 
 
@@ -749,17 +746,8 @@ spring:
 
 ### 8.1 多环境开发控制
 
-- Maven 与 SpringBoot 多环境兼容
-
-  - 两者同时对多环境进行控制时，以Mavn为主。SpringBoot使用`@xxx@`占位符读取Maven对应的配置属性值。
-
-  - 基于SpringBoot 读取 Maven 配置属性的前提下，pom.xml 每次更新需要手动 `compile` 方可生效。
-
-> ① Maven中设置多环境属性
->
-> ② SpringBoot中引用Maven属性
->
-> ③ 执行Maven打包指令，并在生成的boot打包文件.jar文件中查看对应信息
+- `Maven` 与 `SpringBoot` 多环境兼容
+- 两者同时对多环境进行控制时，以Mavn为主。SpringBoot使用 `@xxx@` 占位符读取 Maven 对应的配置属性值，pom.xml 每次更新需要手动 `compile` 方可生效。
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220304133822623.png)
 
@@ -771,7 +759,7 @@ spring:
 
 > 日志作用
 > - 编程期调试代码
-> - 运营期记录信息
+> - 运行期记录信息
 >   - 记录日常运营重要信息（峰值流量、平均响应时长……） 
 >   - 记录应用报错信息（错误堆栈）
 >   - 记录运维过程数据（扩容、宕机、报警……）
@@ -832,32 +820,31 @@ logging:
 ```yaml
 logging:
 # 设置日志组
-	group:
-	# 自定义组名，设置当前组中所包含的包
-  		ebank: com.itheima.controller
-    level:
-      root: warn
-      # 为对应组设置日志级别
-      ebank: debug
-      # 为对包设置日志级别
-      com.itheima.controller: debug
+  group:
+    # 自定义组名，设置当前组中所包含的包
+    ebank: com.itheima.controller
+  level:
+    root: warn
+    # 为对应组设置日志级别
+    ebank: debug
+    # 为对包设置日志级别
+    com.itheima.controller: debug
 ```
 
 - 总结一下
   - 日志用于记录开发调试与运维过程消息
-  - 日志的级别共6种，通常使用4种即可，分别是DEBUG，INFO, WARN, ERROR
-  - 可以通过日志组或代码包的形式进行日志显示级别的控制
+  - 日志的级别共6种，通常使用4种即可，分别是 DEBUG，INFO, WARN, ERROR
+  - 可以通过**日志组**或**代码包**的形式进行日志显示级别的控制
 
-#### 教你一招：@Slf4j 注解优化日志对象创建代码
+#### @Slf4j 注解优化日志对象创建
 
-- 基于`lombok`提供的`@Slf4j`注解为类快速添加日志对象
+- 基于`lombok`提供的 `@Slf4j` 注解为类快速添加日志对象
 
 ```java
 @Slf4j
 @RestController
 @RequestMapping("/books")
 public class BookController {
-  
     @GetMapping
     public String getById(){
         System.out.println("springboot is running...");
@@ -874,11 +861,7 @@ public class BookController {
 
 ### 9.2 日志输出格式控制
 
-
-
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220304135548508.png?w=600)
-
-
 
 
 
