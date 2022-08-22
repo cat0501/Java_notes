@@ -17,16 +17,7 @@
 
 SpringBoot 是由 `Pivotal` 团队提供的全新框架，其设计目的是用来<font color=red>简化 </font>`Spring` 应用的<font color=red>初始搭建</font>以及<font color=red>开发过程。</font>
 
-## 模块说明
-
-- spring-core：spring 核心依赖，引入该依赖会同时引入 spring-core、spring-jcl
-- spring-context：spring 容器依赖，引入该依赖会同时引入 spring-aop、spring-beans、spring-context、spring-core、spring-expression、spring-jcl，如果想使用 spring 做简单的开发，这个依赖基本足够使用。
-- spring-jdbc：spring 容器依赖，并提供了编程式事务控制，引入该依赖会同时引入spring-jdbc、spring-tx
-- spring-tx：spring 提供的声明式事务控制，包含 @Transaction 声明式事务注解
-- spring-web：spring 的 web 框架，引入该依赖会同时引入spring-beans、spring-core、spring-jcl、spring-web
-- spring-webmvc：springmvc 框架，是 web 的一个实现，引入该依赖会同时引入spring-aop、spring-beans、spring-context、spring-core、spring-expression、spring-jcl、spring-web、spring-webmvc，做一般的 web 开发可以直接引入该依赖即可，不必引入其他 spring 依赖。
-
-
+## Spring Framework 模块说明
 
 | 模块           | 内容                              | 引入该依赖会同时引入                                         | 说明                                                     |
 | -------------- | --------------------------------- | ------------------------------------------------------------ | -------------------------------------------------------- |
