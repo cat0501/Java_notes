@@ -1219,45 +1219,73 @@ class Springboot17MongodbApplicationTests {
 
 ### 13.6 ElasticSearch（ES）（NoSQL解决方案3）
 
+详见：
 
+- [ElasticSearch（ES）（NoSQL解决方案3）](https://juejin.cn/post/7133126757812535304#heading-20)
+- [Elasticsearch定时同步MySQL数据实现全文检索（详细实战教程）](https://juejin.cn/post/7133521095886307335)
+- [ElasticSearch 高级搜索](https://juejin.cn/post/7134625514458726437)
 
 #### 13.6.1 概念、应用场景
+
+Elasticsearch 是一个基于 `Lucene` 的搜索服务器，它给我们提供了一个分布式的全文搜索引擎。Elasticsearch 是用 `Java` 语言开发、基于 Apache 协议的开源项目，它也是目前最受欢迎的企业搜索引擎。Elasticsearch 广泛运用于云计算中，能够达到实时搜索，具有稳定，可靠，快速的特点。
+
+
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220305220531243.png)
 
 #### 13.6.2 安装、启动
 
 - windows
+  - 下载zip安装包，[Elasticsearch 下载地址](https://link.juejin.cn/?target=https%3A%2F%2Fwww.elastic.co%2Fcn%2Fdownloads%2Fpast-releases%2Felasticsearch-7-15-1)
+  - 解压
+  - 启动：执行 `/bin` 目录下 `elasticsearch.bat` 文件
+  - 访问 [http://127.0.0.1:9200/](https://link.juejin.cn/?target=http%3A%2F%2F127.0.0.1%3A9200%2F) ，如下表示安装成功
 
-```bash
-# 下载
-https://www.elastic.co/cn/downloads/elasticsearch
-# 安装与启动
-运行 elasticsearch.bat
-
-# IK分词器 
-下载：https://github.com/medcl/elasticsearch-analysis-ik/releases
-```
 
 - macos
+  - 下载 `.tar.gz` 压缩包
+  - 解压
+  - `./bin/elasticsearch` 启动
+
+- IK分词器
+
+下载地址：[github.com/medcl/elast…](https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2Fmedcl%2Felasticsearch-analysis-ik%2Freleases%3Fpage%3D4)
+
+下载后解压到 es 的 plugins 文件夹，重启es即可。
+
+
+
+#### 13.6.3 要点总结
+
+- 核心概念：索引、文档、字段、mapping 映射
+
+- 索引操作
+- 文档操作
+- 坐标：spring-boot-starter-data-elasticsearch(org.springframework.boot)
+- RestHighLevelClient（它执行 `HTTP` 请求，而不是序列化的 `Java` 请求。）
+- DSL搜索
+  - match 查询
+  - term 查询
+  - 布尔查询
+  - 过滤、排序、高亮......
 
 ```bash
-# 启动 in ~/environment/elasticsearch-7.6.2/bin 
-$ sh elasticsearch
-
-# 访问
-127.0.0.1:9200
-```
-
-
-
-#### 13.6.3 ES索引操作
-
-```bash
-# 创建/查询/删除索引
-PUT	http://localhost:9200/books
-GET	http://localhost:9200/books
-DELETE	http://localhost:9200/books
+POST /index_user/_search
+{
+    "query":{
+        "match":{
+            "desc":"一名"
+        }
+    },
+    "post_filter": {
+        "range" : {
+            "age": {
+                "gt":10,
+                "lt":26
+            }
+        }
+    }
+}
 ```
 
 
