@@ -1073,6 +1073,8 @@ hadoop104
 
   - 启动 HDFS
 
+  > 参考：https://blog.csdn.net/weixin_43848614/article/details/112596493
+
   ```bash
   [atguigu@hadoop102 hadoop-3.1.3]$ sbin/start-dfs.sh
   ```
