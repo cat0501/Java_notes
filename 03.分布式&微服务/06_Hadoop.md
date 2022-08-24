@@ -587,7 +587,7 @@ drwxr-xr-x. 4 atguigu atguigu  4096 5月  22 2017 share
 [atguigu@hadoop102 hadoop-3.1.3]$ cd wcinput
 ```
 
-- 编辑 `word.txt` 文件
+- 编辑`word.txt` 文件
 
 ```bash
 [atguigu@hadoop102 wcinput]$ vim word.txt
@@ -599,7 +599,7 @@ atguigu
 atguigu
 ```
 
-- 回到 Hadoop目录` /opt/module/hadoop-3.1.3`，执行程序
+- 回到 Hadoop目录 ` /opt/module/hadoop-3.1.3`，执行程序
 
 ```bash
 [atguigu@hadoop102 hadoop-3.1.3]$ hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-3.1.3.jar wordcount wcinput wcoutput
@@ -631,13 +631,39 @@ yarn    1
   - 6）配置ssh
   - 7）群起并测试集群
 
+- 总结一下
+
+```bash
+# 启动 hdfs
+[atguigu@hadoop102 hadoop-3.1.3]$ sbin/start-dfs.sh
+```
+
+
+
+
+
 
 
 #### 3.2.1虚拟机准备
 
 - 详见2.1、2.2两节。
+- 虚拟机关闭锁屏（一直输密码进系统很麻烦！）
 
-#### 3.2.2编写集群分发脚本xsync
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220824220241066.png)
+
+
+
+#### 3.2.2 编写集群分发脚本xsync ⭐️
+
+> - 拷贝
+> - 同步
+> - 脚本
+
+
+
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220824223022082.png)
+
+
 
 - scp（secure copy）安全拷贝
 
@@ -645,9 +671,13 @@ yarn    1
 
   - 语法
 
-    scp  -r     \$pdir/$fname       $user@$host:$pdir/$fname
-
+    ```bash
+    scp  -r     $pdir/$fname       $user@$host:$pdir/$fname
+    
     命令  递归   要拷贝的文件路径/名称  目的地用户@主机:目的地路径/名称
+    ```
+
+    
 
   - 案例实操
 
@@ -656,13 +686,13 @@ yarn    1
   # 并且已经把这两个目录修改为atguigu:atguigu
   [atguigu@hadoop102 ~]$ sudo chown atguigu:atguigu -R /opt/module
   
-  # 将hadoop102中/opt/module/jdk1.8.0_212目录拷贝到hadoop103上。
+  # 将hadoop102中/opt/module/jdk1.8.0_212目录拷贝到hadoop103上
   [atguigu@hadoop102 ~]$ scp -r /opt/module/jdk1.8.0_212  atguigu@hadoop103:/opt/module
   
-  # 将hadoop102中/opt/module/hadoop-3.1.3目录拷贝到hadoop103上。
+  # 将hadoop102中/opt/module/hadoop-3.1.3目录拷贝到hadoop103上
   [atguigu@hadoop103 ~]$ scp -r atguigu@hadoop102:/opt/module/hadoop-3.1.3 /opt/module/
   
-  # 将hadoop102中/opt/module目录下所有目录拷贝到hadoop104上。
+  # 将hadoop102中/opt/module目录下所有目录拷贝到hadoop104上
   [atguigu@hadoop103 opt]$ scp -r atguigu@hadoop102:/opt/module/* atguigu@hadoop104:/opt/module
   ```
 
@@ -670,12 +700,16 @@ yarn    1
 
 - rsync 远程同步工具
   - rsync 主要用于备份和镜像。具有速度快、避免复制相同内容和支持符号链接的优点。
-  - rsync 和 scp 区别：用 rsync 做文件的复制要比 scp 的速度快，rsync **只对差异文件做更新**。scp 是**把所有文件都复制过去**。
+  
+  - rsync 和 scp 区别：用 rsync 做文件的复制要比 scp 的速度快，rsync **只对差异文件做更新**，scp 是**把所有文件都复制过去**。
+  
   - 语法
   
+    ```bash
     rsync   -av    $pdir/$fname       $user@$host:$pdir/$fname
-  
+    
     命令  选项参数  要拷贝的文件路径/名称  目的地用户@主机:目的地路径/名称
+    ```
   
      选项参数说明
   
@@ -702,13 +736,13 @@ yarn    1
 
   - 分析
 
-    - rsync命令原始拷贝
+    - `rsync` 命令原始拷贝
 
     ```bash
     rsync  -av     /opt/module  		 atguigu@hadoop103:/opt/
     ```
 
-    - 期望脚本：xsync要同步的文件名称
+    - 期望脚本：xsync 要同步的文件名称
     - 期望脚本在任何路径都能使用（脚本放在声明了全局环境变量的路径）
 
     ```bash
@@ -727,8 +761,12 @@ yarn    1
     [atguigu@hadoop102 ~]$ mkdir bin
     [atguigu@hadoop102 ~]$ cd bin
     [atguigu@hadoop102 bin]$ vim xsync
-    
     # 在该文件中编写如下代码
+    ```
+    
+    
+    
+    ```bash
     #!/bin/bash
     
     #1. 判断参数个数
@@ -762,27 +800,27 @@ yarn    1
         done
     done
     ```
-
+    
     - 修改脚本 xsync 具有执行权限
 
     ```bash
     [atguigu@hadoop102 bin]$ chmod +x xsync
     ```
-
+    
     - 测试脚本
 
     ```bash
     [atguigu@hadoop102 ~]$ xsync /home/atguigu/bin
     ```
-
+    
     - 将脚本复制到 /bin 中，以便全局调用
 
     ```bash
     [atguigu@hadoop102 bin]$ sudo cp xsync /bin/
     ```
-
+    
     - 同步环境变量配置（root所有者）
-
+    
     ```bash
     [atguigu@hadoop102 ~]$ sudo ./bin/xsync /etc/profile.d/my_env.sh
     
@@ -791,11 +829,11 @@ yarn    1
     [atguigu@hadoop104 opt]$ source /etc/profile
     ```
 
-#### 3.2.3SSH 无密登录配置
+#### 3.2.3 SSH 无密登录配置
 
 - 配置ssh
 
-  - 语法：ssh另一台电脑的 IP地址
+  - 语法：ssh 另一台电脑的IP地址
   - ssh 连接时出现 Host key verification failed 的解决方法
 
   ```bash
@@ -831,7 +869,8 @@ yarn    1
   还需要在hadoop102上采用root账号，配置一下无密登录到hadoop102、hadoop103、hadoop104服务器上。
   ```
 
-  
+
+
 
 - .ssh文件夹下（~/.ssh）的文件功能解释
 
@@ -842,11 +881,11 @@ yarn    1
 | id_rsa.pub      | 生成的公钥                              |
 | authorized_keys | 存放授权过的无密登录服务器公钥          |
 
-#### 3.2.4集群配置
+#### 3.2.4 集群配置
 
 - 集群部署规划
-  - NameNode和SecondaryNameNode不要安装在同一台服务器
-  - ResourceManager也很消耗内存，不要和NameNode、SecondaryNameNode配置在同一台机器上。
+  - NameNode 和 SecondaryNameNode 不要安装在同一台服务器
+  - ResourceManager 也很消耗内存，不要和 NameNode、SecondaryNameNode 配置在同一台机器上。
 
 |      | hadoop102         | hadoop103                   | hadoop104                  |
 | ---- | ----------------- | --------------------------- | -------------------------- |
@@ -1008,7 +1047,7 @@ yarn    1
 
 
 
-#### 3.2.5群起集群
+#### 3.2.5 群起集群
 
 - 配置 workers
 
@@ -1026,12 +1065,23 @@ hadoop104
 
 - 启动集群
 
-  - **如果集群是第一次启动**，需要在hadoop102节点格式化NameNode
-  - 启动HDFS
+  - **如果集群是第一次启动**，需要在hadoop102节点格式化 NameNode
+
+  ```bash
+  [atguigu@hadoop102 hadoop-3.1.3]$ hdfs namenode -format
+  ```
+
+  - 启动 HDFS
 
   ```bash
   [atguigu@hadoop102 hadoop-3.1.3]$ sbin/start-dfs.sh
   ```
+
+  
+
+  ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220825002900933.png)
+
+  
 
   - 在配置了 ResourceManager 的节点（hadoop103）启动YARN
 
@@ -1042,9 +1092,16 @@ hadoop104
   - Web 端查看 HDFS 的 NameNode
     - 浏览器中输入：http://hadoop102:9870
     - 查看 HDFS 上存储的数据信息
+
+  ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220825003952217.png)
+
+  
+
   - Web 端查看 YARN 的 ResourceManager
     - 浏览器中输入：http://hadoop103:8088
     - 查看 YARN 上运行的 Job 信息
+
+  ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220825004009021.png)
 
 - 集群基本测试
 
@@ -1100,7 +1157,7 @@ hadoop104
   [atguigu@hadoop102 hadoop-3.1.3]$ hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-3.1.3.jar wordcount /input /output
   ```
 
-#### 3.2.6配置历史服务器
+#### 3.2.6 配置历史服务器
 
 为了查看程序的历史运行情况，需要配置一下历史服务器。
 
@@ -1154,7 +1211,7 @@ hadoop104
 
 - 查看 JobHistory：http://hadoop102:19888/jobhistory
 
-#### 3.2.7配置日志的聚集
+#### 3.2.7 配置日志的聚集
 
 - 日志聚集概念：应用运行完成以后，将程序运行日志信息上传到 HDFS 系统上。
   - 好处：可以方便的查看到程序运行详情，方便开发调试。
@@ -1226,7 +1283,7 @@ hadoop104
     - 查看任务运行日志
     - 运行日志详情
 
-#### 3.2.8集群启动/停止方式总结
+#### 3.2.8 集群启动/停止方式总结
 
 - 各个模块分开启动/停止（配置ssh是前提）常用
 
@@ -1250,7 +1307,7 @@ yarn --daemon start/stop  resourcemanager/nodemanager
 
 
 
-#### 3.2.9编写Hadoop集群常用脚本
+#### 3.2.9 编写Hadoop集群常用脚本
 
 - Hadoop集群启停脚本（包含HDFS，Yarn，Historyserver）：myhadoop.sh
 
@@ -1336,7 +1393,7 @@ done
 
 
 
-#### 3.2.10常用端口号说明
+#### 3.2.10 常用端口号说明
 
 | 端口名称                  | Hadoop2.x   | Hadoop3.x        |
 | ------------------------- | ----------- | ---------------- |
@@ -1345,7 +1402,7 @@ done
 | MapReduce查看执行任务端口 | 8088        | 8088             |
 | 历史服务器通信端口        | 19888       | 19888            |
 
-#### 3.2.11集群时间同步
+#### 3.2.11 集群时间同步
 
 - **如果服务器在公网环境（能连接外网），可以不采用集群时间同步**，因为服务器会定期和公网时间进行校准；
 
