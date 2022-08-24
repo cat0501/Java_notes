@@ -337,7 +337,7 @@ atguigu   ALL=(ALL)     NOPASSWD:ALL
 
 ### 2.2 克隆虚拟机
 
-- 1）利用模板机hadoop100，克隆三台虚拟机：hadoop102 hadoop103 hadoop104
+- 1）利用模板机 `hadoop100`，克隆三台虚拟机：hadoop102、hadoop103、hadoop104
 
 > 注意：克隆时，要先关闭hadoop100。
 
@@ -346,7 +346,7 @@ atguigu   ALL=(ALL)     NOPASSWD:ALL
   - （1）修改克隆虚拟机的静态IP
 
   ```bash
-  [root@hadoop100 ~]# vim /etc/sysconfig/network-scripts/ifcfg-ens33
+  [root@hadoop100 ~]# vim /etc/sysconfig/network-scripts/ifcfg-ens33vim /etc/sysconfig/network-scripts/ifcfg-ens33
   修改为
   DEVICE=ens33
   TYPE=Ethernet
@@ -361,7 +361,7 @@ atguigu   ALL=(ALL)     NOPASSWD:ALL
 
   - （2）查看 `Linux` 虚拟机的虚拟网络编辑器，编辑->虚拟网络编辑器->VMnet8
   - （3）查看Windows系统适配器VMware Network Adapter VMnet8的IP地址
-  - （4）保证Linux系统 ifcfg-ens33 文件中IP地址、虚拟网络编辑器地址和Windows系统 VM8 网络 IP 地址相同。
+  - （4）保证 Linux 系统 ifcfg-ens33 文件中IP地址、虚拟网络编辑器地址和Windows系统 VM8 网络 IP 地址相同。
 
 - 3）修改克隆机主机名，以下以hadoop102举例说明
 
@@ -398,11 +398,11 @@ atguigu   ALL=(ALL)     NOPASSWD:ALL
 [root@hadoop100 ~]# reboot
 ```
 
-- 5）修改windows的主机映射文件（hosts文件）
+- 5）修改 windows 的主机映射文件（hosts文件）
 
-  - （1）如果操作系统是window7，可以直接修改
+  - （1）如果操作系统是 window7，可以直接修改
 
-  - （2）如果操作系统是window10，先拷贝出来，修改保存以后，再覆盖即可
+  - （2）如果操作系统是 window10，先拷贝出来，修改保存以后，再覆盖即可
 
     - （a）进入C:\Windows\System32\drivers\etc路径
     - （b）拷贝hosts文件到桌面
@@ -420,11 +420,11 @@ atguigu   ALL=(ALL)     NOPASSWD:ALL
     192.168.10.108 hadoop108
     ```
 
-    - （d）将桌面hosts文件覆盖C:\Windows\System32\drivers\etc路径hosts文件
+    - （d）将桌面hosts文件覆盖 `C:\Windows\System32\drivers\etc` 路径 `hosts `文件
 
 ### 2.3 在hadoop102 安装 JDK
 
-- 1）卸载现有JDK
+- 1）卸载现有 JDK
 
 > 注意：安装JDK前，一定确保提前删除了虚拟机自带的JDK。
 
@@ -474,15 +474,15 @@ java version "1.8.0_212"
 
 Hadoop下载地址：[https://archive.apache.org/dist/hadoop/common/hadoop-3.1.3/](https://archive.apache.org/dist/hadoop/common/hadoop-2.7.2/)
 
-- 1）用 XShell 文件传输工具将hadoop-3.1.3.tar.gz导入到 opt 目录下面的 software 文件夹下面
+- 1）用 XShell 等文件传输工具将hadoop-3.1.3.tar.gz导入到 `opt` 目录下面的 `software` 文件夹下面
 
-- 2）进入到Hadoop安装包路径下
+- 2）进入到 Hadoop 安装包路径下
 
   ```bash
   [atguigu@hadoop102 ~]$ cd /opt/software/
   ```
 
-- 3）解压安装文件到/opt/module下面
+- 3）解压安装文件到 /opt/module 下面
 
   ```bash
   [atguigu@hadoop102 software]$ tar -zxvf hadoop-3.1.3.tar.gz -C /opt/module/
@@ -540,7 +540,7 @@ Hadoop 3.1.3
 
 
 
-### 2.5Hadoop 目录结构
+### 2.5 Hadoop 目录结构
 
 - 1）查看Hadoop目录结构
 
@@ -583,7 +583,7 @@ drwxr-xr-x. 4 atguigu atguigu  4096 5月  22 2017 share
 
 ### 3.1 本地运行模式（官方WordCount）
 
-- 创建在hadoop-3.1.3文件下面创建一个 `wcinput` 文件夹
+- 在 `hadoop-3.1.3` 文件下面创建一个 `wcinput` 文件夹
 
 ```bash
 [atguigu@hadoop102 hadoop-3.1.3]$ mkdir wcinput
@@ -2648,6 +2648,20 @@ public void testListStatus() throws IOException, InterruptedException, URISyntax
 
 
 # 生产调优手册
+
+
+
+
+
+# 推荐
+
+- [尚硅谷大数据Hadoop教程（Hadoop 3.x安装搭建到集群调优）](https://www.bilibili.com/video/BV1Qp4y1n7EN)
+
+```bash
+# 178P，27.5小时
+
+# 进行中
+```
 
 
 
