@@ -139,7 +139,7 @@
 
 
 
-### 1.5 组成（面试重点）
+### 1.5 组成🎈（面试重点）
 
 - `1.x`、`2.x`、`3.x`区别
 
@@ -191,7 +191,7 @@ MapReduce将计算过程分为两个阶段：Map 和 Reduce
 
 
 
-### 1.6 大数据技术生态体系
+### 1.6 大数据技术生态体系 🎈
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220804082525280.png)
 
@@ -422,27 +422,25 @@ atguigu   ALL=(ALL)     NOPASSWD:ALL
 
     - （d）将桌面hosts文件覆盖 `C:\Windows\System32\drivers\etc` 路径 `hosts `文件
 
-### 2.3 在hadoop102 安装 JDK
+### 2.3 在 hadoop102 安装 JDK
 
 - 1）卸载现有 JDK
 
-> 注意：安装JDK前，一定确保提前删除了虚拟机自带的JDK。
+> 注意：安装 JDK 前，一定确保提前删除了虚拟机自带的 JDK。
 
-- 2）用XShell传输工具将 JDK 导入到 opt 目录下面的software文件夹下面
-
-- 3）在Linux系统下的opt目录中查看软件包是否导入成功
+- 2）用 XShell 等传输工具将 JDK 导入到 `/opt/software/` 目录下，并查看
 
   ```bash
   [atguigu@hadoop102 ~]$ ls /opt/software/
   ```
 
-- 4）解压JDK到/opt/module目录下
+- 3）解压 JDK 到 `/opt/module` 目录下
 
   ```bash
   [atguigu@hadoop102 software]$ tar -zxvf jdk-8u212-linux-x64.tar.gz -C /opt/module/
   ```
 
-- 5）配置JDK环境变量
+- 4）配置 JDK 环境变量
 
 ```bash
 （1）新建/etc/profile.d/my_env.sh文件
@@ -470,11 +468,11 @@ java version "1.8.0_212"
 
 
 
-### 2.4 在hadoop102 安装Hadoop
+### 2.4 在 hadoop102 安装Hadoop
 
 Hadoop下载地址：[https://archive.apache.org/dist/hadoop/common/hadoop-3.1.3/](https://archive.apache.org/dist/hadoop/common/hadoop-2.7.2/)
 
-- 1）用 XShell 等文件传输工具将hadoop-3.1.3.tar.gz导入到 `opt` 目录下面的 `software` 文件夹下面
+- 1）用 XShell 等文件传输工具将 hadoop-3.1.3.tar.gz 导入到  `/opt/software/` 目录下
 
 - 2）进入到 Hadoop 安装包路径下
 
@@ -482,20 +480,16 @@ Hadoop下载地址：[https://archive.apache.org/dist/hadoop/common/hadoop-3.1.3
   [atguigu@hadoop102 ~]$ cd /opt/software/
   ```
 
-- 3）解压安装文件到 /opt/module 下面
+- 3）解压安装文件到 /opt/module 下面，并查看
 
   ```bash
   [atguigu@hadoop102 software]$ tar -zxvf hadoop-3.1.3.tar.gz -C /opt/module/
-  ```
-
-- 4）查看是否解压成功
-
-  ```bash
+  
   [atguigu@hadoop102 software]$ ls /opt/module/
   hadoop-3.1.3
   ```
 
-- 5）将Hadoop添加到环境变量
+- 4）将Hadoop添加到环境变量
 
   - （1）获取Hadoop安装路径
 
@@ -525,14 +519,14 @@ Hadoop下载地址：[https://archive.apache.org/dist/hadoop/common/hadoop-3.1.3
   [atguigu@hadoop102 hadoop-3.1.3]$ source /etc/profile
   ```
 
-- 6）测试是否安装成功
+- 5）测试是否安装成功
 
 ```bash
 [atguigu@hadoop102 hadoop-3.1.3]$ hadoop version
 Hadoop 3.1.3
 ```
 
-- 7）重启（如果Hadoop命令不能用再重启虚拟机）
+- 6）重启（如果Hadoop命令不能用再重启虚拟机）
 
 ```bash
 [atguigu@hadoop102 hadoop-3.1.3]$ sudo reboot
@@ -541,8 +535,6 @@ Hadoop 3.1.3
 
 
 ### 2.5 Hadoop 目录结构
-
-- 1）查看Hadoop目录结构
 
 ```bash
 [atguigu@hadoop102 hadoop-3.1.3]$ ll
@@ -559,11 +551,11 @@ drwxr-xr-x. 2 atguigu atguigu  4096 5月  22 2017 sbin
 drwxr-xr-x. 4 atguigu atguigu  4096 5月  22 2017 share
 ```
 
-- 2）重要目录
+- 重要目录
   - （1）**`bin`** 目录：存放对 Hadoop 相关服务（`hdfs`，`yarn`，`mapred`）进行操作的脚本
-  - （2）**`etc` **目录：Hadoop的配置文件目录，存放Hadoop的配置文件
+  - （2）**`etc` ** 目录：Hadoop的配置文件目录，存放Hadoop的配置文件
   - （3）lib 目录：存放Hadoop的本地库（对数据进行压缩解压缩功能）
-  - （4）**`sbin `**目录：存放启动或停止Hadoop相关服务的脚本
+  - （4）**`sbin `** 目录：存放启动或停止Hadoop相关服务的脚本
   - （5）share 目录：存放Hadoop的依赖 jar 包、文档、和官方案例
 
 
@@ -589,13 +581,13 @@ drwxr-xr-x. 4 atguigu atguigu  4096 5月  22 2017 share
 [atguigu@hadoop102 hadoop-3.1.3]$ mkdir wcinput
 ```
 
-- 在 wcinput文件下创建一个 word.txt文件
+- 在 wcinput 文件下创建一个 `word.txt` 文件
 
 ```bash
 [atguigu@hadoop102 hadoop-3.1.3]$ cd wcinput
 ```
 
-- 编辑 word.txt文件
+- 编辑 `word.txt` 文件
 
 ```bash
 [atguigu@hadoop102 wcinput]$ vim word.txt
@@ -607,7 +599,7 @@ atguigu
 atguigu
 ```
 
-- 回到 Hadoop目录 /opt/module/hadoop-3.1.3，执行程序
+- 回到 Hadoop目录` /opt/module/hadoop-3.1.3`，执行程序
 
 ```bash
 [atguigu@hadoop102 hadoop-3.1.3]$ hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-3.1.3.jar wordcount wcinput wcoutput
@@ -1718,7 +1710,7 @@ public void testCopyFromLocalFile() throws IOException, InterruptedException, UR
 
     // 3 关闭资源
     fs.close();
-｝
+｝}
 ```
 
 - 将hdfs-site.xml拷贝到项目的resources资源目录下

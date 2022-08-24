@@ -1,6 +1,7 @@
 ## 强推的软件
 
 - IDEA
+- Xmind（思维导图工具）：https://www.xmind.cn/
 - WizTree：https://www.diskanalyzer.com/download
   - 磁盘文件夹分析工具
 

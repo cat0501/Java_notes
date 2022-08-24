@@ -1108,6 +1108,39 @@ StatefulRedisConnection 自身是线程安全的，可以保障并发访问安�
 
 > MongoDB 是一个开源、高性能、无模式的**文档型数据库**。NoSQL数据库产品中的一种，是**最像关系型数据库**的非关系型数据库。
 
+- 对比 MySQL
+
+| MySQL       | Mongodb     | 说明                                                         |
+| ----------- | ----------- | ------------------------------------------------------------ |
+| database    | database    | 数据库                                                       |
+| table       | collection  | 表/集合                                                      |
+| row         | document    | 行/文档                                                      |
+| comlumn     | field       | 字段/域                                                      |
+| index       | index       | 索引                                                         |
+| join        | 嵌入文档    | 表关联  /Mongodb 不支持join，Mongodb通过嵌入式文档来替代多表连接 |
+| primary key | primary key | 主键  /Mongodb 自动将 _id 字段设置为主键                     |
+
+
+
+- 数据类型
+
+| 数据类型      | 描述                                                         | 举例说明                        |
+| ------------- | ------------------------------------------------------------ | ------------------------------- |
+| 字符串        |                                                              | {"学校":"四川大学"}             |
+| 对象 id       | 对象 id是文档的唯一id                                        | {"name":ObjectId()}             |
+| 布尔值        | true or false                                                | {"name":true}                   |
+| 数组          |                                                              | {"name":["张三","李四","王五"]} |
+| 64位浮点数    |                                                              | {"x":1.23567,"y":100}           |
+| null          | 表示空                                                       | {"name":null}                   |
+| undefined     | 文档中可以使用未定义类型                                     | {"name":undefined}              |
+| 符号          | 会自动转为字符串                                             |                                 |
+| 正则表达式    | 文档中可以用 JavaScript正的则表达式语法                      | {"name": /foobar/i}             |
+| 代码          | 文档中可以包含 JavaScript 代码                               |                                 |
+| 二进制数据    | 由任意字符的串组成，不过shell中无法使用                      | 1                               |
+| 最大值/最小值 | BSON 包含一个特殊类型，表示可能的最大值，shell 中没有这个类型 | 1                               |
+
+
+
 
 
 #### 13.5.1 应用场景
@@ -1128,9 +1161,9 @@ https://www.mongodb.com/try/download/community
 
 # 服务端启动  C:\Program Files\MongoDB\Server\5.0\bin>
 mongod --dbpath C:\enviroment\mongodb\data\db
-
 # 客户端启动
 mongo
+
 # 配置环境变量
 # 可视化客户端——Robo 3T、Navicat
 ```
@@ -1249,9 +1282,9 @@ Elasticsearch 是一个基于 `Lucene` 的搜索服务器，它给我们提供�
 
 - IK分词器
 
-下载地址：[github.com/medcl/elast…](https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2Fmedcl%2Felasticsearch-analysis-ik%2Freleases%3Fpage%3D4)
+  - 下载地址：[github.com/medcl/elast…](https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2Fmedcl%2Felasticsearch-analysis-ik%2Freleases%3Fpage%3D4)
 
-下载后解压到 es 的 plugins 文件夹，重启es即可。
+  - 下载后解压到 es 的 plugins 文件夹，重启es即可。
 
 
 
@@ -1261,8 +1294,8 @@ Elasticsearch 是一个基于 `Lucene` 的搜索服务器，它给我们提供�
 
 - 索引操作
 - 文档操作
-- 坐标：spring-boot-starter-data-elasticsearch(org.springframework.boot)
-- RestHighLevelClient（它执行 `HTTP` 请求，而不是序列化的 `Java` 请求。）
+- 坐标：`spring-boot-starter-data-elasticsearch(org.springframework.boot)`
+- `RestHighLevelClient`（它执行 `HTTP` 请求，而不是序列化的 `Java` 请求。）
 - DSL搜索
   - match 查询
   - term 查询
