@@ -2,6 +2,20 @@
 
 # 1 Linux 常用命令
 
+## 用户 (组) 相关
+
+```sh
+# 切换用户
+sudo su
+
+# 添加用户
+useradd 选项 用户名
+```
+
+
+
+
+
 ## 目录相关
 
 ```sh
@@ -46,11 +60,13 @@ cat -b 文件名
 
 # 创建文件
 touch .gitattrbutes
+
+# 查找并删除文件（面试题）
 ```
 
 
 
-
+## 进程相关
 
 ```sh
 # 查看端口占用情况（用kill pid来杀掉进程）
@@ -62,23 +78,89 @@ $ nohup java -jar demo.jar &
 # 正在运行的java应用（进程）
 $ ps -aux | grep java
 
+```
 
+- ps [-aux]
+  - -a：显示当前终端的所有进程信息
+    -u：以用户的形式显示进程信息
+    -x：显示后台进程运行的参数
+
+```sh
+# 查看某个服务的进程
+# grep 命令用于查找文件里符合条件的字符串
+# 命令格式：命令A|命令B，即命令A的正确输出作为命令B的操作对象
+
+[root@pt-dev /]# ps -aux|grep 4A-server-2.2.5-SNAPSHOT.jar
+root     18929  7.9  2.4 8546904 795772 pts/1  Sl   09:31   5:58 java -jar -Xmx256m -Xmx256m -Xmn256m 4A-server-2.2.5-SNAPSHOT.jar
+root     31087  0.0  0.0 112948  1248 pts/0    S+   10:46   0:00 grep --color=auto 4A-server-2.2.5-SNAPSHOT.jar
+
+
+# 具体信息解释
+[root@pt-dev /]# ps aux
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         1  0.0  0.0 193828  4132 ?        Ss   Nov23   1:29 /usr/lib/systemd/systemd --switched-root --system --deserialize 22
+root     18929  7.1  2.4 8546904 795388 pts/1  Sl   09:31   6:00 java -jar -Xmx256m -Xmx256m -Xmn256m 4A-server-2.2.5-SNAPSHOT.jar
+
+• USER：该 process 属于那个使用者账号的？
+• PID ：该 process 的号码。
+• %CPU：该 process 使用掉的 CPU 资源百分比；
+• %MEM：该 process 所占用的物理内存百分比；
+• VSZ ：该 process 使用掉的虚拟内存量 (Kbytes)
+• RSS ：该 process 占用的固定的内存量 (Kbytes)
+• TTY ：该 process 是在那个终端机上面运作，若与终端机无关，则显示 ?，另外， tty1-tty6 是本机上面的登入者程序，若为 pts/0 等等的，则表示为由网络连接进主机的程序。
+• STAT：该程序目前的状态，主要的状态有：
+o R ：该程序目前正在运作，或者是可被运作；
+o S ：该程序目前正在睡眠当中 (可说是 idle 状态啦！)，但可被某些讯号 (signal) 唤醒。
+o T ：该程序目前正在侦测或者是停止了；
+o Z ：该程序应该已经终止，但是其父程序却无法正常的终止他，造成 zombie (疆尸) 程序的状态
+• START：该 process 被触发启动的时间；
+• TIME ：该 process 实际使用 CPU 运作的时间。
+• COMMAND：该程序的实际指令为何？
+```
+
+
+
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20211208104744502.png)
+
+
+
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20211208110021468.png)
+
+
+
+## 磁盘相关
+
+Linux 磁盘管理常用三个命令为 **df**、**du** 和 **fdisk**。
+
+- **df**（英文全称：disk full）：列出文件系统的整体磁盘使用量
+- **du**（英文全称：disk used）：检查磁盘空间使用量
+- **fdisk**：用于磁盘分区
+
+```sh
+# 对文件和目录磁盘使用的空间的查看
+du [-ahskm] 文件或目录名称
+    -a ：列出所有的文件与目录容量，因为默认仅统计目录底下的文件量而已。
+    -h ：以人们较易读的容量格式 (G/M) 显示；
+    -s ：列出总量而已，而不列出每个各别的目录占用容量；
+    -S ：不包括子目录下的总计，与 -s 有点差别。
+    -k ：以 KBytes 列出容量显示；
+    -m ：以 MBytes 列出容量显示；
+```
+
+
+
+
+
+## 其它
+
+```sh
 # linux批量替换文件夹及子文件夹中文件的内容
 # 上述命令把当前目录以及子目录中的所有文件的 old 替换为 new 
 find -type f -name "*.py" | xargs sed 's#old#new#g' -i
 
-# 查找并删除文件（面试题）
-
-
 # linux将多个文件的内容合并
 cat b1.sql b2.sql b3.sql > b_all.sql
 cat *.sql > merge.sql
-
-
-
-sudo su
-
-mv 
 
 # linux下常用的故障排查命令
 生产环境服务器变慢，诊断思路和性能评估谈谈
@@ -110,7 +192,7 @@ $ ls -lrt /usr/bin/java (获取新的指向路径,循环多次)
   - Ubuntu、RedHat、CentOS
   - Debian、Fedora、SuSE、OpenSUSE、Arch Linux、SolusOS 等
 
-![](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/image-20211208113912602.png)
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20211208113912602-20220825214701647.png)
 
 
 
@@ -232,12 +314,55 @@ $ ls -l
 
 - 更改文件属性
 
-```sh
-# 当权限为-rwxrwx---
+  - Linux 文件的基本权限有九个，分别是 owner/group/others 三种身份各有自己的 read/write/execute 权限。我们可以使用数字来代表各个权限，各权限的分数对照表如下：
 
-chmod 777 文件或目录
-chmod [-R] 777 文件或目录
-```
+  ```sh
+  r:4 w:2 x:1
+  ```
+
+  ```sh
+  每种身份(owner/group/others)各自的三个权限(r/w/x)分数是需要累加的，例如当权限为： [-rwxrwx--
+  -] 分数则是：
+  owner = rwx = 4+2+1 = 7
+  group = rwx = 4+2+1 = 7
+  others= --- = 0+0+0 = 0
+  ```
+
+  - chmod：更改文件9个属性
+
+  ```sh
+  # 当权限为-rwxrwx---
+  chmod 777 文件或目录
+  chmod [-R] 777 文件或目录
+  ```
+
+  - chgrp：更改文件属组
+
+  ```sh
+  # -R：递归更改文件属组，该目录下的所有子目录/文件的属组都会更改
+  chgrp [-R] 属组名 文件名
+  ```
+
+  - chown：更改文件属主，也可以同时更改文件属组
+
+  ```sh
+  chown [–R] 属主名 文件名 
+  chown [-R] 属主名：属组名 文件名
+  ```
+
+
+
+
+
+## Vim 文件编辑器
+
+- **vim fileName**
+- `i` 进入输入模式
+- `esc`，`:wq` 退出
+
+
+
+## yum/apt 命令
 
 
 
@@ -299,58 +424,11 @@ Elastic Compute Service, ECS
 
 
 
-## 6 Linux用户（组）管理
-
-### 添加用户
-
-```sh
-useradd 选项 用户名
-```
-
-
-
-## 7 Linux磁盘管理
-
-> Linux 磁盘管理常用三个命令为 **df**、**du** 和 **fdisk**。
->
-> - **df**（英文全称：disk full）：列出文件系统的整体磁盘使用量
-> - **du**（英文全称：disk used）：检查磁盘空间使用量
-> - **fdisk**：用于磁盘分区
-
-
-
-```sh
-# 对文件和目录磁盘使用的空间的查看
-du [-ahskm] 文件或目录名称
-    -a ：列出所有的文件与目录容量，因为默认仅统计目录底下的文件量而已。
-    -h ：以人们较易读的容量格式 (G/M) 显示；
-    -s ：列出总量而已，而不列出每个各别的目录占用容量；
-    -S ：不包括子目录下的总计，与 -s 有点差别。
-    -k ：以 KBytes 列出容量显示；
-    -m ：以 MBytes 列出容量显示；
-```
-
-
-
-## 8 Linux yum/apt 命令
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-## Linux服务器上更新服务
+# Linux 服务器上更新服务
 
 > 脚本启停服务
 >
@@ -389,151 +467,7 @@ du [-ahskm] 文件或目录名称
 
 
 
-！！！
-
-##### 修改文件属性
-
-Linux文件的基本权限有九个，分别是owner/group/others三种身份各有自己的read/write/execute权限。
-
-我们可以使用数字来代表各个权限，各权限的分数对照表如下：
-
-```bash
-r:4 w:2 x:1
-```
-
-```bash
-每种身份(owner/group/others)各自的三个权限(r/w/x)分数是需要累加的，例如当权限为： [-rwxrwx--
--] 分数则是：
-owner = rwx = 4+2+1 = 7
-group = rwx = 4+2+1 = 7
-others= --- = 0+0+0 = 0
-```
-
-```bash
-chmod 770 filename
-```
-
-
-
-**1、chgrp：更改文件属组**
-
-```bash
-chgrp [-R] 属组名 文件名
-```
-
--R：递归更改文件属组，就是在更改某个目录文件的属组时，如果加上-R的参数，那么该目录下的所有
-文件的属组都会更改。
-**2、chown：更改文件属主，也可以同时更改文件属组**
-
-```bash
-chown [–R] 属主名 文件名 
-chown [-R] 属主名：属组名 文件名
-```
-
-**3、chmod：更改文件9个属性**
-
-```bash
-chmod [-R] xyz 文件或目录
-```
-
-
-
-
-
-
-
-
-
-#### 文件内容查看
-
-> **cat**
-
-```bash
-# 查看文件内容，列出行号
-[root@pt-dev 4a-server]# cat -b application.yml
-```
-
-
-
-![](https://gitee.com/lemonade19/blog-img/raw/master/img/image-20211208093224787.png)
-
-
-
-#### Vim文件编辑器
-
-> **vim**
-
-```bash
-# 进入编辑文件模式
-[root@pt-dev 4a-server]# vim application.yml 
-
-# 按下i进入输入模式
-# 编辑......
-# esc，输入:wq后退出
-```
-
-
-
-#### 进程管理
-
->**ps 查看进程**
-
-**-a：显示当前终端的所有进程信息**
-**-u：以用户的形式显示进程信息**
-**-x：显示后台进程运行的参数**
-
-```bash
-# 查看某个服务的进程
-# grep 命令用于查找文件里符合条件的字符串
-# 命令格式：命令A|命令B，即命令A的正确输出作为命令B的操作对象
-
-[root@pt-dev /]# ps -aux|grep 4A-server-2.2.5-SNAPSHOT.jar
-root     18929  7.9  2.4 8546904 795772 pts/1  Sl   09:31   5:58 java -jar -Xmx256m -Xmx256m -Xmn256m 4A-server-2.2.5-SNAPSHOT.jar
-root     31087  0.0  0.0 112948  1248 pts/0    S+   10:46   0:00 grep --color=auto 4A-server-2.2.5-SNAPSHOT.jar
-
-
-# 具体信息解释
-[root@pt-dev /]# ps aux
-USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
-root         1  0.0  0.0 193828  4132 ?        Ss   Nov23   1:29 /usr/lib/systemd/systemd --switched-root --system --deserialize 22
-root     18929  7.1  2.4 8546904 795388 pts/1  Sl   09:31   6:00 java -jar -Xmx256m -Xmx256m -Xmn256m 4A-server-2.2.5-SNAPSHOT.jar
-
-• USER：该 process 属于那个使用者账号的？
-• PID ：该 process 的号码。
-• %CPU：该 process 使用掉的 CPU 资源百分比；
-• %MEM：该 process 所占用的物理内存百分比；
-• VSZ ：该 process 使用掉的虚拟内存量 (Kbytes)
-• RSS ：该 process 占用的固定的内存量 (Kbytes)
-• TTY ：该 process 是在那个终端机上面运作，若与终端机无关，则显示 ?，另外， tty1-tty6 是本机上面的登入者程序，若为 pts/0 等等的，则表示为由网络连接进主机的程序。
-• STAT：该程序目前的状态，主要的状态有：
-o R ：该程序目前正在运作，或者是可被运作；
-o S ：该程序目前正在睡眠当中 (可说是 idle 状态啦！)，但可被某些讯号 (signal) 唤醒。
-o T ：该程序目前正在侦测或者是停止了；
-o Z ：该程序应该已经终止，但是其父程序却无法正常的终止他，造成 zombie (疆尸) 程序的状态
-• START：该 process 被触发启动的时间；
-• TIME ：该 process 实际使用 CPU 运作的时间。
-• COMMAND：该程序的实际指令为何？
-```
-
-
-
-![image-20211208104744502](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20211208104744502.png)
-
-
-
-![image-20211208110021468](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20211208110021468.png)
-
-
-
-
-
-
-
 安装nginx并且进行相关配置
-
-
-
-
 
 ```sh
 # 安装nginx,在make编译时报错：make: *** No rule to make target `build', needed by `default'. Stop.
@@ -574,23 +508,13 @@ make && make install
 
 
 
-dist文件夹压缩成.tar文件
-
-```
-tar -czvf dist.tar.gz dist
-```
-
-
-
-
-
-## 参考与推荐
+# 参考与推荐
 
 https://www.runoob.com/linux/linux-tutorial.html
 
 
 
-
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20211208093224787.png)
 
 
 
