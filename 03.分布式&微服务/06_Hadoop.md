@@ -1204,7 +1204,7 @@ hadoop104
   [atguigu@hadoop104 software]$ hadoop fs -get /jdk-8u212-linux-x64.tar.gz ./
   ```
 
-  - 执行wordcount程序
+  - 执行 `wordcount` 程序
 
   ```bash
   [atguigu@hadoop102 hadoop-3.1.3]$ hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-3.1.3.jar wordcount /input /output
@@ -1214,7 +1214,7 @@ hadoop104
 
 为了查看程序的历史运行情况，需要配置一下历史服务器。
 
-- 配置 mapred-site.xml
+- 配置 `mapred-site.xml`
 
 ```bash
 [atguigu@hadoop102 hadoop]$ vim mapred-site.xml
@@ -1264,15 +1264,17 @@ hadoop104
 
 - 查看 JobHistory：http://hadoop102:19888/jobhistory
 
+
+
 #### 3.2.7 配置日志的聚集
 
 - 日志聚集概念：应用运行完成以后，将程序运行日志信息上传到 HDFS 系统上。
   - 好处：可以方便的查看到程序运行详情，方便开发调试。
-  - 注意：开启日志聚集功能，需要重新启动NodeManager 、ResourceManager 和 HistoryServer。
+  - 注意：开启日志聚集功能，需要重新启动 NodeManager 、ResourceManager 和 HistoryServer。
 
 - 开启
 
-  - 配置yarn-site.xml
+  - 配置 `yarn-site.xml`
 
   ```bash
   [atguigu@hadoop102 hadoop]$ vim yarn-site.xml
@@ -1335,6 +1337,12 @@ hadoop104
     - 历史任务列表
     - 查看任务运行日志
     - 运行日志详情
+
+
+
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220825231327179.png)
+
+
 
 #### 3.2.8 集群启动/停止方式总结
 
@@ -1446,14 +1454,20 @@ done
 
 
 
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220825231040057.png)
+
+
+
 #### 3.2.10 常用端口号说明
 
-| 端口名称                  | Hadoop2.x   | Hadoop3.x        |
-| ------------------------- | ----------- | ---------------- |
-| NameNode内部通信端口      | 8020 / 9000 | 8020 / 9000/9820 |
-| NameNode HTTP UI          | 50070       | 9870             |
-| MapReduce查看执行任务端口 | 8088        | 8088             |
-| 历史服务器通信端口        | 19888       | 19888            |
+| 端口名称                  | Hadoop2.x   | Hadoop3.x            |
+| ------------------------- | ----------- | -------------------- |
+| NameNode内部通信端口      | 8020 / 9000 | 8020 🎈 / 9000 / 9820 |
+| NameNode HTTP UI          | 50070 🎈     | 9870 🎈               |
+| MapReduce查看执行任务端口 | 8088        | 8088                 |
+| 历史服务器通信端口        | 19888       | 19888                |
+
+
 
 #### 3.2.11 集群时间同步
 
