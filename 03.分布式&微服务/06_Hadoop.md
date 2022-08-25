@@ -227,13 +227,19 @@ MapReduce将计算过程分为两个阶段：Map 和 Reduce
 
 ## 2 运行环境搭建（开发重点）
 
+- Linux：`CentOS-7.5-x86-1804`
+- Jdk 8
+- Hadoop 3.1.3
+
+
+
 ### 2.1 模板虚拟机环境准备
 
 - 0）安装模板虚拟机，IP地址192.168.10.100、主机名称 hadoop100、内存4G、硬盘50G
 
-- 1）hadoop100 虚拟机配置要求如下（本文 Linux 系统全部以 `CentOS-7.5-x86-1804` 为例）
+- 1）hadoop100 虚拟机配置如下
 
-  - yum安装
+  - yum 安装
   - 安装 `epel-release`
 
   ```bash
@@ -274,7 +280,7 @@ MapReduce将计算过程分为两个阶段：Map 和 Reduce
 [root@hadoop100 ~]# vim /etc/sudoers
 ```
 
-在 %wheel 这行下面添加一行，如下所示：
+在 `%wheel` 这行下面添加一行，如下所示：
 
 ```bash
 ## Allow root to run any commands anywhere
@@ -289,21 +295,21 @@ atguigu   ALL=(ALL)     NOPASSWD:ALL
 
 - 5）在 `/opt` 目录下创建文件夹，并修改所属主和所属组
 
-  - （1）在/opt目录下创建module、software文件夹
+  - （1）在 `/opt` 目录下创建 module、software 文件夹
 
   ```bash
   [root@hadoop100 ~]# mkdir /opt/module
   [root@hadoop100 ~]# mkdir /opt/software
   ```
 
-  - （2）修改module、software文件夹的所有者和所属组均为atguigu用户
+  - （2）修改 module、software 文件夹的所有者和所属组均为 atguigu 用户
 
   ```bash
   [root@hadoop100 ~]# chown atguigu:atguigu /opt/module 
   [root@hadoop100 ~]# chown atguigu:atguigu /opt/software
   ```
 
-  - （3）查看module、software文件夹的所有者和所属组
+  - （3）查看 module、software 文件夹的所有者和所属组
 
   ```bash
   [root@hadoop100 ~]# cd /opt/
@@ -316,7 +322,7 @@ atguigu   ALL=(ALL)     NOPASSWD:ALL
 
   
 
-- 6）卸载虚拟机自带的JDK
+- 6）卸载虚拟机自带的 JDK
 
   ```bash
   # 查看
@@ -324,7 +330,7 @@ atguigu   ALL=(ALL)     NOPASSWD:ALL
   [root@hadoop100 ~]# rpm -qa | grep -i java | xargs -n1 rpm -e --nodeps
   ```
 
-  - rpm -qa：查询所安装的所有rpm软件包
+  - rpm -qa：查询所安装的所有 rpm 软件包
   - grep -i：忽略大小写
   - xargs -n1：表示每次只传递一个参数
   - rpm -e –nodeps：强制卸载软件
@@ -404,9 +410,9 @@ atguigu   ALL=(ALL)     NOPASSWD:ALL
 
   - （2）如果操作系统是 window10，先拷贝出来，修改保存以后，再覆盖即可
 
-    - （a）进入C:\Windows\System32\drivers\etc路径
-    - （b）拷贝hosts文件到桌面
-    - （c）打开桌面hosts文件并添加如下内容
+    - （a）进入 `C:\Windows\System32\drivers\etc` 路径
+    - （b）拷贝 hosts 文件到桌面
+    - （c）打开桌面 hosts 文件并添加如下内容
 
     ```bash
     192.168.10.100 hadoop100
@@ -420,7 +426,7 @@ atguigu   ALL=(ALL)     NOPASSWD:ALL
     192.168.10.108 hadoop108
     ```
 
-    - （d）将桌面hosts文件覆盖 `C:\Windows\System32\drivers\etc` 路径 `hosts `文件
+    - （d）将桌面 hosts 文件覆盖 `C:\Windows\System32\drivers\etc` 路径 `hosts `文件
 
 ### 2.3 在 hadoop102 安装 JDK
 
@@ -631,22 +637,68 @@ yarn    1
   - 6）配置ssh
   - 7）群起并测试集群
 
-- 总结一下
+
+
+#### 3.2.0 总结一下
+
+|      | hadoop102         | hadoop103                   | hadoop104                  |
+| ---- | ----------------- | --------------------------- | -------------------------- |
+| HDFS | NameNode DataNode | DataNode                    | SecondaryNameNode DataNode |
+| YARN | NodeManager       | ResourceManager NodeManager | NodeManager                |
+
+- 虚拟机准备（详见 2.1 ~ 2.4 ）
+  - hadoop102 安装 JDK、Hadoop
+  - 关闭锁屏
+
+- 集群分发脚本
+  - `scp` 命令拷贝 
+  - `rsync` 远程同步（同步 hadoop102 上的 JDK、Hadoop、环境变量配置到 hadoop103、hadoop104 ）
+  - 实现 `xsync` 集群分发脚本
+
+- ssh 无密登陆配置（三台机器同样配置）
 
 ```bash
-# 启动 hdfs
-[atguigu@hadoop102 hadoop-3.1.3]$ sbin/start-dfs.sh
+$ ssh-keygen -t rsa
+$ ssh-copy-id hadoop102
+$ ssh-copy-id hadoop103
+$ ssh-copy-id hadoop104
 ```
 
+- 修改 hadoop102 配置文件并分发
+  - 核心配置文件：`core-site.xml`
+  - HDFS 配置文件：配置 `hdfs-site.xml`
+  - YARN 配置文件：配置 `yarn-site.xml`
+  - MapReduce 配置文件：配置 `mapred-site.xml`
+
+- 启动集群
+
+  - hadoop102 配置 `workers` 并分发
+  - hadoop102 格式化 `NameNode`
+  - hadoop102 启动 `hdfs`
+
+  ```bash
+  # 启动 hdfs
+  [atguigu@hadoop102 hadoop-3.1.3]$ sbin/start-dfs.sh
+  ```
+
+  - hadoop103 启动 `yarn`
+
+  ```bash
+  [atguigu@hadoop103 hadoop-3.1.3]$ sbin/start-yarn.sh
+  ```
+
+  - web 页面查看：http://hadoop102:9870、 http://hadoop103:8088
+
+- 配置历史服务器
+- 配置日志 
 
 
 
 
 
+#### 3.2.1 虚拟机准备
 
-#### 3.2.1虚拟机准备
-
-- 详见2.1、2.2两节。
+- 详见 2.1 ~ 2.4 
 - 虚拟机关闭锁屏（一直输密码进系统很麻烦！）
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220824220241066.png)
@@ -730,7 +782,7 @@ yarn    1
   
   
   
-- xsync集群分发脚本
+- `xsync` 集群分发脚本
 
   - 需求：循环复制文件到所有节点的相同目录下
 
@@ -754,7 +806,7 @@ yarn    1
 
   - 脚本实现
 
-    - 在 /home/atguigu/bin 目录下创建 xsync 文件
+    - 在 /home/atguigu/bin 目录下创建 `xsync` 文件
 
     ```bash
     [atguigu@hadoop102 opt]$ cd /home/atguigu
@@ -831,10 +883,10 @@ yarn    1
 
 #### 3.2.3 SSH 无密登录配置
 
-- 配置ssh
+- 配置 ssh
 
-  - 语法：ssh 另一台电脑的IP地址
-  - ssh 连接时出现 Host key verification failed 的解决方法
+  - 语法：`ssh` 另一台电脑的IP地址
+  - ssh 连接时出现 `Host key verification failed` 的解决方法
 
   ```bash
   [atguigu@hadoop102 ~]$ ssh hadoop103
@@ -866,13 +918,12 @@ yarn    1
   # 注意：
   还需要在hadoop103上采用atguigu账号配置一下无密登录到hadoop102、hadoop103、hadoop104服务器上。
   还需要在hadoop104上采用atguigu账号配置一下无密登录到hadoop102、hadoop103、hadoop104服务器上。
-  还需要在hadoop102上采用root账号，配置一下无密登录到hadoop102、hadoop103、hadoop104服务器上。
   ```
 
 
 
 
-- .ssh文件夹下（~/.ssh）的文件功能解释
+- .ssh 文件夹下（~/.ssh）的文件功能解释
 
 | 文件            | 功能                                    |
 | --------------- | --------------------------------------- |
@@ -894,7 +945,7 @@ yarn    1
 
 - 配置文件说明
 
-  - Hadoop配置文件分两类：默认配置文件和自定义配置文件，只有用户想修改某一默认配置值时，才需要修改自定义配置文件，更改相应属性值。
+  - Hadoop 配置文件分两类：默认配置文件和自定义配置文件，只有用户想修改某一默认配置值时，才需要修改自定义配置文件，更改相应属性值。
   - 默认配置文件
 
   | 要获取的默认文件     | 文件存放在Hadoop的jar包中的位置                           |
@@ -910,7 +961,7 @@ yarn    1
 
 - 配置集群
 
-  - 核心配置文件：配置core-site.xml
+  - 核心配置文件：配置 `core-site.xml`
 
   ```bash
   [atguigu@hadoop102 ~]$ cd $HADOOP_HOME/etc/hadoop
@@ -946,7 +997,7 @@ yarn    1
 
   
 
-  - HDFS配置文件：配置 hdfs-site.xml
+  - HDFS 配置文件：配置 `hdfs-site.xml`
 
   ```bash
   [atguigu@hadoop102 hadoop]$ vim hdfs-site.xml
@@ -974,7 +1025,7 @@ yarn    1
 
   
 
-  - YARN配置文件：配置 yarn-site.xml
+  - YARN 配置文件：配置 `yarn-site.xml`
 
   ```bash
   [atguigu@hadoop102 hadoop]$ vim yarn-site.xml
@@ -1007,7 +1058,7 @@ yarn    1
   </configuration>
   ```
 
-  - MapReduce配置文件：配置mapred-site.xml
+  - MapReduce 配置文件：配置 `mapred-site.xml`
 
   ```bash
   [atguigu@hadoop102 hadoop]$ vim mapred-site.xml
@@ -1030,7 +1081,7 @@ yarn    1
 
   
 
-- 在集群上分发配置好的Hadoop配置文件
+- 在集群上分发配置好的 Hadoop 配置文件
 
 ```bash
 [atguigu@hadoop102 hadoop]$ xsync /opt/module/hadoop-3.1.3/etc/hadoop/
@@ -1065,7 +1116,7 @@ hadoop104
 
 - 启动集群
 
-  - **如果集群是第一次启动**，需要在hadoop102节点格式化 NameNode
+  - **如果集群是第一次启动**，需要在 hadoop102 节点格式化 `NameNode`
 
   ```bash
   [atguigu@hadoop102 hadoop-3.1.3]$ hdfs namenode -format
@@ -1457,9 +1508,11 @@ done
   
   - 原因是在 Linux 的根目录下 /tmp 目录中存在启动的进程临时文件，将集群相关进程删除掉，再重新启动集群。
   
-- 11、jps不生效
-  - 原因：全局变量hadoop java没有生效。解决办法：需要source /etc/profile文件。
-
+- 11、jps 不生效 ✔
+  
+  - 原因：全局变量 `hadoop java` 没有生效。
+  - 解决办法：需要 `source /etc/profile` 文件。
+  
 - 12、8088端口连接不上
 
 

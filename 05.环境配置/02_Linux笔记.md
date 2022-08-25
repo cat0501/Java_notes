@@ -1,23 +1,61 @@
 # 
 
-# Linux
+# 1 Linux 常用命令
 
-## 1 常用命令
+## 目录相关
+
+```sh
+# 列出目录（可能是最常被运行的）
+## -a 全部文件（含隐藏）、-l 详细信息（含权限信息）
+ll [-a]
+ls [-a、l]
+
+# 切换目录
+cd [相对路径或绝对路径]
+
+# 显示目前所在的目录
+pwd
+
+# 创建目录
+mkdir test
+# 删除/递归删除
+rmdir test
+rm -rf 文件或目录
+
+# 压缩文件与解压缩
+tar -czvf dist.tar.gz dist
+tar -xzvf dist.tar.gz
+
+# 移动文件与目录，或修改名称
+mv source destination
+```
+
+
+
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20211207145644741.png)
+
+
+
+
+
+## 文件相关
+
+```sh
+# 文件内容查看
+cat -b 文件名
+
+# 创建文件
+touch .gitattrbutes
+```
+
+
+
+
 
 ```sh
 # 查看端口占用情况（用kill pid来杀掉进程）
 $ lsof -i tcp:port
 $ netstat -tunlp|grep 3306
-
-# 创建空文件夹
-$ mkdir test
-# 创建一个文件
-touch .gitattrbutes
-
-# 压缩文件与解压缩
-$ tar -czvf dist.tar.gz dist
-$ tar -xzvf dist.tar.gz
-
 
 # 运行java应用
 $ nohup java -jar demo.jar &
@@ -64,7 +102,7 @@ $ ls -lrt /usr/bin/java (获取新的指向路径,循环多次)
 
 
 
-## 2 简介与安装Linux环境（含虚拟机配置）
+# 2 概述
 
 - Linux 的发行版：简单来说，就是将 Linux 内核与应用软件做一个打包。
 
@@ -76,24 +114,145 @@ $ ls -lrt /usr/bin/java (获取新的指向路径,循环多次)
 
 
 
-- Linux 的安装步骤比较繁琐，现在其实云服务器挺普遍的，价格也便宜。
-  - 如果自己不想搭建，也可以直接买一台学习用用，参考[各大云服务器比较](https://www.runoob.com/linux/linux-cloud-server.html)。
+- Linux 的安装步骤比较繁琐，其实现在云服务器挺普遍的，价格也便宜。如果自己不想搭建，也可以直接买一台学习用用，参考[各大云服务器比较](https://www.runoob.com/linux/linux-cloud-server.html)。
 
-- 虚拟机安装后占用空间，也会有些卡顿，我们作为程序员其实可以选择购买一台自己的服务器，这样的话更加接近真实线上工作。
-
-
-
-### 2.1 安装VMware虚拟机来安装Linux系统
-
-- 安装 VMware 虚拟机软件，然后使用镜像，配置网卡！
-- https://www.runoob.com/w3cnote/vmware-install-centos7.html
+- 虚拟机安装后占用空间，也会有些卡顿，可以考虑购买一台自己的服务器，这样的话更加接近真实线上工作。
 
 
 
-#### 虚拟机配置（重要！）
+## 目录结构
 
-- VMware Fusion 12.1.2
-- Centos 7.6
+
+
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20211207142241892-20220212171125315.png)
+
+
+
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220212171804813.png)
+
+
+
+```bash
+# 在Linux文件系统中有两个特殊的目录
+一个用户所在的工作目录，也叫当前目录，可以使用一个点 . 来表示
+另一个是当前目录的上一级目录，也叫父目录，可以使用两个点 .. 来表示
+```
+
+
+
+
+
+| 目录              | 内容                                     | 说明                               |
+| ----------------- | ---------------------------------------- | ---------------------------------- |
+| 🎈/etc             | 系统中的配置文件                         |                                    |
+| 🎈/bin, /usr/bin   | 给系统用户使用的指令（除root外的通用户） | 比如 ls 就是在 /bin/ls 目录下的    |
+| 🎈/sbin, /usr/sbin | 给 root 用户使用的指令                   |                                    |
+| 🎈/var             | 各个程序产生的日志被记录到这个目录下     | 具体在 /var/log 目录下             |
+| /bin              |                                          | binary缩写，存放着最经常使用的命令 |
+| /home             | 用户的主目录                             | Linux中每个用户都有一个自己的目录  |
+| /opt              | 安装软件的目录                           | 默认为空                           |
+| /root             | 系统管理员的用户主目录                   | 1                                  |
+| /usr              | 存放用户的很多应用程序和文件             | 类似于windows下的program files目录 |
+| /tmp              | 存放一些临时文件                         |                                    |
+
+
+
+```sh
+/boot: 启动Linux时使用的一些核心文件，包括一些连接文件以及镜像文件。
+/dev: Device（设备）的缩写，存放的是Linux的外部设备。在Linux中访问设备的方式和访问文件的方式是相同的。
+
+/lib: 存放系统最基本的动态连接共享库，作用类似于windows的DLL文件。
+/lost+found: 一般为空，系统非法关机后存放一些文件。
+/media: Linux系统会自动识别一些设备，例如U盘、光驱等等。识别后Linux会把识别的设备挂载到这个目录下。
+# 系统提供该目录是为了让用户临时挂载别的文件系统的。
+# 我们可以将光驱挂载在 /mnt/ 上，然后进入该目录就可以查看光驱里的内容了。
+/mnt
+
+/proc: 存储的是当前内核运行状态的一系列特殊文件
+
+/srv: 存放一些服务启动之后需要提取的数据。
+/sys: 该目录下安装了 2.6 内核中新出现的一个文件系统 sysfs 。
+
+/usr/src: 内核源代码默认的放置目录。
+/var: 这个目录中存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。包括各种日志文件。
+```
+
+## 远程登录（工具）
+
+> 对于Linux 系统，通过 ssh 服务实现远程登录功能， ssh 服务默认端口号为 22。
+
+- Windows 
+  -  SecureCRT, Putty, SSH Secure Shell 等工具
+
+- mac
+  - electerm（推荐）
+
+
+
+## 文件属性
+
+- Linux 系统是一种典型的多用户系统，不同的用户处于不同的地位，拥有不同的权限。
+  - 为了保护系统的安全性，Linux 系统对不同的用户访问同一文件（包括目录文件）的权限做了不同的规定。
+
+```sh
+# 显示一个文件的属性以及文件所属的用户和组
+$ ls -l
+```
+
+- Linux 系统按 **文件所有者（属主）、文件所有者同组用户（属组） 和 其他用户**来规定了不同的文件访问权限。
+  - 对于 `root` 用户来说，一般情况下，文件的权限对其不起作用。
+- 10 个字符确定每一个文件的属性
+
+> 第一个字符代表这个文件是目录、文件或链接文件等等。当为 **d** 则是目录；当为 **-** 则是文件；若是 **l** 则表示为链接文档(link file)。
+
+> 接下来的字符以三个为一组，且均为 **rwx** 的组合。其中， **r** 代表可读(read)、 **w** 代表可写(write)、 **x** 代表可执行(execute)。 要注意的是，这三个权限的位置不会改变，如果没有权限，就会出现减号 **-** 而已。
+
+
+
+```bash
+第一个字符代表这个文件是目录、文件或链接文件等等：
+    当为[ d ]则是目录
+    当为[ - ]则是文件；
+    若是[ l ]则表示为链接文档 ( link file )；
+    若是[ b ]则表示为装置文件里面的可供储存的接口设备 ( 可随机存取装置 )；
+    若是[ c ]则表示为装置文件里面的串行端口设备，例如键盘、鼠标 ( 一次性读取装置 )。
+接下来的字符中，三个为一组，且均为『rwx』 的三个参数的组合。
+		其中，[ r ]代表可读(read)、[ w ]代表可写(write)、[ x ]代表可执行(execute)。如果没有权限，就会出现减号[ - ]而已。
+		
+每个文件的属性由左边第一部分的10个字符来确定（如下图）：
+```
+
+
+
+
+
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220212180836310.png)
+
+
+
+- 更改文件属性
+
+```sh
+# 当权限为-rwxrwx---
+
+chmod 777 文件或目录
+chmod [-R] 777 文件或目录
+```
+
+
+
+# 3 安装Linux环境（含虚拟机配置）
+
+## 通过 VMware 虚拟机
+
+- 流程
+
+  - 安装 VMware 虚拟机软件（VMware Fusion 12.1.2）
+
+  - 使用镜像（Centos 7.6）
+
+  - 配置网卡
+
 
 
 ```bash
@@ -115,7 +274,6 @@ Password:
 vim /etc/sysconfig/network-scripts/ifcfg-ens33
 systemctl restart network.service
 
-
 # 虚拟机2
 dhclient(2926) is already running - exiting.
 ## 查找dhclient进程
@@ -125,189 +283,19 @@ kill -9 xxx
 192.168.1.7
 ```
 
+- 可参考：[菜鸟教程](https://www.runoob.com/w3cnote/vmware-install-centos7.html) 
+
+- 关机
+  - 正确的关机流程为：sync（将数据由内存同步到硬盘中） > shutdown > reboot > halt
 
 
-### 2.2 购买云服务器(Elastic Compute Service, ECS)
+
+## 通过购买云服务器 ECS
+
+Elastic Compute Service, ECS
 
 - 阿里云
 - 腾讯云
-
-```sh
-1、阿里云购买服务器：https://www.aliyun.com/minisite/goods?userCode=0phtycgr
-2、购买完毕后，获取服务器的ip地址，重置服务器密码，就可以远程登录了
-3、下载 xShell 工具，进行远程连接使用！
-注意事项：
-如果要打开端口，需要在阿里云的安全组面板中开启对应的出入规则，不然的话会被阿里拦截！
-```
-
-
-
-### 2.3 关机
-
-在 linux 领域内大多用在服务器上，很少遇到关机的操作。毕竟服务器上跑一个服务是永无止境的，除非特殊情况下，不得已才会关机。
-
-正确的关机流程为：sync > shutdown > reboot > halt
-
-最后总结一下，不管是重启系统还是关闭系统，首先要运行 **sync** 命令，把内存中的数据写到磁盘中。
-
-```bash
-# 将数据由内存同步到硬盘中
-sync
-
-# 关机指令
-shutdown
-```
-
-
-
-## 3 Linux系统目录结构
-
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20211207142241892-20220212171125315.png)
-
-
-
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220212171804813.png)
-
-
-
-```sh
-# 在 Linux 系统中，有几个目录是比较重要的，平时需要注意不要误删除或者随意更改内部文件。
-/etc：上边也提到了，这个是系统中的配置文件，如果你更改了该目录下的某个文件可能会导致系统不能启动。
-/bin, /sbin, /usr/bin, /usr/sbin: 这是系统预设的执行文件的放置目录，比如 ls 就是在 /bin/ls 目录下的。
-值得提出的是，/bin, /usr/bin 是给系统用户使用的指令（除root外的通用户），而/sbin, /usr/sbin 则是给 root 使用的指令。
-
-/var： 各个程序产生的日志被记录到这个目录下，具体在 /var/log 目录下，另外 mail 的预设放置也是在这里。
-
-# 在Linux文件系统中有两个特殊的目录
-一个用户所在的工作目录，也叫当前目录，可以使用一个点 . 来表示；
-另一个是当前目录的上一级目录，也叫父目录，可以使用两个点 .. 来表示。
-```
-
-
-
-
-
-```sh
-# binary缩写，存放着最经常使用的命令。
-/bin
-
-/boot: 启动Linux时使用的一些核心文件，包括一些连接文件以及镜像文件。
-/dev: Device（设备）的缩写，存放的是Linux的外部设备。在Linux中访问设备的方式和访问文件的方式是相同的。
-
-# 所有的系统管理所需要的配置文件和子目录。
-/etc
-# 用户的主目录。Linux中每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的。
-/home
-
-/lib: 存放系统最基本的动态连接共享库，作用类似于windows的DLL文件。
-/lost+found: 一般为空，系统非法关机后存放一些文件。
-/media: Linux系统会自动识别一些设备，例如U盘、光驱等等。识别后Linux会把识别的设备挂载到这个目录下。
-# 系统提供该目录是为了让用户临时挂载别的文件系统的。
-# 我们可以将光驱挂载在 /mnt/ 上，然后进入该目录就可以查看光驱里的内容了。
-/mnt
-
-# 给主机额外安装软件的目录。比如你安装一个Oracle数据库就可以放到这个目录下，默认为空。
-/opt
-
-/proc: 存储的是当前内核运行状态的一系列特殊文件
-
-# 系统管理员，也称作超级权限者的用户主目录。
-/root
-
-/sbin: 存放的是系统管理员使用的系统管理程序。
-/srv: 存放一些服务启动之后需要提取的数据。
-/sys: 该目录下安装了 2.6 内核中新出现的一个文件系统 sysfs 。
-/tmp: 存放一些临时文件。
-
-# 这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，类似于windows下的program files目录。
-/usr
-
-/usr/src: 内核源代码默认的放置目录。
-/var: 这个目录中存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。包括各种日志文件。
-```
-
-
-
-
-
-## 4 Linux远程登录（工具）
-
-> Linux 系统中是通过 ssh 服务实现的远程登录功能， ssh 服务默认端口号为 22。
-
-- Windows 
-  -  SecureCRT, Putty, SSH Secure Shell 等
-
-- mac
-  - electerm（推荐）
-
-## 5 Linux文件
-
-### 基本属性
-
-> Linux 系统是一种典型的多用户系统，不同的用户处于不同的地位，拥有不同的权限。为了保护系统的安全性，Linux 系统对不同的用户访问同一文件（包括目录文件）的权限做了不同的规定。
-
-```sh
-# 显示一个文件的属性以及文件所属的用户和组
-$ ls -l
-```
-
-
-
-> 第一个字符代表这个文件是目录、文件或链接文件等等。当为 **d** 则是目录；当为 **-** 则是文件；若是 **l** 则表示为链接文档(link file)。
-
-> 接下来的字符以三个为一组，且均为 **rwx** 的组合。其中， **r** 代表可读(read)、 **w** 代表可写(write)、 **x** 代表可执行(execute)。 要注意的是，这三个权限的位置不会改变，如果没有权限，就会出现减号 **-** 而已。
-
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220212180836310.png)
-
-
-
-#### Linux文件属主和属组
-
-Linux系统按文件所有者、文件所有者同组用户和其他用户来规定了不同的文件访问权限。
-
-对于 root 用户来说，一般情况下，文件的权限对其不起作用。
-
-#### 更改文件属性
-
-```sh
-# 当权限为-rwxrwx---
-chmod 777 文件或目录
-chmod [-R] 777 文件或目录
-```
-
-
-
-### 文件和目录管理
-
-```sh
-# 列出目录（可能是最常被运行的）
-ls -a
-# 切换目录
-cd [相对路径或绝对路径]
-# 显示目前所在的目录
-pwd
-
-# 创建新目录
-mkdir test
-# 删除空的目录
-rmdir test
-rmdir -p test1/test2/test3/test4
-# 你可以使用 rm 命令来删除非空目录
-rm [-fir] 文件或目录
-    -f ：就是 force 的意思，忽略不存在的文件，不会出现警告信息；
-    -i ：互动模式，在删除前会询问使用者是否动作
-    -r ：递归删除啊！最常用在目录的删除了！这是非常危险的选项！！！
-
-# 移动文件与目录，或修改名称
-mv [-fiu] source destination
-    -f ：force 强制的意思，如果目标文件已经存在，不会询问而直接覆盖；
-    -i ：若目标文件 (destination) 已经存在时，就会询问是否覆盖！
-    -u ：若目标文件已经存在，且 source 比较新，才会升级 (update)
-
-# 文件内容查看
-cat -b 文件名
-
-```
 
 
 
@@ -358,7 +346,8 @@ du [-ahskm] 文件或目录名称
 
 
 
-<hr>
+
+
 
 
 ## Linux服务器上更新服务
@@ -400,93 +389,7 @@ du [-ahskm] 文件或目录名称
 
 
 
-
-
-
-
-
-
-
-
-## 常用基本命令
-
-#### 目录管理
-
-> **ls列出目录**
-
-**ls -al**
-
-**-a ：全部的文件，连同隐藏文件( 开头为 . 的文件) 一起列出来(常用)**
-**-l ：长数据串列出，包含文件的属性与权限等等数据；(常用)**
-
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20211207145103938.png)
-
-
-
-> **cd （切换目录）**
-
-```bash
-# 回到根目录
-[root@pt-dev pt]# cd /
-[root@pt-dev /]# ls
-bin   data  etc   jitlog  lib64  mnt  oracle19  root  sbin  ssd  tmp    usr  www
-boot  dev   home  lib     media  opt  proc      run   srv   sys  Users  var
-[root@pt-dev /]# 
-
-# 回到家目录，即/root这个目录
-[root@pt-dev /]# cd ~
-[root@pt-dev ~]# ls
-0910BJ_ELEMENT.dmp  0910NEW_LOGGER.dmp    ApiManager-0.0.1-SNAPSHOT.jar    element.dmp     logs              NEW_WORKFLOW.dmp
-0910BJ_FRAME.dmp    0910NEW_PORTALET.dmp  billType.dmp                     hn_element.dmp  my-yapi           yapi-1.10.1.zip
-0910NEW_FRS.dmp     anaconda-ks.cfg       dm8_20210712_x86_rh6_64_ent.zip  hn_frame.dmp    NEW_BILLTYPE.dmp  yapi-docker
-
-# 回到上一级
-[root@pt-dev ~]# cd ..
-[root@pt-dev /]# 
-
-# 进入某个目录，如opt目录
-[root@pt-dev /]# cd opt
-[root@pt-dev opt]# ls
-newPt  openoffice4  pt
-[root@pt-dev opt]# 
-```
-
-
-
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20211207145644741.png)
-
-#### 基本属性（权限）
-
-##### 看懂文件属性
-
-> Linux系统是一种**典型的多用户系统**，不同的用户处于不同的地位，拥有不同的权限。为了保护系统的安全性，Linux系统对不同的用户访问同一文件（包括目录文件）的权限做了不同的规定。
->
-> 对于文件来说，它都有一个特定的所有者，也就是对该文件具有所有权的用户。
-> 同时，在Linux系统中，用户是按组分类的，一个用户属于一个或多个组。
-> 文件所有者以外的用户又可以分为文件所有者的同组用户和其他用户。
-> 因此，Linux系统按**文件所有者**、**文件所有者同组用户**和**其他用户**来规定了不同的文件访问权限。
-> 在以上实例中，boot 文件是一个目录文件，属主和属组都为 root。
-
-```bash
-第一个字符代表这个文件是目录、文件或链接文件等等：
-    当为[ d ]则是目录
-    当为[ - ]则是文件；
-    若是[ l ]则表示为链接文档 ( link file )；
-    若是[ b ]则表示为装置文件里面的可供储存的接口设备 ( 可随机存取装置 )；
-    若是[ c ]则表示为装置文件里面的串行端口设备，例如键盘、鼠标 ( 一次性读取装置 )。
-接下来的字符中，三个为一组，且均为『rwx』 的三个参数的组合。
-		其中，[ r ]代表可读(read)、[ w ]代表可写(write)、[ x ]代表可执行(execute)。如果没有权限，就会出现减号[ - ]而已。
-		
-每个文件的属性由左边第一部分的10个字符来确定（如下图）：
-```
-
-
-
-<img src="https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20211208111432441.png" alt="image-20211208111432441" style="zoom: 33%;" />
-
-![image-20211208111121039](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20211208111121039.png)
-
-
+！！！
 
 ##### 修改文件属性
 
