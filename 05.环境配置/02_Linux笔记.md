@@ -27,7 +27,7 @@ ls [-a、l]
 # 切换目录
 cd [相对路径或绝对路径]
 
-# 显示目前所在的目录
+# 显示当前所在目录
 pwd
 
 # 创建目录
@@ -55,7 +55,7 @@ mv source destination
 ## 文件相关
 
 ```sh
-# 文件内容查看
+# 查看文件内容
 cat -b 文件名
 
 # 创建文件
@@ -149,8 +149,6 @@ du [-ahskm] 文件或目录名称
 
 
 
-
-
 ## 其它
 
 ```sh
@@ -219,8 +217,6 @@ $ ls -lrt /usr/bin/java (获取新的指向路径,循环多次)
 一个用户所在的工作目录，也叫当前目录，可以使用一个点 . 来表示
 另一个是当前目录的上一级目录，也叫父目录，可以使用两个点 .. 来表示
 ```
-
-
 
 
 
@@ -303,8 +299,6 @@ $ ls -l
 		
 每个文件的属性由左边第一部分的10个字符来确定（如下图）：
 ```
-
-
 
 
 
@@ -471,7 +465,7 @@ Elastic Compute Service, ECS
 
 ```sh
 # 安装nginx,在make编译时报错：make: *** No rule to make target `build', needed by `default'. Stop.
-# 解决：
+# 解决
 
 # 更新yum
 yum update
