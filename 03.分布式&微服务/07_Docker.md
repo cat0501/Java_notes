@@ -880,7 +880,7 @@ ENTRYPOINT java -jar /tmp/app.jar
 
 ### 案例：基于java:8-alpine镜像，将一个Java项目构建为镜像
 
-可以将上面Dockerfile中的命令简化如下
+可以将上面 Dockerfile 中的命令简化如下
 
 ```sh
 # 指定基础镜像
@@ -898,7 +898,7 @@ ENTRYPOINT java -jar /tmp/app.jar
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20211214232947091.png)
 
-> 只需要4步就可以完成。
+> 只需要4步就可以完成
 
 
 
@@ -925,11 +925,11 @@ ENTRYPOINT java -jar /tmp/app.jar
 ### 介绍
 
 - Docker Compose 可以基于 Compose 文件帮我们快速的部署分布式应用，而无需手动一个个创建和运行容器！
-- Compose文件是一个文本文件，通过指令定义集群中的每个容器如何运行。
+- Compose 文件是一个文本文件，通过指令定义集群中的每个容器如何运行。
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220808233150416.png)
 
-- DockerCompose的详细语法参考官网：https://docs.docker.com/compose/compose-file/
+- `DockerCompose` 的详细语法参考官网：https://docs.docker.com/compose/compose-file/
 
 
 
@@ -938,27 +938,24 @@ ENTRYPOINT java -jar /tmp/app.jar
 1）下载
 
 ```bash
-# 安装
 curl -L https://github.com/docker/compose/releases/download/1.23.1/docker-compose- uname -s -uname -m > /usr/local/bin/docker-compose
 ```
 
-可以使用课前资料提供的docker-compose文件，上传到`/usr/local/bin/`目录也可以。
+可以使用课前资料提供的 docker-compose 文件，上传到`/usr/local/bin/`目录也可以。
 
 2）修改文件权限：变绿色，可执行
 
 ```bash
-# 修改权限
 chmod +x /usr/local/bin/docker-compose
 ```
 
-3）Bash自动补全命令
+3）Bash 自动补全命令
 
 ```bash
-# 补全命令
 curl -L https://raw.githubusercontent.com/docker/compose/1.29.1/contrib/completion/bash/docker-compose > /etc/bash_completion.d/docker-compose
 ```
 
-如果这里出现错误，需要修改自己的hosts文件：
+如果这里出现错误，需要修改自己的hosts文件
 
 ```bash
 echo "199.232.68.133 raw.githubusercontent.com" >> /etc/hosts
@@ -972,7 +969,9 @@ echo "199.232.68.133 raw.githubusercontent.com" >> /etc/hosts
 
 ## 12 部署微服务集群
 
-### 案例：将之前学习的cloud-demo微服务集群利用DockerCompose部署
+### DockerCompose部署案例
+
+案例：将之前学习的 cloud-demo 微服务集群利用 DockerCompose 部署
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220808233405530.png)
 
@@ -1013,9 +1012,9 @@ echo "199.232.68.133 raw.githubusercontent.com" >> /etc/hosts
 
 > 搭建镜像仓库可以基于Docker官方提供的DockerRegistry来实现。官网地址：https://hub.docker.com/_/registry
 
-#### 1）搭建简化版镜像仓库
+#### 1）搭建简化版镜像仓库 Docker Registry
 
-Docker官方的Docker Registry是一个基础版本的Docker镜像仓库，具备仓库管理的完整功能，但是没有图形化界面。
+Docker官方的 `Docker Registry` 是一个基础版本的 Docker 镜像仓库，具备仓库管理的完整功能，但是没有图形化界面。
 
 搭建方式比较简单，命令如下：
 
@@ -1030,13 +1029,13 @@ docker run -d \
 
 
 
-命令中挂载了一个数据卷registry-data到容器内的/var/lib/registry 目录，这是私有镜像库存放数据的目录。
+命令中挂载了一个数据卷 `registry-data` 到容器内的 `/var/lib/registry`  目录，这是私有镜像库存放数据的目录。
 
-访问http://YourIp:5000/v2/_catalog 可以查看当前私有镜像服务中包含的镜像
+查看当前私有镜像服务中包含的镜像：http://YourIp:5000/v2/_catalog
 
 #### 2）搭建带有图形化界面版本
 
-使用DockerCompose部署带有图象界面的DockerRegistry，命令如下：
+使用 `DockerCompose` 部署带有图形界面的 DockerRegistry，命令如下：
 
 ```yaml
 version: '3.0'
@@ -1058,28 +1057,30 @@ services:
 
 
 
-#### 3）配置Docker信任地址
+#### 3）配置 Docker 信任地址
 
-我们的私服采用的是http协议，默认不被Docker信任，所以需要做一个配置：
+我们的私服采用的是 `http` 协议，默认不被 Docker 信任，所以需要做一个配置：
 
 ```sh
 # 打开要修改的文件
 vi /etc/docker/daemon.json
+
 # 添加内容：
 "insecure-registries":["http://192.168.150.101:8080"]
+
 # 重加载
 systemctl daemon-reload
 # 重启docker
 systemctl restart docker
 ```
 
-![](https://gitee.com/lemonade19/blog-img/raw/master/img/image-20211215030300597.png)
+![](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/image-20211215030300597.png)
 
-![](https://gitee.com/lemonade19/blog-img/raw/master/img/image-20211215030444085.png)
+![](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/image-20211215030444085.png)
 
 
 
-![](https://gitee.com/lemonade19/blog-img/raw/master/img/image-20211215030515158.png)
+![](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/image-20211215030515158.png)
 
 
 
@@ -1089,11 +1090,11 @@ systemctl restart docker
 
 
 
-## 15从镜像仓库拉取镜像
+## 15 从镜像仓库拉取镜像
 
 ### 在私有镜像仓库推送或拉取镜像
 
-- 推送镜像到私有镜像服务必须先 tag。
+- 推送镜像到私有镜像服务必须先 tag
 - 实现
 
 ```bash
@@ -1120,8 +1121,11 @@ docker pull 192.168.150.101:8080/nginx:1.0
 ![](https://gitee.com/lemonade19/blog-img/raw/master/img/image-20211215031418472.png)
 
 > 推送本地镜像到仓库前都必须重命名(docker tag)镜像，以镜像仓库地址为前缀
+>
 > 镜像仓库推送前需要把仓库地址配置到docker服务的daemon.json文件中，被docker信任
+>
 > 推送使用docker push命令
+>
 > 拉取使用docker pull命令
 
 

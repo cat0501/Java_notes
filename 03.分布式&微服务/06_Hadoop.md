@@ -1836,7 +1836,7 @@ public void testCopyFromLocalFile() throws IOException, InterruptedException, UR
 
     // 3 关闭资源
     fs.close();
-｝}
+}
 ```
 
 - 将hdfs-site.xml拷贝到项目的resources资源目录下
