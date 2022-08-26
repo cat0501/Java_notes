@@ -1346,7 +1346,7 @@ hadoop104
 
 #### 3.2.8 集群启动/停止方式总结
 
-- 各个模块分开启动/停止（配置ssh是前提）常用
+- 各个模块分开启动/停止（配置 ssh 是前提） 常用
 
 ```bash
 # 整体启动/停止HDFS
@@ -1370,7 +1370,7 @@ yarn --daemon start/stop  resourcemanager/nodemanager
 
 #### 3.2.9 编写Hadoop集群常用脚本
 
-- Hadoop集群启停脚本（包含HDFS，Yarn，Historyserver）：myhadoop.sh
+- Hadoop集群启停脚本 `myhadoop.sh` （包含HDFS，Yarn，Historyserver）
 
 ```bash
 [atguigu@hadoop102 ~]$ cd /home/atguigu/bin

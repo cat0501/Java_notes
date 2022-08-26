@@ -3,21 +3,31 @@
 # 常用命令
 
 - 获取 Git 仓库的 2种方法
-  - 在现有目录中初始化仓库：进入项目目录运行 `git init` 命令,该命令将创建一个名为 `.git` 的子目录。
-  - 从一个服务器克隆一个现有的 Git 仓库: `git clone [url]` 
+  - 在现有目录中初始化仓库：进入项目目录运行 `git init` 命令，该命令将创建一个名为 `.git` 的子目录。
+  - 从一个服务器克隆一个现有的 Git 仓库：`git clone [url]` 
 
-```bash
-# 初始化
+## 初始化
+
+- 初始化
+
+```sh
 git init;
+```
 
-# 添加远程库（本地库关联远程库）
+- 添加远程库（本地库关联远程库）
+
+```sh
 git remote add gitee https://gitee.com/Lemonade19/Java_notes.git
 git remote add github https://github.com/cat0501/Java_notes_code.git
 
-# 远程仓库的移除与重命名
+# 远程仓库的重命名、移除
 git remote rename test test1
 git remote rm test1
+```
 
+- 提交信息
+
+```sh
 # 查看提交历史
 git log
 ## 只看某个人的提交记录
@@ -27,6 +37,12 @@ git log --author=bob
 git config user.name Lemonade19
 git config user.email 17782975312@163.com
 ```
+
+
+
+
+
+## 提交更新
 
 - 提交更新到仓库（本地库同步到 Github、Gitee等）
 
@@ -66,12 +82,12 @@ git config --global core.quotepath false
 
 ```bash
 # 列出本地分支
-git branch
+$ git branch
 # 查看远程分支
-git branch -r
+$ git branch -r
 
 # 新建一个本地分支 test
-git branch test
+$ git branch test
 # 切换当前分支到 test
 git checkout test
 
