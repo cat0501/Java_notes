@@ -461,10 +461,11 @@ Elastic Compute Service, ECS
 
 
 
-安装nginx并且进行相关配置
+安装nginx、并且进行相关配置
 
 ```sh
 # 安装nginx,在make编译时报错：make: *** No rule to make target `build', needed by `default'. Stop.
+
 # 解决
 
 # 更新yum
