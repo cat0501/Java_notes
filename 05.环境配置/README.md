@@ -1,6 +1,7 @@
 ## 强推的软件
 
 - IDEA
+- Snipaste（强大的截图、贴图工具）
 - Xmind（思维导图工具）：https://www.xmind.cn/
 - WizTree：https://www.diskanalyzer.com/download
   - 磁盘文件夹分析工具
@@ -41,7 +42,8 @@
   - CentOS-7.5镜像
   - electerm（远程工具）
 - git
-- Jdk 8
+- Jdk
+- maven
 
 
 

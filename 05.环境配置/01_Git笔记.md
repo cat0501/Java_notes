@@ -245,6 +245,14 @@ IDEA Git 插件越来越强大，很多时候，我们日常使用 Git ，更多
 
 
 
+# 安装环境
+
+- 官网下载：https://git-scm.com/download
+- 直接 Next 安装即可
+- 参考：https://blog.csdn.net/mukes/article/details/115693833
+
+
+
 # 参考&推荐
 
 - [《Git 面試題》](https://gitbook.tw/interview)

@@ -691,10 +691,24 @@ $ ssh-copy-id hadoop104
 
 - 配置历史服务器
 - 配置日志 
+- Hadoop集群常用脚本
 
+  - 启动、停止
 
+  ```sh
+  cd /root/bin
+  sh myhadoop.sh start
+  sh myhadoop.sh stop
+  ```
 
+  - 查看 3 台服务器进程脚本
 
+  ```sh
+  cd /root/bin
+  sh jpsall
+  ```
+
+  
 
 #### 3.2.1 虚拟机准备
 
@@ -1368,16 +1382,16 @@ yarn --daemon start/stop  resourcemanager/nodemanager
 
 
 
-#### 3.2.9 编写Hadoop集群常用脚本
+#### 3.2.9 编写Hadoop集群常用脚本 🎈
 
-- Hadoop集群启停脚本 `myhadoop.sh` （包含HDFS，Yarn，Historyserver）
+- Hadoop 集群启停脚本 `myhadoop.sh` （包含HDFS，Yarn，Historyserver）
 
 ```bash
 [atguigu@hadoop102 ~]$ cd /home/atguigu/bin
 [atguigu@hadoop102 bin]$ vim myhadoop.sh
 ```
 
-输入如下内容：
+输入以下内容：
 
 ```sh
 #!/bin/bash
@@ -1421,7 +1435,7 @@ esac
 [atguigu@hadoop102 bin]$ chmod +x myhadoop.sh
 ```
 
-- 查看三台服务器Java进程脚本：jpsall
+- 查看三台服务器 `Java` 进程脚本：jpsall
 
 ```bash
 [atguigu@hadoop102 ~]$ cd /home/atguigu/bin
@@ -1446,7 +1460,7 @@ done
 [atguigu@hadoop102 bin]$ chmod +x jpsall
 ```
 
-- 分发 /home/atguigu/bin 目录，保证自定义脚本在三台机器上都可以使用
+- 分发 `/home/atguigu/bin` 目录，保证自定义脚本在三台机器上都可以使用
 
 ```bash
 [atguigu@hadoop102 ~]$ xsync /home/atguigu/bin/
@@ -1469,23 +1483,110 @@ done
 
 
 
-#### 3.2.11 集群时间同步
+#### 3.2.11 集群时间同步（不需要配置）
 
 - **如果服务器在公网环境（能连接外网），可以不采用集群时间同步**，因为服务器会定期和公网时间进行校准；
-
 - 如果服务器在内网环境，必须要配置集群时间同步，否则时间久了，会产生时间偏差，导致集群执行任务时间不同步。
 
-- 需求
-- 时间服务器配置（必须root用户）
-- 其他机器配置（必须root用户）
 
 
+> 需求：找一个机器，作为时间服务器，所有的机器与这台集群时间进行定时的同步，生产环境根据任务对时间的准确程度要求周期同步。测试环境为了尽快看到效果，采用 1 分钟同步一次。
+
+- 时间服务器配置（root用户）
+
+  - 查看所有节点 ntpd 服务状态和开机自启动状态
+
+  ```sh
+  [atguigu@hadoop102 ~]$ sudo systemctl status ntpd
+  [atguigu@hadoop102 ~]$ sudo systemctl start ntpd
+  [atguigu@hadoop102 ~]$ sudo systemctl is-enabled ntpd
+  ```
+
+  - 修改 hadoop102 的 ntp.conf 配置文件
+
+  ```sh
+  [atguigu@hadoop102 ~]$ sudo vim /etc/ntp.conf
+  ```
+
+  ```sh
+  # 修改 1（授权 192.168.10.0-192.168.10.255 网段上的所有机器可以从这台机器上查询和同步时间）
+  restrict 192.168.10.0 mask 255.255.255.0 nomodify notrap
+  
+  # 修改 2（集群在局域网中，不使用其他互联网上的时间）
+  #server 0.centos.pool.ntp.org iburst
+  #server 1.centos.pool.ntp.org iburst
+  #server 2.centos.pool.ntp.org iburst
+  #server 3.centos.pool.ntp.org iburst
+  
+  # 添加 3（当该节点丢失网络连接，依然可以采用本地时间作为时间服务器为集群中的其他节点提供时间同步）
+  server 127.127.1.0
+  fudge 127.127.1.0 stratum 10
+  ```
+
+  - 修改 hadoop102 的 `/etc/sysconfig/ntpd`  文件
+
+  ```sh
+  [atguigu@hadoop102 ~]$ sudo vim /etc/sysconfig/ntpd
+  ```
+
+  增加内容如下（让硬件时间与系统时间一起同步）
+
+  ```sh
+  SYNC_HWCLOCK=yes
+  ```
+
+  - 重新启动 ntpd 服务
+
+  ```sh
+  [atguigu@hadoop102 ~]$ sudo systemctl start ntpd
+  ```
+
+  - 设置 ntpd 服务开机启动
+
+  ```sh
+  [atguigu@hadoop102 ~]$ sudo systemctl enable ntpd
+  ```
+
+- 其他机器配置（root用户）
+
+  - 关闭所有节点上 ntp 服务和自启动
+
+  ```sh
+  [atguigu@hadoop103 ~]$ sudo systemctl stop ntpd
+  [atguigu@hadoop103 ~]$ sudo systemctl disable ntpd
+  [atguigu@hadoop104 ~]$ sudo systemctl stop ntpd
+  [atguigu@hadoop104 ~]$ sudo systemctl disable ntpd
+  ```
+
+  - 在其他机器配置 1 分钟与时间服务器同步一次
+
+  ```sh
+  [atguigu@hadoop103 ~]$ sudo crontab -e
+  
+  # 编写定时任务如下
+  */1 * * * * /usr/sbin/ntpdate hadoop102
+  ```
+
+  - 修改任意机器时间
+
+  ```sh
+  [atguigu@hadoop103 ~]$ sudo date -s "2021-9-11 11:11:11"
+  ```
+
+  - 1 分钟后查看机器是否与时间服务器同步
+
+  ```sh
+  [atguigu@hadoop103 ~]$ sudo date
+  ```
+
+  
 
 ## 4 常见错误及解决方案
 
-- 1、防火墙没关闭、或者没有启动YARN
+- 1、防火墙没关闭、或者没有启动 YARN
+  
   - *INFO client.RMProxy: Connecting to ResourceManager at hadoop108/192.168.10.108:8032*
-
+  
 - 2、主机名称配置错误
 
 - 3、IP 地址配置错误
@@ -1510,46 +1611,49 @@ done
 
   - 解决办法：
 
-    （1）在 `/etc/hosts` 文件中添加192.168.10.102 hadoop102
+    （1）在 `/etc/hosts` 文件中添加 192.168.10.102 hadoop102
 
     （2）主机名称不要起 hadoop  hadoop000 等特殊名称
 
-- 8、DataNode 和 NameNode进程同时只能工作一个。
-- 9、执行命令不生效，粘贴Word中命令时，遇到-和长–没区分开。导致命令失效
-  - 解决办法：尽量不要粘贴Word中代码。
+- 8、DataNode 和 NameNode 进程同时只能工作一个
 
-- 10、jps 发现进程已经没有，但是重新启动集群，提示进程已经开启。
-  
-  - 原因是在 Linux 的根目录下 /tmp 目录中存在启动的进程临时文件，将集群相关进程删除掉，再重新启动集群。
-  
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220826224053934.png)
+
+- 9、执行命令不生效，粘贴Word中命令时，遇到-和长–没区分开。导致命令失效
+  - 建议：尽量不要粘贴Word中代码
+
+- 10、`jps` 发现进程已经没有，但是重新启动集群，提示进程已经开启。
+  - 原因是 Linux 根目录下 /tmp 目录中存在启动的进程临时文件，将集群相关进程删除掉，再重新启动集群。
+
 - 11、jps 不生效 ✔
-  
-  - 原因：全局变量 `hadoop java` 没有生效。
-  - 解决办法：需要 `source /etc/profile` 文件。
-  
-- 12、8088端口连接不上
+  - 原因：全局变量 `hadoop java` 没有生效
+  - 建议：需要 `source /etc/profile` 文件
+
+- 12、8088 端口连接不上
 
 
 
 # HDFS
 
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220826225706750.png)
+
+
+
 ## 5 HDFS 概述
 
-### 5.1HDFS 产生背景、定义和使用场景
+### 5.1 HDFS 产生背景、定义和使用场景
 
 - 产生背景
   - 随着数据量越来越大，在一个操作系统存不下所有的数据；
   - 那么就分配到更多的操作系统管理的磁盘中，但是不方便管理和维护，迫切需要一种系统来管理多台机器上的文件，这就是分布式文件管理系统。
   - HDFS 只是**分布式文件管理系统**中的一种。
-
 - 定义
   - HDFS（Hadoop Distributed File System），它是一个文件系统，用于存储文件，通过目录树来定位文件；
   - 其次，它是分布式的，由很多服务器联合起来实现其功能，集群中的服务器有各自的角色。
-
 - 使用场景
   - **适合一次写入，多次读出的场景**。一个文件经过创建、写入和关闭之后就不需要改变。
 
-### 5.2HDFS 优缺点
+### 5.2 HDFS 优缺点
 
 - 优点
   - 高容错性：数据自动保存多个副本。某一个副本丢失以后，可以自动恢复。
@@ -1564,33 +1668,68 @@ done
 
 
 
-### 5.3HDFS 组成架构
+### 5.3 HDFS 组成架构
+
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220826231033814.png)
+
+
+
+- NameNode（nn）：就是 `Master`，它是一个主管、管理者。 
+
+  - （1）管理HDFS的名称空间；
+
+  - （2）配置副本策略； 
+
+  - （3）管理数据块（Block）映射信息； 
+
+  - （4）处理客户端读写请求。 
+
+- DataNode：就是 `Slave`。NameNode下达命令，DataNode执行实际的操作。 
+  - （1）存储实际的数据块；
+  - （2）执行数据块的读/写操作。
+
+- Client：就是客户端。 
+
+  - （1）文件切分。文件上传HDFS的时候，Client将文件切分成一个一个的Block，然后进行上传； 
+
+  - （2）与NameNode交互，获取文件的位置信息；
+
+  - （3）与DataNode交互，读取或者写入数据；
+
+  - （4）Client提供一些命令来管理HDFS，比如NameNode格式化； 
+
+  - （5）Client可以通过一些命令来访问HDFS，比如对HDFS增删查改操作； 
+
+- Secondary NameNode：并非 `NameNode` 的热备。当 `NameNode` 挂掉的时候，它并不能马上替换 `NameNode` 并提供服务。
+
+  - （1）辅助 NameNode，分担其工作量，比如定期合并 Fsimage 和 Edits，并推送给 NameNode ； 
+
+  - （2）在紧急情况下，可辅助恢复 NameNode。
 
 
 
 
 
-### 5.4HDFS 文件块大小（面试重点）
+### 5.4 HDFS 文件块大小（面试重点）
 
-- HDFS 中的文件在物理上是分块存储（Block），块的大小可以通过配置参数来规定，默认大小在Hadoop2.x/3.x版本是128M。
-
+- HDFS 中的文件在物理上是分块存储（Block），块的大小可以通过配置参数( dfs.blocksize）来规定，默认大小在 Hadoop2.x/3.x版本是 **128 M**，1.x版本是 64 M。
 - 不能设置太小，也不能设置太大？
   - 太小，会增加寻址时间
   - 太大，程序在处理这块数据时，会非常慢
-  - HDFS块的大小设置主要取决于磁盘传输速率。
+  - **HDFS块的大小设置主要取决于磁盘传输速率。（一般为 128M 或 256M）**
 
 
 
-## 6 HDFS 的shell操作（开发重点）
+## 6 HDFS 的 shell操作（开发重点）
 
-### 6.1基本语法
+### 6.1 基本语法
 
-- hadoop fs 具体命令
-- hdfs dfs 具体命令
+- `hadoop fs` 具体命令
+- `hdfs dfs` 具体命令
 
 
 
-### 6.2命令大全
+### 6.2 命令大全
 
 ```bash
 [atguigu@hadoop102 hadoop-3.1.3]$ bin/hadoop fs
@@ -1598,7 +1737,7 @@ done
 
 
 
-### 6.3常用命令实操
+### 6.3 常用命令实操
 
 #### 准备工作
 
@@ -1611,7 +1750,7 @@ done
 
 
 
-- -help：输出这个命令参数
+- `-help`：输出这个命令参数
 
 ```bash
 [atguigu@hadoop102 hadoop-3.1.3]$ hadoop fs -help rm
@@ -1619,7 +1758,7 @@ done
 
 
 
-- 创建/sanguo文件夹
+- 创建 `/sanguo` 文件夹
 
 ```bash
 [atguigu@hadoop102 hadoop-3.1.3]$ hadoop fs -mkdir /sanguo
@@ -1649,7 +1788,7 @@ weiguo
 [atguigu@hadoop102 hadoop-3.1.3]$ hadoop fs -copyFromLocal weiguo.txt /sanguo
 ```
 
-- -put：等同于copyFromLocal，生产环境更习惯用put
+- -put：等同于copyFromLocal，生产环境更习惯用 put
 
 ```bash
 [atguigu@hadoop102 hadoop-3.1.3]$ vim wuguo.txt
@@ -1694,7 +1833,7 @@ liubei
 -cat：显示文件内容
 [atguigu@hadoop102 hadoop-3.1.3]$ hadoop fs -cat /sanguo/shuguo.txt
 
--chgrp、-chmod、-chown：Linux文件系统中的用法一样，修改文件所属权限
+-chgrp、-chmod、-chown：与 Linux 文件系统中的用法一样，修改文件所属权限
 [atguigu@hadoop102 hadoop-3.1.3]$ hadoop fs  -chmod 666  /sanguo/shuguo.txt
 [atguigu@hadoop102 hadoop-3.1.3]$ hadoop fs  -chown  atguigu:atguigu   /sanguo/shuguo.txt
 
@@ -1735,9 +1874,9 @@ liubei
 
 ## 7 HDFS 的API操作
 
-### 7.1客户端环境准备
+### 7.1 客户端环境准备
 
-- 找到资料包路径下的 Windos 依赖文件夹，拷贝hadoop-3.1.0到非中文路径（比如d:\）。
+- 找到资料包路径下的 `Windows` 依赖文件夹，拷贝 hadoop-3.1.0 到非中文路径（比如d:\）。
 
 - 配置 `HADOOP_HOME` 环境变量
 
@@ -1816,7 +1955,37 @@ org.apache.hadoop.security.AccessControlException: Permission denied: user=56576
 
 
 
-### 7.2HDFS 的API案例操作
+### 7.2 HDFS 的API案例操作
+
+```java
+public class HdfsClient {
+
+    private FileSystem fs;
+
+    @Before
+    public void init() throws URISyntaxException, IOException, InterruptedException {
+        // 连接的集群nn地址
+        URI uri = new URI("hdfs://hadoop102:8020");
+        // 创建一个配置文件
+        Configuration configuration = new Configuration();
+
+        configuration.set("dfs.replication", "2");
+        // 用户
+        String user = "atguigu";
+
+        // 1 获取到了客户端对象
+        fs = FileSystem.get(uri, configuration, user);
+    }
+
+    @After
+    public void close() throws IOException {
+        // 3 关闭资源
+        fs.close();
+    }
+}
+```
+
+
 
 #### HDFS文件上传（测试参数优先级）
 
@@ -1825,21 +1994,11 @@ org.apache.hadoop.security.AccessControlException: Permission denied: user=56576
 ```java
 @Test
 public void testCopyFromLocalFile() throws IOException, InterruptedException, URISyntaxException {
-
-    // 1 获取文件系统
-    Configuration configuration = new Configuration();
-    configuration.set("dfs.replication", "2");
-    FileSystem fs = FileSystem.get(new URI("hdfs://hadoop102:8020"), configuration, "atguigu");
-
-    // 2 上传文件
     fs.copyFromLocalFile(new Path("d:/sunwukong.txt"), new Path("/xiyou/huaguoshan"));
-
-    // 3 关闭资源
-    fs.close();
 }
 ```
 
-- 将hdfs-site.xml拷贝到项目的resources资源目录下
+- 将 `hdfs-site.xml` 拷贝到项目的 `resources` 资源目录下
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -1864,10 +2023,6 @@ public void testCopyFromLocalFile() throws IOException, InterruptedException, UR
 ```java
 @Test
 public void testCopyToLocalFile() throws IOException, InterruptedException, URISyntaxException{
-
-    // 1 获取文件系统
-    Configuration configuration = new Configuration();
-    FileSystem fs = FileSystem.get(new URI("hdfs://hadoop102:8020"), configuration, "atguigu");
     
     // 2 执行下载操作
     // boolean delSrc 指是否将原文件删除
@@ -1876,8 +2031,6 @@ public void testCopyToLocalFile() throws IOException, InterruptedException, URIS
     // boolean useRawLocalFileSystem 是否开启文件校验
     fs.copyToLocalFile(false, new Path("/xiyou/huaguoshan/sunwukong.txt"), new Path("d:/sunwukong2.txt"), true);
     
-    // 3 关闭资源
-    fs.close();
 }
 ```
 
@@ -1886,18 +2039,19 @@ public void testCopyToLocalFile() throws IOException, InterruptedException, URIS
 #### HDFS文件更名和移动
 
 ```java
+// 文件的更名和移动
 @Test
-public void testRename() throws IOException, InterruptedException, URISyntaxException{
+public void testmv() throws IOException {
+  // 参数解读：参数1 ：原文件路径； 参数2 ：目标文件路径
+  // 对文件名称的修改
+  //fs.rename(new Path("/input/word.txt"), new Path("/input/ss.txt"));
 
-	// 1 获取文件系统
-	Configuration configuration = new Configuration();
-	FileSystem fs = FileSystem.get(new URI("hdfs://hadoop102:8020"), configuration, "atguigu"); 
-		
-	// 2 修改文件名称
-	fs.rename(new Path("/xiyou/huaguoshan/sunwukong.txt"), new Path("/xiyou/huaguoshan/meihouwang.txt"));
-		
-	// 3 关闭资源
-	fs.close();
+  // 文件的移动和更名
+  //fs.rename(new Path("/input/ss.txt"),new Path("/cls.txt"));
+
+  // 目录更名
+  fs.rename(new Path("/input"), new Path("/output"));
+
 }
 ```
 
@@ -1906,18 +2060,19 @@ public void testRename() throws IOException, InterruptedException, URISyntaxExce
 #### HDFS删除文件和目录
 
 ```java
+// 删除
 @Test
-public void testDelete() throws IOException, InterruptedException, URISyntaxException{
+public void testRm() throws IOException {
 
-	// 1 获取文件系统
-	Configuration configuration = new Configuration();
-	FileSystem fs = FileSystem.get(new URI("hdfs://hadoop102:8020"), configuration, "atguigu");
-		
-	// 2 执行删除
-	fs.delete(new Path("/xiyou"), true);
-		
-	// 3 关闭资源
-	fs.close();
+  // 参数解读：参数1：要删除的路径； 参数2 ： 是否递归删除
+  // 删除文件
+  //fs.delete(new Path("/jdk-8u212-linux-x64.tar.gz"),false);
+
+  // 删除空目录
+  //fs.delete(new Path("/xiyou"), false);
+
+  // 删除非空目录
+  fs.delete(new Path("/jinguo"), true);
 }
 ```
 
@@ -1930,10 +2085,6 @@ public void testDelete() throws IOException, InterruptedException, URISyntaxExce
 ```java
 @Test
 public void testListFiles() throws IOException, InterruptedException, URISyntaxException {
-
-	// 1获取文件系统
-	Configuration configuration = new Configuration();
-	FileSystem fs = FileSystem.get(new URI("hdfs://hadoop102:8020"), configuration, "atguigu");
 
 	// 2 获取文件详情
 	RemoteIterator<LocatedFileStatus> listFiles = fs.listFiles(new Path("/"), true);
@@ -1955,8 +2106,6 @@ public void testListFiles() throws IOException, InterruptedException, URISyntaxE
 		BlockLocation[] blockLocations = fileStatus.getBlockLocations();
 		System.out.println(Arrays.toString(blockLocations));
 	}
-	// 3 关闭资源
-	fs.close();
 }
 ```
 
@@ -1967,10 +2116,6 @@ public void testListFiles() throws IOException, InterruptedException, URISyntaxE
 ```java
 @Test
 public void testListStatus() throws IOException, InterruptedException, URISyntaxException{
-
-    // 1 获取文件配置信息
-    Configuration configuration = new Configuration();
-    FileSystem fs = FileSystem.get(new URI("hdfs://hadoop102:8020"), configuration, "atguigu");
 
     // 2 判断是文件还是文件夹
     FileStatus[] listStatus = fs.listStatus(new Path("/"));
@@ -1984,9 +2129,6 @@ public void testListStatus() throws IOException, InterruptedException, URISyntax
             System.out.println("d:"+fileStatus.getPath().getName());
         }
     }
-
-    // 3 关闭资源
-    fs.close();
 }
 ```
 
@@ -1994,7 +2136,11 @@ public void testListStatus() throws IOException, InterruptedException, URISyntax
 
 ## 8 读写流程（面试重点）
 
-### 8.1HDFS 写数据流程
+### 8.1 HDFS 写数据流程
+
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220827193453124.png)
+
+
 
 #### 刨析文件写入
 
@@ -2002,40 +2148,107 @@ public void testListStatus() throws IOException, InterruptedException, URISyntax
 - （2）NameNode 返回是否可以上传。
 - （3）客户端请求第一个 Block 上传到哪几个 DataNode 服务器上。
 - （4）NameNode 返回3个 DataNode节点，分别为 dn1、dn2、dn3。
-- （5）客户端通过 FSDataOutputStream 模块请求 dn1上传数据，dn1 收到请求会继续调用 dn2，然后 dn2调用 dn3，将这个通信管道建立完成。
+- （5）客户端通过 `FSDataOutputStream` 模块请求 dn1上传数据，dn1 收到请求会继续调用 dn2，然后 dn2调用 dn3，将这个通信管道建立完成。
 - （6）dn1、dn2、dn3逐级应答客户端。
-- （7）客户端开始往dn1上传第一个 Block（先从磁盘读取数据放到一个本地内存缓存），以 Packet 为单位，dn1收到一个Packet就会传给dn2，dn2传给dn3；dn1每传一个packet会放入一个应答队列等待应答。
-- （8）当一个 Block传输完成之后，客户端再次请求 NameNode 上传第二个 Block 的服务器。（重复执行3-7步）。
-
-
+- （7）客户端开始往 dn1上传第一个 `Block`（先从磁盘读取数据放到一个本地内存缓存），以 `Packet` 为单位，dn1 收到一个Packet就会传给 dn2，dn2 传给 dn3；dn1 每传一个 packet 会放入一个应答队列等待应答。
+- （8）当一个 Block 传输完成之后，客户端再次请求 NameNode 上传第二个 Block 的服务器（重复执行3-7步）。
 
 
 
 #### 网络拓扑-节点距离计算
 
+在 HDFS 写数据的过程中，NameNode 会选择距离待上传数据最近距离的 DataNode 接收数据。那么这个最近距离怎么计算呢？
+
+节点距离：两个节点到达最近的共同祖先的距离总和。
+
+
+
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220827194345846.png)
+
+
+
 
 
 #### 机架感知（副本存储节点选择）
 
+- 源码说明
 
-
-
-
-### 8.2HDFS 读数据流程
-
-
+```sh
+Crtl + n 查找 BlockPlacementPolicyDefault，在该类中查找 chooseTargetInOrder 方法。
+```
 
 
 
 
 
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220827194846328.png)
 
 
-## 9 NameNode和SecondaryNameNode
+
+### 8.2 HDFS 读数据流程
+
+
+
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220827195018789.png)
+
+
+
+- （1）客户端通过 DistributedFileSystem 向 NameNode 请求下载文件，NameNode 通过查询元数据，找到文件块所在的 DataNode 地址。
+- （2）挑选一台 DataNode（就近原则，然后随机）服务器，请求读取数据。 
+- （3）DataNode 开始传输数据给客户端（从磁盘里面读取数据输入流，以 Packet 为单位来做校验）。
+- （4）客户端以 Packet 为单位接收，先在本地缓存，然后写入目标文件。
+
+
+
+## 9 NameNode 和 SecondaryNameNode
+
+### 9.1 NN 和 2NN 工作机制
+
+
+
+![image-20220827200916652](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220827200916652.png)
+
+
+
+#### 第一阶段：NameNode 启动
+
+- （1）第一次启动 NameNode 格式化后，创建 Fsimage 和 Edits 文件。如果不是第一次启动，直接加载编辑日志和镜像文件到内存。
+- （2）客户端对元数据进行增删改的请求。 
+- （3）NameNode 记录操作日志，更新滚动日志。 
+- （4）NameNode 在内存中对元数据进行增删改。
+
+
+
+#### 第二阶段：Secondary NameNode 工作
+
+- （1）Secondary NameNode 询问 NameNode 是否需要 CheckPoint。直接带回 NameNode是否检查结果。
+- （2）Secondary NameNode 请求执行 CheckPoint。 
+- （3）NameNode 滚动正在写的 Edits 日志。 
+- （4）将滚动前的编辑日志和镜像文件拷贝到 Secondary NameNode。 
+- （5）Secondary NameNode 加载编辑日志和镜像文件到内存，并合并。
+- （6）生成新的镜像文件 fsimage.chkpoint。 
+- （7）拷贝 fsimage.chkpoint 到 NameNode。 
+- （8）NameNode 将 fsimage.chkpoint 重新命名成 fsimage。
+
+
+
+
+
+### 9.2 Fsimage 和 Edits 解析
+
+
+
+
+
+
+
+### 9.3 CheckPoint 时间设置
+
+
 
 ## 10 DataNode
 
-### 10.1DataNode工作机制
+### 10.1 DataNode工作机制
 
 - 一个数据块在 DataNode 上以文件形式存储在磁盘上，包括两个文件，一个是数据本身，一个是元数据包括数据块的长度，块数据的校验和，以及时间戳。
 
@@ -2069,7 +2282,7 @@ public void testListStatus() throws IOException, InterruptedException, URISyntax
 - 心跳是每 3秒一次，心跳返回结果带有 NameNode给该 DataNode的命令如复制块数据到另一台机器，或删除某个数据块。如果超过 10分钟没有收到某个 DataNode的心跳，则认为该节点不可用。
 - 集群运行中可以安全加入和退出一些机器。
 
-### 10.2数据完整性
+### 10.2 数据完整性
 
 - DataNode 节点保证数据完整性的方法。
 
@@ -2085,7 +2298,7 @@ public void testListStatus() throws IOException, InterruptedException, URISyntax
 
 
 
-### 10.3掉线时限参数设置
+### 10.3 掉线时限参数设置
 
 
 
@@ -2093,13 +2306,13 @@ public void testListStatus() throws IOException, InterruptedException, URISyntax
 
 ## 11 MapReduce 概述
 
-### 11.1MapReduce 定义
+### 11.1 MapReduce 定义
 
 - **分布式运算程序**的编程框架，是用户开发“基于Hadoop的数据分析应用”的核心框架。
 
 - 核心功能是将**用户编写的业务逻辑代码**和**自带默认组件**整合成一个完整的分布式运算程序，并发运行在一个Hadoop集群上。
 
-### 11.2MapReduce 优缺点
+### 11.2 MapReduce 优缺点
 
 #### 优点👉
 
@@ -2125,7 +2338,7 @@ public void testListStatus() throws IOException, InterruptedException, URISyntax
 
 
 
-### 11.3MapReduce 核心思想
+### 11.3 MapReduce 核心思想
 
 
 
@@ -2137,7 +2350,7 @@ public void testListStatus() throws IOException, InterruptedException, URISyntax
 
 
 
-### 11.4MapReduce 进程
+### 11.4 MapReduce 进程
 
 - 一个完整的MapReduce程序在分布式运行时有三类实例进程
   - MrAppMaster：负责整个程序的过程调度及状态协调。
@@ -2146,11 +2359,11 @@ public void testListStatus() throws IOException, InterruptedException, URISyntax
 
 
 
-### 11.5官方WordCount源码
+### 11.5 官方WordCount源码
 
 采用反编译工具反编译源码，发现 WordCount案例有 Map类、Reduce类和驱动类。且数据的类型是Hadoop自身封装的序列化类型。
 
-### 11.6常用数据序列化类型
+### 11.6 常用数据序列化类型
 
 | **Java类型** | **Hadoop Writable类型** |
 | ------------ | ----------------------- |
@@ -2165,7 +2378,7 @@ public void testListStatus() throws IOException, InterruptedException, URISyntax
 | Array        | ArrayWritable           |
 | Null         | NullWritable            |
 
-###  11.7MapReduce 编程规范
+###  11.7 MapReduce 编程规范
 
 用户编写的程序分成三个部分：Mapper、Reducer和Driver。
 
@@ -2189,7 +2402,7 @@ public void testListStatus() throws IOException, InterruptedException, URISyntax
 
 
 
-### 11.8WordCount案例实操
+### 11.8 WordCount案例实操
 
 - 需求描述
 
@@ -2363,7 +2576,7 @@ public void testListStatus() throws IOException, InterruptedException, URISyntax
 
 ## 12 Hadoop 序列化
 
-### 12.1序列化概述
+### 12.1 序列化概述
 
 - 什么是序列化
   - 序列化就是**把内存中的对象，转换成字节序列**（或其他数据传输协议）以便于存储到磁盘（持久化）和网络传输。
@@ -2382,7 +2595,7 @@ public void testListStatus() throws IOException, InterruptedException, URISyntax
 
 
 
-### 12.2自定义bean对象实现序列化接口（Writable）
+### 12.2 自定义bean对象实现序列化接口（Writable）
 
 - 在企业开发中往往常用的基本序列化类型不能满足所有需求，比如在Hadoop框架内部传递一个 `bean` 对象，那么该对象就需要实现序列化接口。
 
@@ -2423,7 +2636,7 @@ public void testListStatus() throws IOException, InterruptedException, URISyntax
   - （6）要想把结果显示在文件中，需要重写 `toString()` ，可用 "\t" 分开，方便后续用。
   - （7）如果需要将自定义的 bean 放在 key 中传输，则还需要实现 `Comparable` 接口，因为MapReduce框中的 Shuffle 过程要求对 key 必须能排序。详见后面排序案例。
 
-### 12.3序列化案例实操
+### 12.3 序列化案例实操
 
 - 需求
 - 需求分析
