@@ -2834,23 +2834,23 @@ Crtl + n 查找 BlockPlacementPolicyDefault，在该类中查找 chooseTargetInO
 
   
 
-## 13 MapReduce框架原理
+## 13 MapReduce 框架原理
 
-### 13.1 InputFormat数据输入
+### 13.1 InputFormat 数据输入
 
 ### 13.2 工作流程
 
-### 13.3 Shuffle机制
+### 13.3 Shuffle 机制
 
-### 13.4 OutputFormat数据输出
+### 13.4 OutputFormat 数据输出
 
 ### 13.5 MapReduce内核源码解析
 
-### 13.6 Join应用
+### 13.6 Join 应用
 
 ### 13.7 数据清洗（ETL）
 
-### 13.8 MapReduce开发总结
+### 13.8 MapReduce 开发总结
 
 
 
