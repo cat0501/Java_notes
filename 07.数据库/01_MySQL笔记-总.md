@@ -289,7 +289,9 @@ mysql [-h 127.0.0.1][-p 3306] -u root -p
 ## （1）下载并上传到/usr/local目录下，解压，重命名
 https://dev.mysql.com/downloads/mysql/
 
-[root@192 local]# tar -Jxf mysql-8.0.27-linux-glibc2.12-x86_64.tar.xz
+$ tar xvJf xxx.tar.xz
+
+
 [root@192 local]# mv mysql-8.0.27-linux-glibc2.12-x86_64 mysql8
 
 ## (2) 创建用户，并给数据目录赋予权限（出错的话试下绝对路径）

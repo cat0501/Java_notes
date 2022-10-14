@@ -1,8 +1,8 @@
 import java.util.Arrays;
 
 /**
- * @author cat
- * @description
+ * @author Lemonade22
+ * @description : 最大子数组和（找出一个具有最大和的连续子数组，返回其最大和。）
  * @date 2022/6/12 下午11:29
  */
 
@@ -14,7 +14,7 @@ import java.util.Arrays;
 // 算法
 // 基础（对照简历复习复习）
 
-public class E53 {
+public class M53 {
     public static void main(String[] args) {
         int[] nums = {-2,1,-3,4,-1,2,1,-5,4};
         System.out.println(new Solution53().maxSubArray(nums));

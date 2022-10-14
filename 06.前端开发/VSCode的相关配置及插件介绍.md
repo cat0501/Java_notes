@@ -1,9 +1,3 @@
-
-
-
-
-
-
 # 前端常用编辑器介绍
 
 ## Visual Studio Code
@@ -109,6 +103,28 @@ Vetur 是为 Vue 开发量身打造的插件。
 ### Browser Preview
 
 - 可以在 VS Code 内直接打开浏览器，边编辑代码边预览网页效果
+
+
+
+
+
+# WebStorm 插件
+
+## 实用插件
+
+### Translation
+
+
+
+
+
+
+
+- [WebStorm：常用插件（全部实用）包含主题、界面、开发效率等](https://blog.csdn.net/yanzer/article/details/123963639)
+
+
+
+
 
 
 

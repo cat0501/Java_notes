@@ -1,4 +1,4 @@
-import static com.sun.tools.doclint.Entity.sum;
+//import static com.sun.tools.doclint.Entity.sum;
 
 /**
  * @author cat

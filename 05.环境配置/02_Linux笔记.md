@@ -164,12 +164,13 @@ cat *.sql > merge.sql
 生产环境服务器变慢，诊断思路和性能评估谈谈
 整机：top——看CPU和内存
 内存：free
+
 ```
 
-- 如何查看 `Jdk` 安装路径
+- where is my jdk?（查看 `Jdk` 安装路径）
 
 ```bash
-# 在打印文本的最后两行可以看到jdk的路径
+# 在打印文本的最后两行可以看到 jdk 的路径
 $ java -verbose
 
 # 前提是配置了环境变量$JAVA_HOME
@@ -178,7 +179,26 @@ $ echo $JAVA_HOME
 # which java
 $ which java
 $ ls -lrt /usr/bin/java (获取新的指向路径,循环多次)
+
+# https://www.jb51.net/article/228544.htm
 ```
+
+- 开发
+
+```bash
+yum install redhat-lsb -y
+# 查看系统版本信息
+lsb_release -a
+
+
+
+
+
+```
+
+
+
+
 
 
 
