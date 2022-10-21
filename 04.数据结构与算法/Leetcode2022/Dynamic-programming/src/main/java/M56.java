@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.function.ToDoubleFunction;
 
 /**
  * @author Lemonade
@@ -52,14 +51,16 @@ public class M56 {
         int[][] intervals6 = {{1,4},{0,0}};
         int[][] intervals7 = {{4,5},{1,4},{0,1}};
 
+        int[][] intervals8 = {{1,3},{2,5},{6,9}};
 
-        //System.out.println(Arrays.deepToString(new Solution56().merge(intervals)));
+
+        System.out.println(Arrays.deepToString(new Solution56().merge(intervals)));
         //System.out.println(Arrays.deepToString(new Solution56().merge(intervals2)));
         //System.out.println(Arrays.deepToString(new Solution56().merge(intervals3)));
         //System.out.println(Arrays.deepToString(new Solution56().merge(intervals4)));
         //System.out.println(Arrays.deepToString(new Solution56().merge(intervals5)));
         //System.out.println(Arrays.deepToString(new Solution56().merge(intervals6)));
-        System.out.println(Arrays.deepToString(new Solution56().merge(intervals7)));
+        //System.out.println(Arrays.deepToString(new Solution56().merge(intervals8)));
     }
 }
 
@@ -71,15 +72,7 @@ public class M56 {
 
 class Solution56 {
     public int[][] merge(int[][] intervals) {
-        if (intervals.length == 1){
-            return intervals;
-        }
-        // 等价于 Arrays.sort(intervals, Comparator.comparingInt(o -> o[0]));
-        //Arrays.sort(intervals, (o1, o2) -> {
-        //    //这里根据第一列进行排序
-        //    return o1[0] - o2[0];
-        //});
-        // 重写 Arrays.sort() 方法
+        //重写Arrays.sort()方法
         Arrays.sort(intervals, new Comparator<int[]>() {
             @Override
             public int compare(int[] o1, int[] o2) {
@@ -87,21 +80,24 @@ class Solution56 {
                 return o1[0] - o2[0];
             }
         });
-        // first merge
-        int[][] arr = mergeDp(intervals);
 
-        while (checkMergeOk(arr)) {
-            arr = mergeDp(arr);
+        if (intervals.length == 1){
+            return intervals;
         }
-        return arr;
+
+        int[][] mergeDp = mergeDp(intervals);
+
+        while (check(mergeDp)){
+            mergeDp = mergeDp(mergeDp);
+        }
+        return mergeDp;
     }
 
-    // 是否可再合并
-    public boolean checkMergeOk(int[][] intervals){
+    // 是否不可再合并
+    public boolean check(int[][] intervals){
         for (int i = 0; i < intervals.length - 1; i++) {
             int[] left = intervals[i];
             int[] right = intervals[i + 1];
-
             if (left[left.length - 1] >= right[0]){
                 return true;
             }
@@ -109,7 +105,6 @@ class Solution56 {
         return false;
     }
 
-    // 合并
     public int[][] mergeDp(int[][] intervals) {
 
         ArrayList<int[]> arrayList = new ArrayList<>();
@@ -117,18 +112,18 @@ class Solution56 {
             int[] left = intervals[i];
             int[] right = intervals[i + 1];
 
-            int[] arr;
+            int[] arr = new int[0];
             // 一共几种情况？考虑全面
             // 情况1：如果  [1,3],[2,6]，那么[1, 6]
             // 情况2：如果  [1,4],[0,4]，那么[0, 4]
-            arr = left[left.length - 1] >= right[0] ?
-                    (new int[]{Math.min(left[0], right[0]), Math.min(left[right.length - 1], right[right.length - 1])})
-                    : intervals[i];
-            // 可以合并
             if (left[left.length - 1] >= right[0]){
-                int leftN, rightN;
-                leftN = Math.min(left[0], right[0]);
-                rightN = Math.min(left[right.length - 1], right[right.length - 1]);
+                int leftN = Math.min(left[0], right[0]);
+                int rightN;
+                if (left[left.length - 1] >= right[right.length - 1]){
+                    rightN = left[right.length - 1];
+                } else {
+                    rightN = right[right.length - 1];
+                }
                 arr = new int[]{leftN, rightN};
                 ++i;
             } else {
@@ -136,7 +131,6 @@ class Solution56 {
             }
             arrayList.add(arr);
         }
-        // 是否添加最后一个元素
         int[] ints = arrayList.get(arrayList.size() - 1);
         if (ints[ints.length - 1] < intervals[intervals.length - 1][intervals[0].length - 1]){
             arrayList.add(intervals[intervals.length - 1]);
@@ -144,6 +138,86 @@ class Solution56 {
         return arrayList.toArray(new int[0][]);
     }
 }
+
+
+
+
+
+//class Solution56 {
+//    public int[][] merge(int[][] intervals) {
+//        if (intervals.length == 1){
+//            return intervals;
+//        }
+//        // 等价于 Arrays.sort(intervals, Comparator.comparingInt(o -> o[0]));
+//        //Arrays.sort(intervals, (o1, o2) -> {
+//        //    //这里根据第一列进行排序
+//        //    return o1[0] - o2[0];
+//        //});
+//        // 重写 Arrays.sort() 方法
+//        Arrays.sort(intervals, new Comparator<int[]>() {
+//            @Override
+//            public int compare(int[] o1, int[] o2) {
+//                //这里根据第一列进行排序
+//                return o1[0] - o2[0];
+//            }
+//        });
+//        // first merge
+//        int[][] arr = mergeDp(intervals);
+//
+//        while (checkMergeOk(arr)) {
+//            arr = mergeDp(arr);
+//        }
+//        return arr;
+//    }
+//
+//    // 是否可再合并
+//    public boolean checkMergeOk(int[][] intervals){
+//        for (int i = 0; i < intervals.length - 1; i++) {
+//            int[] left = intervals[i];
+//            int[] right = intervals[i + 1];
+//
+//            if (left[left.length - 1] >= right[0]){
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+//
+//    // 合并
+//    public int[][] mergeDp(int[][] intervals) {
+//
+//        ArrayList<int[]> arrayList = new ArrayList<>();
+//        for (int i = 0; i < intervals.length - 1; i++) {
+//            int[] left = intervals[i];
+//            int[] right = intervals[i + 1];
+//
+//            int[] arr;
+//            // 一共几种情况？考虑全面
+//            // 情况1：如果  [1,3],[2,6]，那么[1, 6]
+//            // 情况2：如果  [1,4],[0,4]，那么[0, 4]
+//            arr = left[left.length - 1] >= right[0] ?
+//                    (new int[]{Math.min(left[0], right[0]), Math.min(left[right.length - 1], right[right.length - 1])})
+//                    : intervals[i];
+//            // 可以合并
+//            if (left[left.length - 1] >= right[0]){
+//                int leftN, rightN;
+//                leftN = Math.min(left[0], right[0]);
+//                rightN = Math.min(left[right.length - 1], right[right.length - 1]);
+//                arr = new int[]{leftN, rightN};
+//                ++i;
+//            } else {
+//                arr = intervals[i];
+//            }
+//            arrayList.add(arr);
+//        }
+//        // 是否添加最后一个元素
+//        int[] ints = arrayList.get(arrayList.size() - 1);
+//        if (ints[ints.length - 1] < intervals[intervals.length - 1][intervals[0].length - 1]){
+//            arrayList.add(intervals[intervals.length - 1]);
+//        }
+//        return arrayList.toArray(new int[0][]);
+//    }
+//}
 
 
 /**
