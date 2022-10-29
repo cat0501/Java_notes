@@ -1,20 +1,14 @@
-# 
 
-# 常用命令
 
-- 获取 Git 仓库的 2 种方法
-  - 在现有目录中初始化仓库：进入项目目录运行 `git init` 命令，该命令将创建一个名为 `.git` 的子目录。
-  - 从一个服务器克隆一个现有的 Git 仓库：`git clone [url]` 
+# 命令
 
-- 整体流程
-
-![](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/image-20220327224143107.png)
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220327224143107.png)
 
 
 
 ## 初始化
 
-- 初始化
+- 现有目录初始化（将创建一个名为 `.git`  的子目录）
 
 ```sh
 git init
@@ -46,11 +40,13 @@ git config user.email 17782975312@163.com
 
 
 
+- 从服务器克隆已有Git 仓库：`git clone [url]` 
+
+
+
 ## 提交更新
 
-本地库同步到 Github、Gitee等
-
-- 提交
+- 提交（本地库同步到 Github、Gitee等）
 
 ```sh
 # 检测当前文件状态
@@ -88,7 +84,7 @@ true
 $ git config core.ignorecase false
 
 # cmd git页面中文显示为数字,不是乱码
-git config --global core.quotepath false
+$ git config --global core.quotepath false
 ```
 
 
@@ -111,10 +107,10 @@ $ git branch -r
 # 新建一个本地分支 test
 $ git branch test
 # 切换当前分支到 test
-git checkout test
+$ git checkout test
 
 # 创建分支并切换过去(上面两条命令的合写)
-git checkout -b feature_x
+$ git checkout -b feature_x
 
 # 切换到主分支
 git checkout master
@@ -131,57 +127,37 @@ git merge test
 
 ## 其它
 
+1. 查看提交历史
 
+   ```sh
+   git log
+   ```
 
-![](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/image-20220327231015557.png)
+2. 撤销指定的提交
 
-
-
-- `git show $id` ：显示某次提交的内容
-
-- `git diff` ：查看本次修改与上次修改的内容的区别
-
-- `git add <file>` ：把现在所要添加的文件放到暂存区中。
-
-  - `git log -p <file>` ：查看每次详细修改内容的 diff 。
-
-  - `git rm <file>` ：从版本库中删除文件。
-
-  - `git reset <file>` ：从暂存区恢复到工作文件。
-
-  - `git reset HEAD^` ：恢复最近一次提交过的状态，即放弃上次提交后的所有本次修改` 。
-
-    > HEAD 本身是一個游标，它通常會指向某一个本地端分支或是其它 commit，所以你也可以把 HEAD 当做是目前所在的分支（current branch）。 可参见 [《Git 中 HEAD 是什么东西》](https://juejin.im/entry/59a38c5d6fb9a0248e5cc884) 。
-
-- `git checkout` ：切换分支
-
-- `git merge <branch>` ：将 branch 分支合并到当前分支
-
-- `git stash`：暂存。
-
-  - `git stash pop` ：恢复最近一次的暂存。
+   ```sh
+   git revert <commit>
+   ```
 
 
 
-# Git 工具？
+# Tools
 
-## 命令行
+1. 命令行
 
-- cmd、IDEA 的终端
+   cmd、IDEA 的终端
 
-## IDEA Git 插件
+2. IDEA Git 插件
 
 IDEA Git 插件越来越强大，很多时候，我们日常使用 Git ，更多使用它。具体的教程，可以看看 [《IntelliJ IDEA 下的使用 git》](https://blog.csdn.net/huangfan322/article/details/53220060) 。
 
-## SourceTree
+3. SourceTree
 
-> 可以说是最好用的 Git 工具，没有之一。
+   一个图形化的 Git 增强工具，其最好用的功能就在于它集成了 GitFlow ，让开发者可以更简单、更规范的去做一些 Git 操作；
 
-一个图形化的 Git 增强工具，其最好用的功能就在于它集成了 GitFlow ，让开发者可以更简单、更规范的去做一些 Git 操作；
+   另外它还提供了更友好的 merge 界面，但是操作起来不是很顺手，因为它只支持整行删除。
 
-另外它还提供了更友好的 merge 界面，但是操作起来不是很顺手，因为它只支持整行删除。
-
-## 其它
+4. 其它
 
 - [SmartGit](https://www.syntevo.com/smartgit/)
 - [Tower](https://www.git-tower.com/mac)
@@ -189,7 +165,9 @@ IDEA Git 插件越来越强大，很多时候，我们日常使用 Git ，更多
 
 
 
-# Git 和 SVN 的优缺点？
+# Introduction
+
+## Git 相比 SVN 的优缺点？
 
 **Git 是分布式版本控制系统，SVN 是集中式版本控制系统。**
 
@@ -222,11 +200,11 @@ IDEA Git 插件越来越强大，很多时候，我们日常使用 Git ，更多
   - 2、不符合常规思维。
   - 3、代码保密性差，一旦开发者把整个库克隆下来就可以完全公开所有代码和版本信息。
 
-所以，很多公司的开发团队使用 Git 作为版本管理，而产品团队使用 SVN 。
+所以，很多公司的开发团队使用 Git 作为版本管理工具，而产品团队使用 SVN 。
 
 
 
-# Git 服务器
+## Git 服务器
 
 - 公有服务方案
   - Github
@@ -239,13 +217,13 @@ IDEA Git 插件越来越强大，很多时候，我们日常使用 Git ，更多
 > 注意，Gitlab 和 Bitbucket 也提供公有服务的方案。
 
 - 一般情况下，大多数公司使用 GitLab 作为 Git 服务器。
-  - GitLab是一个利用 [Ruby on Rails](http://www.oschina.net/p/ruby+on+rails) 开发的开源应用程序，实现一个自托管的[Git](http://www.oschina.net/p/git)项目仓库，可通过Web界面进行访问公开的或者私人项目。
-  - 不过因为 GitLb 使用 Ruby on Rails 实现，所以占用的系统资源会比较多。
-  - 它拥有与[Github](http://www.oschina.net/p/github)类似的功能，能够浏览源代码，管理缺陷和注释。可以管理团队对仓库的访问，它非常易于浏览提交过的版本并提供一个文件历史库。它还提供一个代码片段收集功能可以轻松实现代码复用，便于日后有需要的时候进行查找。
+  - GitLab是一个利用 [Ruby on Rails](http://www.oschina.net/p/ruby+on+rails) 开发的开源应用程序，实现一个自托管的 [Git](http://www.oschina.net/p/git) 项目仓库，可通过Web界面进行访问公开的或者私人的项目。
+  - 因为 GitLb 使用 Ruby on Rails 实现，所以占用的系统资源会比较多。
+  - 它拥有与 [Github](http://www.oschina.net/p/github) 类似的功能，能够浏览源代码，管理缺陷和注释。可以管理团队对仓库的访问，它非常易于浏览提交过的版本并提供一个文件历史库。它还提供一个代码片段收集功能可以轻松实现代码复用，便于日后有需要的时候进行查找。
 
 
 
-# 安装环境
+## 安装环境
 
 - 官网下载：https://git-scm.com/download
 - 直接 Next 安装即可
@@ -253,7 +231,7 @@ IDEA Git 插件越来越强大，很多时候，我们日常使用 Git ，更多
 
 
 
-# 参考&推荐
+# Reference
 
 - [《Git 面試題》](https://gitbook.tw/interview)
 
@@ -280,14 +258,15 @@ IDEA Git 插件越来越强大，很多时候，我们日常使用 Git ，更多
 
 
 
-# 一些其它问题
+# 	Q&A
 
 ## 一个本地库能不能既关联 GitHub，又关联 Gitee 呢？
 
 > 答案是肯定的，因为 git 本身是分布式版本控制系统，可以同步到另外一个远程库，当然也可以同步到另外两个远程库。
+>
 > 使用多个远程库时，我们要注意，git 给远程库起的默认名称是 `origin`，如果有多个远程库，我们需要用不同的名称来标识不同的远程库。
 
-### 1）取消全局设置
+1. 取消全局设置
 
 ```bash
 # 查看
@@ -301,7 +280,7 @@ git config --global --unset user.email
 
 
 
-### 2）配置秘钥
+2. 配置秘钥
 
 由于你的本地 Git 仓库和 GitHub 仓库之间的传输是通过 `SSH` 加密的，所以我们需要配置验证信息。
 
@@ -333,7 +312,7 @@ ssh-keygen -t rsa -C "pxzjl123@icloud.com"
 
 
 
-### 3）关联 GitHub 和 Gitee
+3. 关联 GitHub 和 Gitee
 
 - 关联 GitHub 远程库
 
@@ -349,17 +328,18 @@ $ git remote add github git@github.com:tianqixin/runoob-git-test.git
 $ git remote add gitee git@gitee.com:imnoob/runoob-test.git
 ```
 
-- 用 `git remote -v` 查看远程库信息，如下2个
+- 查看远程库信息
 
 ```bash
 $ git remote -v
+
 gitee    git@gitee.com:imnoob/runoob-test.git (fetch)
 gitee    git@gitee.com:imnoob/runoob-test.git (push)
 github    git@github.com:tianqixin/runoob.git (fetch)
 github    git@github.com:tianqixin/runoob.git (push)
 ```
 
-### 4）推送改动
+4. 推送改动
 
 ```bash
 # 添加和提交
@@ -398,7 +378,7 @@ git push gitee master
 
 ## git push -u 的含义和用法
 
-- 第一次加了参数 `-u` 后，以后即可直接用 git push 代替 git push origin master
+- 第一次加了参数 `-u` 后，以后即可直接用 `git push` 代替 `git push origin master`
 
 - https://blog.csdn.net/chenzz444/article/details/104408607
 
