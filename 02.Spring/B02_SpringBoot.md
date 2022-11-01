@@ -30,33 +30,6 @@ SpringBoot 是由 `Pivotal` 团队提供的全新框架，其设计目的是用�
 
 
 
-## 问题解决
-
-- **（服务启动报错）IDEAError:Internal error: (java.io.IOException) Cannot find IntelliJ IDEA projec**
-
-解决：控制面板->时间和区域->区域->管理选项卡->更改系统区域设置,取消 `utf8` 编码的勾,重启即可。
-
-参考：https://blog.csdn.net/qq_44443306/article/details/109304856
-
-- **（服务启动报错）.\demo0810-1.0-SNAPSHOT.jar 中没有主清单属性**
-
-```xml
-<build>
-    <plugins>
-        <plugin>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-maven-plugin</artifactId>
-        </plugin>
-    </plugins>
-</build>
-```
-
-参考：https://blog.csdn.net/qq_31868149/article/details/122652305
-
-
-
-
-
 
 
 # 一、基础篇
@@ -1906,6 +1879,56 @@ Actuator提供了SpringBoot生产就绪功能，通过端点的配置与访问�
 
 
 
+
+# Q&A
+
+## （服务启动报错）IDEAError:Internal error: (java.io.IOException) Cannot find IntelliJ IDEA projec
+
+解决：控制面板->时间和区域->区域->管理选项卡->更改系统区域设置，取消 `utf8` 编码的勾，重启即可。
+
+参考：https://blog.csdn.net/qq_44443306/article/details/109304856
+
+## （服务启动报错）.\demo0810-1.0-SNAPSHOT.jar 中没有主清单属性
+
+```xml
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+        </plugin>
+    </plugins>
+</build>
+```
+
+参考：https://blog.csdn.net/qq_31868149/article/details/122652305
+
+
+
+## （服务启动异常）SpringBoot项目启动问题
+
+时隔一年，终于解决。
+
+问题复现
+
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220303092821111.png)
+
+
+
+解决办法 [参考](https://blog.csdn.net/qq_44695727/article/details/106296294)
+
+1. 找到报错的仓库位置，复制一份，解压一份
+2. 打开 `MANIFEST.MF` 文件，删除 `Class-Path`（这个指向的就是找不到的那几个），再打包回 `jar`
+
+```sh
+打jar命令：$ jar cvf jaxb-impl-2.1.13.jar .
+```
+
+3. 替换本地仓库原来的 `jar` 包
+
+
+
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220303095046901.png)
 
 
 
