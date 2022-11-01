@@ -158,12 +158,9 @@ IDEA Git 插件越来越强大，很多时候，我们日常使用 Git ，更多
    另外它还提供了更友好的 merge 界面，但是操作起来不是很顺手，因为它只支持整行删除。
 
 4. 其它
-
-- [SmartGit](https://www.syntevo.com/smartgit/)
-- [Tower](https://www.git-tower.com/mac)
-- Atom
-
-
+   - [SmartGit](https://www.syntevo.com/smartgit/)
+   - [Tower](https://www.git-tower.com/mac)
+   - Atom
 
 # Introduction
 
