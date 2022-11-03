@@ -199,7 +199,14 @@ SHOW PROC '/backends'\G
 - 前提：StarRocks 集群中已部署 Broker。
 
 ```sh
+# 查看
 SHOW PROC "/brokers";
+
+# broker 添加
+ALTER SYSTEM ADD BROKER mybroker "10.11.14.16:8000";
+
+# broker 删除
+ALTER SYSTEM DROP BROKER mybroker "10.11.14.16:8000";
 ```
 
 
