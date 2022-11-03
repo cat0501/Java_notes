@@ -1,7 +1,6 @@
 package stack_queue;
 
 /**
- * @author cat
  * @description
  * @date 2022/5/30 下午6:55
  */
@@ -46,8 +45,7 @@ public class E20 {
         String s5 = "([)]";
         String s = "{[]}";
         String s6 = "]";
-
-
+        
         //System.out.println(new Solution().isValid(s1));
         //System.out.println(new Solution().isValid(s4));
         //System.out.println(new Solution().isValid(s2));
@@ -56,52 +54,46 @@ public class E20 {
         System.out.println(new Solution().isValid(s6));
 
     }
+}
 
+class Solution {
+    public boolean isValid(String s) {
 
-    static
-    class Solution {
-        public boolean isValid(String s) {
+        Stack<Character> stack = new Stack<>();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            //System.out.println("当前字符是：" + c);
 
-            Stack<Character> stack = new Stack<>();
-            for (int i = 0; i < s.length(); i++) {
-                char c = s.charAt(i);
-                //System.out.println("当前字符是：" + c);
+            // 当前是右括号
+            if (c == ')' || c == '}' || c == ']') {
+                switch (c) {
+                    case ')':
+                        if ((stack.size() <= 0 || stack.pop() != '(')) {
+                            return false;
+                        }
+                        break;
 
-                // 当前是右括号
-                if (c == ')' || c == '}' || c == ']') {
-                    switch (c) {
-                        case ')':
-                            if (stack.size() > 0 && stack.pop() == '(') {
-                            } else {
-                                return false;
-                            }
-                            break;
+                    case '}':
+                        if (stack.size() > 0 && stack.pop() == '{') {
+                        } else {
+                            return false;
+                        }
+                        break;
 
-                        case '}':
-                            if (stack.size() > 0 && stack.pop() == '{') {
-                            } else {
-                                return false;
-                            }
-                            break;
-
-                        case ']':
-                            if (stack.size() > 0 && stack.pop() == '[') {
-                            } else {
-                                return false;
-                            }
-                    }
-
+                    case ']':
+                        if (stack.size() <= 0 || stack.pop() != '[') {
+                            return false;
+                        }
                 }
-                // 当前是左括号
-                else {
-                    stack.push(c);
-                    //System.out.println("当前的栈为------------------>" + stack.peek());
 
-                }
             }
-            //System.out.println("当前的栈size为------------------>" + stack.size());
-
-            return stack.isEmpty();
+            // 当前是左括号
+            else {
+                stack.push(c);
+                //System.out.println("当前的栈为------------------>" + stack.peek());
+            }
         }
+        //System.out.println("当前的栈size为------------------>" + stack.size());
+        return stack.isEmpty();
     }
 }
