@@ -369,9 +369,9 @@ mysql -h 10.11.14.15 -P9030 -u root
 ### 建库建表
 
 ```sql
-# 建库
+-- 建库
 CREATE DATABASE example_db;
-# 查看当前 StarRocks 集群中所有数据库
+-- 查看当前 StarRocks 集群中所有数据库
 MySQL [(none)]> SHOW DATABASES;
 ```
 
@@ -466,28 +466,28 @@ SHOW CREATE TABLE table_name;
 StarRocks 支持多种 DDL 操作。可以通过 [ALTER TABLE](https://docs.starrocks.io/zh-cn/2.3/sql-reference/sql-statements/data-definition/ALTER TABLE) 命令可以修改表的 Schema，包括增加列，删除列，修改列类型（暂不支持修改列名称），改变列顺序。
 
 ```sql
-# 增加列
+-- 增加列
 例如，在以上创建的表中，与 ispass 列后新增一列 uv，类型为 BIGINT，默认值为 0。
 ALTER TABLE detailDemo ADD COLUMN uv BIGINT DEFAULT '0' after ispass;
 
-# 删除列（删除以上步骤新增的列）
+-- 删除列（删除以上步骤新增的列）
 ALTER TABLE detailDemo DROP COLUMN uv;
 
-# 查看修改表结构作业状态（修改表结构为异步操作。提交成功后，您可以通过以下命令查看作业状态）
+-- 查看修改表结构作业状态（修改表结构为异步操作。提交成功后，您可以通过以下命令查看作业状态）
 SHOW ALTER TABLE COLUMN\G;
 
-# 取消修改表结构（取消当前正在执行的作业）
+-- 取消修改表结构（取消当前正在执行的作业）
 CANCEL ALTER TABLE COLUMN FROM table_name\G;
 ```
 
 ### 创建用户并授权
 
 ```sql
-# 使用 root 账户创建 test 账户，并授予其 example_db 的读写权限 。
+-- 使用 root 账户创建 test 账户，并授予其 example_db 的读写权限 。
 CREATE USER 'test' IDENTIFIED by '123456';
 GRANT ALL on example_db to test;
 
-# 通过登录被授权的 test 账户，就可以操作 example_db 数据库。
+-- 通过登录被授权的 test 账户，就可以操作 example_db 数据库。
 mysql -h 127.0.0.1 -P9030 -utest -p123456
 ```
 
@@ -831,8 +831,303 @@ SHOW LOAD\G;
 
 
 
+## 使用 INSERT INTO 语句导入
+
+### 准备库表
+
+在 StarRocks 中创建数据库 `load_test`，并在其中创建聚合模型表 `insert_wiki_edit` 以及数据源表 `source_wiki_edit`。
+
+```sql
+CREATE DATABASE IF NOT EXISTS load_test;
+USE load_test;
+CREATE TABLE insert_wiki_edit
+(
+    event_time DATETIME,
+    channel VARCHAR(32) DEFAULT '',
+    user VARCHAR(128) DEFAULT '',
+    is_anonymous TINYINT DEFAULT '0',
+    is_minor TINYINT DEFAULT '0',
+    is_new TINYINT DEFAULT '0',
+    is_robot TINYINT DEFAULT '0',
+    is_unpatrolled TINYINT DEFAULT '0',
+    delta INT SUM DEFAULT '0',
+    added INT SUM DEFAULT '0',
+    deleted INT SUM DEFAULT '0'
+)
+AGGREGATE KEY(event_time, channel, user, is_anonymous, is_minor, is_new, is_robot, is_unpatrolled)
+PARTITION BY RANGE(event_time)
+(
+    PARTITION p06 VALUES LESS THAN ('2015-09-12 06:00:00'),
+    PARTITION p12 VALUES LESS THAN ('2015-09-12 12:00:00'),
+    PARTITION p18 VALUES LESS THAN ('2015-09-12 18:00:00'),
+    PARTITION p24 VALUES LESS THAN ('2015-09-13 00:00:00')
+)
+DISTRIBUTED BY HASH(user) BUCKETS 3;
+
+
+CREATE TABLE source_wiki_edit
+(
+    event_time DATETIME,
+    channel VARCHAR(32) DEFAULT '',
+    user VARCHAR(128) DEFAULT '',
+    is_anonymous TINYINT DEFAULT '0',
+    is_minor TINYINT DEFAULT '0',
+    is_new TINYINT DEFAULT '0',
+    is_robot TINYINT DEFAULT '0',
+    is_unpatrolled TINYINT DEFAULT '0',
+    delta INT SUM DEFAULT '0',
+    added INT SUM DEFAULT '0',
+    deleted INT SUM DEFAULT '0'
+)
+AGGREGATE KEY(event_time, channel, user, is_anonymous, is_minor, is_new, is_robot, is_unpatrolled)
+PARTITION BY RANGE(event_time)
+(
+    PARTITION p06 VALUES LESS THAN ('2015-09-12 06:00:00'),
+    PARTITION p12 VALUES LESS THAN ('2015-09-12 12:00:00'),
+    PARTITION p18 VALUES LESS THAN ('2015-09-12 18:00:00'),
+    PARTITION p24 VALUES LESS THAN ('2015-09-13 00:00:00')
+)
+DISTRIBUTED BY HASH(user) BUCKETS 3;
+```
+
+
+
+### 通过 INSERT INTO VALUES 语句导入数据
+
+> 注意
+>
+> INSERT INTO VALUES 语句导入方式仅适用于导入少量数据作为验证 DEMO 用途，不适用于大规模测试或生产环境。如需大规模导入数据，请选择其他导入方式。
+
+
+
+以下示例以 `insert_load_wikipedia` 为 Label 向源表 `source_wiki_edit` 中导入两条数据。
+```sql
+INSERT INTO source_wiki_edit
+WITH LABEL insert_load_wikipedia
+VALUES
+    ("2015-09-12 00:00:00","#en.wikipedia","AustinFF",0,0,0,0,0,21,5,0),
+    ("2015-09-12 00:00:00","#ca.wikipedia","helloSR",0,1,0,1,0,3,23,0);
+```
+
+
+
+### 通过 INSERT INTO SELECT 语句导入数据
+
+将源表中的数据导入至目标表中。详细使用方式，参考 [INSERT](https://docs.starrocks.io/zh-cn/2.3/sql-reference/sql-statements/data-manipulation/insert)。详细参数信息，参考 [INSERT 参数](https://docs.starrocks.io/zh-cn/2.3/sql-reference/sql-statements/data-manipulation/insert#参数说明)。
+
+- 以下示例以 `insert_load_wikipedia_1` 为 Label 将源表中的数据导入至目标表中。
+
+```sql
+INSERT INTO insert_wiki_edit
+WITH LABEL insert_load_wikipedia_1
+SELECT * FROM source_wiki_edit;
+```
+
+- 以下示例以 `insert_load_wikipedia_2` 为 Label 将源表中的数据导入至目标表的 `p06` 和 `p12` 分区中。
+
+```sql
+INSERT INTO insert_wiki_edit PARTITION(p06, p12)
+WITH LABEL insert_load_wikipedia_2
+SELECT * FROM source_wiki_edit;
+```
+
+- 以下示例将源表中指定列的数据导入至目标表中。
+
+```sql
+INSERT INTO insert_wiki_edit
+    WITH LABEL insert_load_wikipedia_3 (event_time, channel)
+    SELECT event_time, channel FROM routine_wiki_edit;
+```
+
+
+
+## 通过 HTTP PUT 从本地文件系统或流式数据源导入数据
+
+### 概念
+
+- HTTP 协议、Stream Load 导入方式
+  - StarRocks 提供基于 **HTTP** 协议的 **Stream Load** 导入方式，帮助您从**本地文件系统或流式数据源**导入数据。
+- 同步导入方式
+  - 提交导入作业以后，StarRocks 会同步地执行导入作业，并返回导入作业的结果信息。可以通过返回的结果信息来判断导入作业是否成功。
+- 适用业务场景
+  - 导入本地数据文件：采用 curl 命令直接提交一个导入作业，将本地数据文件的数据导入到 StarRocks 中。
+  - 导入实时产生的数据流：一般可采用 Apache Flink® 等程序提交一个导入作业，持续生成一系列导入任务，将实时产生的数据流持续不断地导入到 StarRocks 中。
+- 支持的数据文件格式
+  - CSV
+  - JSON
+- 基本原理
+  - Stream Load 需要您在客户端上通过 HTTP 发送导入作业请求给 FE 节点，FE 节点会通过 HTTP 重定向 (Redirect) 指令将请求转发给某一个 BE 节点。
+
+![4.2-1](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/4.2-1.png)
+
+### 导入本地文件
+
+#### 创建导入作业
+
+有关创建导入作业的详细语法和参数说明，请参见 [STREAM LOAD](https://docs.starrocks.io/zh-cn/2.3/sql-reference/sql-statements/data-manipulation/STREAM LOAD)。
+
+##### 导入 CSV 格式的数据
+- 建表
+```sql
+MySQL [test_db]> CREATE TABLE `table1`
+(
+    `id` int(11) NOT NULL COMMENT "用户 ID",
+    `name` varchar(65533) NULL COMMENT "用户姓名",
+    `score` int(11) NOT NULL COMMENT "用户得分"
+)
+ENGINE=OLAP
+PRIMARY KEY(`id`)
+DISTRIBUTED BY HASH(`id`) BUCKETS 10;
+```
+- 准备数据
+```bash
+1,Lily,23
+2,Rose,23
+3,Alice,24
+4,Julia,25
+```
+- 执行导入
+```bash
+curl --location-trusted -u root: -H "label:123" \
+    -H "column_separator:," \
+    -H "columns: id, name, score" \
+    -T example1.csv -XPUT \
+    http://<fe_host>:<fe_http_port>/api/test_db/table1/_stream_load
+```
+- 查询
+```sql
+MySQL [test_db]> SELECT * FROM table1;
+
++------+-------+-------+
+| id   | name  | score |
++------+-------+-------+
+|    1 | Lily  |    23 |
+|    2 | Rose  |    23 |
+|    3 | Alice |    24 |
+|    4 | Julia |    25 |
++------+-------+-------+
+
+4 rows in set (0.00 sec)
+```
+
+##### 导入 JSON 格式的数据
+
+- 建表（主键模型表）
+
+```sql
+MySQL [test_db]> CREATE TABLE `table2`
+(
+    `id` int(11) NOT NULL COMMENT "城市 ID",
+    `city` varchar(65533) NULL COMMENT "城市名称"
+)
+ENGINE=OLAP
+PRIMARY KEY(`id`)
+DISTRIBUTED BY HASH(`id`) BUCKETS 10;
+```
+
+- 准备数据
+
+```json
+{"name": "北京", "code": 2}
+```
+
+- 执行导入
+
+```bash
+curl -v --location-trusted -u root: -H "strict_mode: true" \
+    -H "format: json" -H "jsonpaths: [\"$.name\", \"$.code\"]" \
+    -H "columns: city,tmp_id, id = tmp_id * 100" \
+    -T example2.json -XPUT \
+    http://<fe_host>:<fe_http_port>/api/test_db/table2/_stream_load
+```
+
+
+
+![4.2-2](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/4.2-2.png)
+
+
+> 说明：上述示例中，在导入过程中先将 `example2.json` 文件中 `code` 字段对应的值乘以 100，然后再落入到 `table2` 表的 `id` 中。
+
+- 查询
+
+#### 查看导入作业
+因为是同步导入，所以导入作业结束后，StarRocks 会以 JSON 格式返回本次导入作业的结果信息。
+
+#### 取消导入作业
+不支持手动取消导入作业。如果导入作业发生超时或者导入错误，StarRocks 会自动取消该作业。
+
+
+
+### 导入数据流
+
+Stream Load 支持通过程序导入数据流，具体操作方法，请参见如下文档：
+- Flink 集成 Stream Load，请参见[使用 flink-connector-starrocks 导入至 StarRocks](https://docs.starrocks.io/zh-cn/latest/loading/Flink-connector-starrocks)。
+- Java 集成 Stream Load，请参见 [https://github.com/StarRocks/demo/MiscDemo/stream_load](https://github.com/StarRocks/demo/tree/master/MiscDemo/stream_load)。
+- Apache Spark™ 集成 Stream Load，请参见 [01_sparkStreaming2StarRocks](https://github.com/StarRocks/demo/blob/master/docs/01_sparkStreaming2StarRocks.md)。
+
+
+
+### 参数配置
+
+- `streaming_load_max_mb`：单个待导入数据文件的大小上限。默认文件大小上限为 10 GB。具体请参见 [BE 配置项](https://docs.starrocks.io/zh-cn/latest/administration/Configuration#be-配置项)。
+- `stream_load_default_timeout_second`：导入作业的超时时间。默认超时时间为 600 秒。具体请参见 [FE 动态参数](https://docs.starrocks.io/zh-cn/latest/administration/Configuration#配置-fe-动态参数)。
+
+
+
+### 使用说明
+
+- 如果待导入数据文件中某行数据的某个字段缺失、并且 StarRocks 表中跟该字段对应的列定义为 `NOT NULL`，StarRocks 会在导入该行数据时自动往 StarRocks 表中对应的列补充 `NULL`。您也可以通过 `ifnull()` 函数指定要补充的默认值。
+- 例如，如果上述 `example2.json` 文件中代表城市 ID 的列缺失，您希望 StarRocks 在导入数据时往 StarRocks 表中对应的列中补充 `x`，可以指定 `"columns: city, tmp_id, id = ifnull(tmp_id, 'x')"`。
+
+
+
+## 从 Apache Kafka® 持续导入
+
+
+
+## 使用 Apache Spark™ 批量导入
+
+> ![Spark与Flink究竟哪家强？](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/v2-f0610f026422d3ab5bc784b60f3b2e38_720w.jpg)
+>
+> Apache Spark 和 Apache Flink是两个最流行的数据处理框架。Spark 与 Flink都支持大规模分布式数据处理，并提供对前几代框架的改进。从成熟度来说 Spark 生态更完善，Flink 比较新，而且包含 Spark不具备的功能。
+> 更多内容：111
+
+
+
+
+
+## 从 Apache Flink® 持续导入
+
+- 功能简介
+  - StarRocks 提供 `flink-connector-starrocks`，导入数据至 StarRocks，相比于 `Flink` 官方提供的 `flink-connector-jdbc`，导入性能更佳。 flink-connector-starrocks 的内部实现是通过缓存并批量由 `Stream Load` 导入。
+- 支持的数据源
+  - CSV
+  - JSON
+
+- 源码地址：https://github.com/StarRocks/starrocks-connector-for-apache-flink
+
+- 实践
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # 参考
 
 官方文档：https://docs.starrocks.io/zh-cn/2.3/quick_start/Deploy
+
+Spark 与 Flink 究竟哪家强？：https://zhuanlan.zhihu.com/p/549490227
