@@ -45,7 +45,7 @@ public class E20 {
         String s5 = "([)]";
         String s = "{[]}";
         String s6 = "]";
-        
+
         //System.out.println(new Solution().isValid(s1));
         //System.out.println(new Solution().isValid(s4));
         //System.out.println(new Solution().isValid(s2));
