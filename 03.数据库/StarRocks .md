@@ -16,25 +16,29 @@
 
  
 
-#<video src="https://notes2021.oss-cn-beijing.aliyuncs.com/2021/StarRocks%20Intro.mp4"></video>
+> 一个官方视频介绍：
+> #<video src="https://notes2021.oss-cn-beijing.aliyuncs.com/2021/StarRocks%20Intro.mp4"></video>
 
 
+
+- 背景
+  - Doris ：百度统计报表的专用系统
+  - **Apache Doris**：2018年百度贡献给Apache 的
+  - DorisDB：原百度 Doris 团队的个别人员离职创业的商业化闭源产品
+  - **StarRocks**：版权的问题，将 DorisDB 改名为StarRocks
+- 官方文档
+  - Apache Doris 官网文档：https://doris.apache.org/zh-CN/learning
+  - StarRocks 官方文档：https://docs.starrocks.io/zh-cn/main/introduction/StarRocks_intro
 
 - 出现：如何有效地分析这些海量的数据，真正有效地利用数据为业务创造价值？
   - **数据分析性能不达标**：业务提出了更多的分析需求，比如多维分析，实时分析，高并发查询。在很多分析需求场景下，当前系统性能表现不佳，无法提供极速分析体验。
-  - **数据分析的灵活性不足**：比如自助化BI这样灵活的场景下，星型模型和雪花模型的价值不可替代。现有的系统难以同时高性能支持这些建模手段。
-  - **数据架构复杂度太高**：目前同时构建离线数据链路和实时数据链路。存在数据同步、数据一致性、计算逻辑同步、异常数据处理、多系统运维等问题。
+  - **数据分析的灵活性不足**：比如自助化 BI 这样灵活的场景下，星型模型和雪花模型的价值不可替代。现有的系统难以同时高性能支持这些建模手段。
+  - **数据架构复杂度太高**：目前同时构建离线数据链路和实时数据链路，存在数据同步、数据一致性、计算逻辑同步、异常数据处理、多系统运维等问题。
   - **数据分析能力弹性不足**：数据规模越来越大，对应的数据分析系统需要不断地扩容；不同的业务线有不同的数据分析访问量。如何保证既能支持好业务，又能节省成本？**就需要一套全新的“极速统一”的数据架构。“极速”，意味着全面提升数据处理和分析的性能；“统一”意味着将复杂分散的数据架构融合为简单统一的架构。**
 
 > 复杂的企业数据分析架构
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/v2-38fb3beddd6e5d7ba07d42b9549f622f_1440w.jpg)
-
-
-
-
-
-
 
 
 
@@ -68,12 +72,12 @@
 
 
 
-- 在大数据生态中的地位：StarRocks 不依赖于某⼀种技术栈，⽽又能够兼容⼤数据平台的绝⼤部分技术栈。
-  - 在数据导⼊层⾯上，StarRock 可以拉取 HDFS、S3、OSS 中的数据，也可以导⼊平⾯ ⽂件，或者是消费 Kafka 中的增量数据
-  - 对于像 MySQL 或者 Oceanbase 这样的 TP 业务库，全量数据我们可以通过 dataX， sqoop 等⼯具进⾏同步，增量数据我们可以通过 canal 这样的 CDC ⼯具实时同步。
-  - 如果在同步的过程中，我们需要进⾏⼀些清洗或者数据转换操作，可以使⽤ Flink 或 者 Spark
-  - 此外 StarRocks 还⽀持外表联邦查询，可以拉取 Hive、MySQL、ES 以及 Iceberg 中的 数据，与 StarRocks 中的表进⾏关联，避免数据孤岛的存在
-  - 从顶层协议来看，StarRocks 兼容了 MySQL 协议，可以轻松平稳的对接多种开源或者 商业 BI ⼯具，⽐如说 Tableau，FineBI，SmartBI，Superset 等
+- 在大数据生态中的地位：StarRocks 不依赖于某⼀种技术栈，而又能够**兼容大数据平台的绝大部分技术栈**。
+  - 在数据导入层面上，StarRock 可以拉取 HDFS、S3、OSS 中的数据，也可以导⼊平面文件，或者是消费 Kafka 中的增量数据；
+  - 对于像 MySQL 或者 Oceanbase 这样的 TP 业务库，全量数据我们可以通过 dataX， sqoop 等工具进⾏同步，增量数据我们可以通过 canal 这样的 CDC 工具实时同步；
+  - 如果在同步的过程中，我们需要进⾏⼀些清洗或者数据转换操作，可以使⽤ Flink 或 者 Spark；
+  - 此外 StarRocks 还支持外表联邦查询，可以拉取 Hive、MySQL、ES 以及 Iceberg 中的 数据，与 StarRocks 中的表进⾏关联，避免数据孤岛的存在；
+  - 从顶层协议来看，StarRocks 兼容了 `MySQL` 协议，可以轻松平稳的对接多种开源或者 商业 `BI` 工具，⽐如说 Tableau，FineBI，SmartBI，Superset 等。
 
 > 数据运营层 ODS
 >
@@ -87,7 +91,7 @@
 
 
 
-
+![](https://img-blog.csdnimg.cn/230e8277a75a47c4aff4c520e884e822.png)
 
 
 
@@ -145,7 +149,7 @@ FE 是 StarRocks 的前端节点，负责管理元数据，管理客户端连接
   - **只有元数据读取权限**，无写入权限。通过回放 Leader 的元数据日志来异步同步数据。
   - **参与 Leader 选举**，必须有半数以上的 Follower 节点存活才能进行选主。
 - Leader
-  - 只有 Leader 节点会对元数据进行写操作，Follower 和 Observer 只有读取权限。
+  - 只有 Leader 节点会**对元数据进行写操作**，Follower 和 Observer 只有读取权限。
   - Leader 从 Follower 中选举。如果 Leader 节点失败，Follower 会发起新一轮选主。
 
 
@@ -277,9 +281,9 @@ StarRocks不仅能高效的分析本地存储的数据，也可以作为计算�
 
 ### 规划
 
-| FE          | BE                                    |
-| :---------- | :------------------------------------ |
-| 10.11.14.15 | 10.11.14.13、10.11.14.15、10.11.14.16 |
+| FE          | BE                                    | Broker                                |
+| :---------- | :------------------------------------ | ------------------------------------- |
+| 10.11.14.15 | 10.11.14.13、10.11.14.15、10.11.14.16 | 10.11.14.13、10.11.14.15、10.11.14.16 |
 
 
 
@@ -357,6 +361,10 @@ mysql -h 127.0.0.1 -P9030 -uroot
 SHOW PROC '/frontends'\G
 ```
 
+web UI：http://10.11.14.15:8030/system
+
+
+
 #### （7）部署 FE 节点的高可用集群
 
 StarRocks 的 FE 节点支持 HA 模型部署，以保证集群的高可用。详细设置方式参考 [FE 高可用集群部署](https://docs.starrocks.io/zh-cn/2.3/administration/Deployment)。
@@ -433,7 +441,24 @@ mysql> SHOW PROC '/backends'\G
 
 
 
+### 部署 Broker 节点
 
+通过部署的 Broker，StarRocks 可**读取对应数据源（如HDFS、S3）上的数据**，利用自身的计算资源**对数据进行预处理和导入**。
+
+除此之外，Broker 也被应用于**数据导出，备份恢复**等功能。
+
+```sh
+cd $STARROCKS_HOME/apache_hdfs_broker
+
+# 查看
+SHOW PROC "/brokers";
+
+# broker 添加
+ALTER SYSTEM ADD BROKER mybroker "10.11.14.16:8000";
+
+# broker 删除
+ALTER SYSTEM DROP BROKER mybroker "10.11.14.16:8000";
+```
 
 
 
@@ -588,13 +613,17 @@ mysql -h 127.0.0.1 -P9030 -utest -p123456
 
 # 表设计
 
+建表时，您需要指定数据模型 (Data Model)，这样数据导入至数据模型时，StarRocks 会**按照排序键对数据进行排序、处理和存储**。
+
+
+
 - 数据模型
 
 StarRocks 支持四种数据模型，分别是明细模型 (Duplicate Key Model)、聚合模型 (Aggregate Key Model)、更新模型 (Unique Key Model) 和主键模型 (Primary Key Model)。
 
 这四种数据模型能够支持多种数据分析场景，例如日志分析、数据汇总分析、实时分析等。
 
-- 排序键：按照建表时指定的一列或多列排序和存储，这部分用于排序的列就称为排序键。
+- 排序键：数据导入至数据模型，按照建表时指定的一列或多列**排序和存储**，这部分用于排序的列就称为排序键。
   - 明细模型中，排序键就是用于排序的列，即 `DUPLICATE KEY` 指定的列。 
   - 聚合模型中，排序键就是用于聚合的列，即 `AGGREGATE KEY` 指定的列。
   - 主键模型和更新模型中，排序键就是满足唯一性约束的列，分别由 `PRIMARY KEY` 和 `UNIQUE KEY` 指定。
@@ -606,12 +635,29 @@ StarRocks 支持四种数据模型，分别是明细模型 (Duplicate Key Model)
 - 概念：创建表时，支持定义**排序键**。
 - 适用场景
   - 适用于**分析日志数据等**，支持追加新数据，不支持修改历史数据。
+  - 导入日志数据或者时序数据，主要特点是旧数据不会更新，只会追加新的数据。
+- 举例
+  - 例如，需要分析某时间范围的某一类事件的数据，则可以将事件时间（`event_time`）和事件类型（`event_type`）作为排序键。在该业务场景下，建表语句如下：
+
+```sql
+CREATE TABLE IF NOT EXISTS detail (
+    event_time DATETIME NOT NULL COMMENT "datetime of event",
+    event_type INT NOT NULL COMMENT "type of event",
+    user_id INT COMMENT "id of user",
+    device_code INT COMMENT "device code",
+    channel INT COMMENT ""
+)
+DUPLICATE KEY(event_time, event_type)
+DISTRIBUTED BY HASH(user_id) BUCKETS 8;
+```
+
+> 建表时必须使用 `DISTRIBUTED BY HASH` 子句指定分桶键。分桶键的更多说明，请参见[分桶](https://docs.starrocks.io/zh-cn/latest/table_design/Data_distribution/#分桶)。
 
 
 
 ## 聚合模型 (Aggregate Key Model)
 
-- 概念：建表时，支持定义**排序键和指标列**，并为指标列指定聚合函数。当多条数据具有相同的排序键时，指标列会进行聚合。在分析统计和汇总数据时，聚合模型能够减少查询时所需要处理的数据，提升查询效率。
+- 概念：建表时，支持定义**排序键和指标列**，**并为指标列指定聚合函数**。当多条数据具有相同的排序键时，指标列会进行聚合。在分析统计和汇总数据时，聚合模型能够减少查询时所需要处理的数据，提升查询效率。
 - 适用场景：适用于**分析统计和汇总数据**。多为汇总类查询，比如 **SUM**、**COUNT**、**MAX** 等类型的查询。
   - 通过分析网站或 APP 的访问流量，统计用户的访问总时长、访问总次数。
   - 广告厂商为广告主提供的广告点击总量、展示总量、消费统计等。
@@ -640,18 +686,42 @@ StarRocks 支持四种数据模型，分别是明细模型 (Duplicate Key Model)
 
 - 概念：建表时，支持定义**主键和指标列**，查询时**返回主键相同的一组数据中的最新数据**。相对于明细模型，更新模型**简化了数据导入流程**，能够更好地支撑实时和频繁更新的场景。
 - 适用场景：**实时和频繁更新**的业务场景，例如分析电商订单。在电商场景中，订单的状态经常会发生变化，每天的订单更新量可突破上亿。
+- 原理：可以视为聚合模型的特殊情况，指标列指定的聚合函数为 **REPLACE**，返回具有相同主键的一组数据中的最新数据。
+  - 例如下表中，`ID` 是主键，`value` 是指标列，`_version` 是 StarRocks 内部的版本号
+  
+  | ID   | value | _version |
+  | :--- | :---- | :------- |
+  | 1    | 100   | 1        |
+  | 1    | 101   | 2        |
+  | 2    | 100   | 3        |
+  | 2    | 101   | 4        |
+  | 2    | 102   | 5        |
+  
+  - 最终查询结果如下
+  | ID   | value |
+  | :--- | :---- |
+  | 1    | 101   |
+  | 2    | 102   |
 
 
 
 ## 主键模型 (Primary Key Model)
 
-- 概念：建表时，支持定义主键和指标列，查询时返回主键相同的一组数据中的最新数据。StarRocks 1.19 版本推出。
+- 概念：建表时，支持定义**主键和指标列**，查询时**返回主键相同的一组数据中的最新数据**。StarRocks 1.19 版本推出。
+
+  - 相对于更新模型：主键模型在查询时不需要执行聚合操作，并且支持谓词和索引下推，能够在支持**实时和频繁更新**等场景的同时，提供高效查询。
+
 - 适用场景
   - 适用于**实时和频繁更新的场景**。
   - 相对于其他模型，主键模型对内存的要求比较高。目前主键模型中，主键编码后，占用内存空间上限为 127 字节。
   - 如下两个场景中，主键占用空间相对可控：
     - （1）数据有冷热特征，即最近几天的热数据才经常被修改，老的冷数据很少被修改。例如，MySQL订单表实时同步到 StarRocks 中提供分析查询。
+    
+    ![主键1](https://docs.starrocks.io/static/a93e1d5136d7d58c9395f9da6569a62c/c1724/3.2-1.png)
+    
     - （2）大宽表（数百到数千列）。主键只占整个数据的很小一部分，其内存开销比较低。比如用户状态和画像表，虽然列非常多，但总的用户数不大（千万至亿级别），主键索引内存占用相对可控。
+    
+    ![主键2](https://docs.starrocks.io/static/248eb27b2bdaedb46664684792b0c75d/2a195/3.2-2.png)
 - 原理
   - StarRocks 收到对某记录的更新操作时，会通过主键索引找到该条记录的位置，并对其标记为删除，再插入一条新的记录。**相当于把 Update 改写为 Delete+Insert**。
 - 举例
@@ -1191,6 +1261,90 @@ Stream Load 支持通过程序导入数据流，具体操作方法，请参见�
 
 ## 从 Apache Kafka® 持续导入
 
+向StarRocks 提交一个 Routine Load 导入作业 `example_tbl1_ordertest1`，持续消费 Kafka 集群中 Topic `ordertest1` 的消息，并导入至数据库 `example_db` 的表 `example_tbl1` 中。并且导入作业会从该 Topic 所指定分区的最早位点 (Offset) 开始消费。
+
+- 建表
+
+```sql
+CREATE TABLE example_db.example_tbl1 ( 
+    `order_id` bigint NOT NULL COMMENT "订单编号",
+    `incr` bigint NOT NULL COMMENT "日增长", 
+    `price` bigint NOT NULL COMMENT "单价", 
+    `customer_name1` varchar(26) NULL COMMENT "顾客姓名1", 
+    `customer_name2` varchar(26) NULL COMMENT "顾客姓名2"
+) 
+ENGINE=OLAP 
+PRIMARY KEY (order_id) 
+DISTRIBUTED BY HASH(`order_id`) BUCKETS 5; 
+```
+
+- topic
+
+```sh
+./kafka-topics --zookeeper 10.11.14.17: 2181/kafka --create --topic topic-demo --replication-factor 3 --partitions 4
+
+./kafka-topics --describe --zookeeper 10.11.14.17:2181 --topic topic-demo2
+
+./kafka-console-producer --broker-list 10.11.14.19:9092,10.11.14.20:9092,10.11.14.21:9092 --topic topic-demo22 < ./b.csv
+```
+
+- 查看
+
+```sql
+SHOW ROUTINE LOAD\G;
+
+```
+
+
+
+
+
+
+
+```sql
+CREATE ROUTINE LOAD example_db.example_tbl1_ordertest1 ON example_tbl1
+COLUMNS TERMINATED BY ",",
+COLUMNS (order_id, pay_dt, customer_name, nationality, temp_gender, price)
+PROPERTIES
+(
+    "desired_concurrent_number" = "5"
+)
+FROM KAFKA
+(
+    "kafka_broker_list" ="<kafka_broker1_ip>:<kafka_broker1_port>,<kafka_broker2_ip>:<kafka_broker2_port>",
+    "kafka_topic" = "ordertest1",
+    "kafka_partitions" ="0,1,2,3,4",
+    "property.kafka_default_offsets" = "OFFSET_BEGINNING"
+);
+```
+
+
+
+```sh
+CREATE ROUTINE LOAD example_db.example_tbl2_ordertest1 ON example_tbl1
+COLUMNS TERMINATED BY ",",
+COLUMNS (order_id, incr, price, customer_name1, customer_name2)
+PROPERTIES
+(
+    "desired_concurrent_number" = "3"
+)
+FROM KAFKA
+(
+    "kafka_broker_list" ="10.11.14.19:9092,10.11.14.20:9092,10.11.14.21:9092",
+    "kafka_topic" = " topic-demo",
+    "kafka_partitions" ="0,1,2,3",
+    "property.kafka_default_offsets" = "OFFSET_BEGINNING"
+);
+```
+
+
+
+查看导入作业执行情况：SHOW ROUTINE LOAD
+
+
+
+
+
 
 
 ## 使用 Apache Spark™ 批量导入
@@ -1224,6 +1378,70 @@ Stream Load 支持通过程序导入数据流，具体操作方法，请参见�
 
 
 
+# 数据导出
+
+可以使用该功能将指定表或分区上的数据，以 **CSV** 的格式，通过 **Broker** 程序导出到外部云存储系统，如 HDFS、阿里云 OSS、AWS S3、或其他兼容 S3 协议的对象存储服务。
+
+- 前提：部署 Broker 节点
+- 注意事项
+  - 建议不要一次性导出大量数据。一个导出作业建议的导出数据量最大为几十 GB。一次性导出过量数据可能会导致导出失败，重试的成本也会增加。
+  - 如果表数据量过大，建议按照分区导出。
+- 流程
+
+![](https://docs.starrocks.io/static/bc95e13b8351e1109a1785ade5d0143b/c1b63/5.1-2.png)
+
+导出作业的总体处理流程主要包括以下三个步骤：
+
+1. 用户**提交**一个导出作业到 Leader FE。
+2. Leader FE 会先向集群中所有的 BE 发送 `snapshot` 命令，对所有涉及到的 Tablet 做一个**快照**，以保持导出数据的一致性，**并生成多个导出子任务**。每个子任务即为一个查询计划，每个查询计划会负责处理一部分 Tablet。
+3. Leader FE 会把**一个个导出子任务发送**给 BE 执行。
+
+- 基本原理
+- 相关配置
+  - FE 参数配置
+  - Broker 参数配置
+
+- 实际操作 `EXPORT`
+  - 把 `db1` 数据库中 `tbl1` 表在 `p1` 和 `p2` 分区上 `col1` 和 `col3` 两列的数据导出到 HDFS 存储上的 `export` 目录中
+
+```sql
+EXPORT TABLE db1.tbl1 
+
+PARTITION (p1,p2)
+
+(col1, col3)
+
+TO "hdfs://HDFS_IP:HDFS_Port/export/lineorder_" 
+
+PROPERTIES
+
+(
+    "column_separator"=",",
+    "load_mem_limit"="2147483648",
+    "timeout" = "3600"
+)
+
+WITH BROKER "broker1"
+
+(
+    "username" = "user",
+    "password" = "passwd"
+);
+```
+
+
+
+- 获取导出作业的查询 ID、查看导出作业的状态
+
+```sql
+SELECT LAST_QUERY_ID() 
+SHOW EXPORT WHERE queryid = "edee47f0-abe1-11ec-b9d1-00163e1e238f";
+
+-- 取消
+CANCEL EXPORT WHERE queryid = "921d8f80-7c9d-11eb-9342-acde48001122";
+```
+
+- 最佳实践
 
 
 
@@ -1231,8 +1449,7 @@ Stream Load 支持通过程序导入数据流，具体操作方法，请参见�
 
 
 
-
-
+# 性能测试
 
 # 参考
 
@@ -1244,11 +1461,12 @@ Spark 与 Flink 究竟哪家强？：https://zhuanlan.zhihu.com/p/549490227
 
 OLAP数据库：https://www.modb.pro/wiki/2279
 
+大数据Hadoop之——DorisDB介绍与环境部署（StarRocks）：https://blog.csdn.net/qq_35745940/article/details/125580804
 
+StarRocks开源——携手未来，星辰大海！：https://zhuanlan.zhihu.com/p/407955287
 
-https://zhuanlan.zhihu.com/p/407955287
+[StarRocks内部实时更新技术的实现方案 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/566219916)
 
+三大数据模型：星型模型、雪花模型、星座模型：https://www.modb.pro/db/134542
 
-
-
-
+超详细的Kafka架构原理图解：https://blog.csdn.net/SQY0809/article/details/117197036
