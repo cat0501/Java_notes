@@ -25,7 +25,7 @@
   - Doris ：百度统计报表的专用系统
   - **Apache Doris**：2018年百度贡献给Apache 的
   - DorisDB：原百度 Doris 团队的个别人员离职创业的商业化闭源产品
-  - **StarRocks**：版权的问题，将 DorisDB 改名为StarRocks
+  - **StarRocks**：版权的问题，将 DorisDB 改名为 StarRocks
 - 官方文档
   - Apache Doris 官网文档：https://doris.apache.org/zh-CN/learning
   - StarRocks 官方文档：https://docs.starrocks.io/zh-cn/main/introduction/StarRocks_intro
@@ -50,9 +50,9 @@
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/v2-d78042fa3bd19decf248c6de5e8405c1_1440w.webp)
 
-- StarRocks实现了极速统一分析
-  - StarRocks可以同时高效支持OLAP多维分析、实时数据分析、高并发查询、AdHoc查询等多场景，并且比上一代同类型产品的分析能力快3～5倍以上。
-  - 全新的OLAP多维分析体验，打破“只能做大宽表”的局限性，让多种数据建模模式：预计算、大宽表、星型模型和雪花模型等都具备极速分析体验。
+- StarRocks 实现了极速统一分析
+  - StarRocks 可以同时高效支持 OLAP 多维分析、实时数据分析、高并发查询、AdHoc 查询等多场景，并且比上一代同类型产品的分析能力快3～5倍以上。
+  - 全新的 OLAP多维分析体验，打破“只能做大宽表”的局限性，让多种数据建模模式：预计算、大宽表、星型模型和雪花模型等都具备极速分析体验。
   - 全新的实时数据分析体验，支持数据实时更新和删除，并能保证极速查询性能。
   - 全新的高并发查询体验，支持数千人同时访问。
   - 全新极简统一的OLAP架构，大大降低了使用和运维管理复杂度，提升了开发和使用效率。
@@ -65,7 +65,7 @@
 >   - 通常并发不高，每个查询会运行较长时间，操作的数据量巨大。
 >   - 分析中的查询，大多只需读取数据，不会对历史数据轻易修改。
 >   - 分析中的关系代数操作，会包含非常复杂的交运算，中间结果可能种类繁多数量庞大，但 最终返回给用户的结果可能较小较容易理解。
-> - 分布式OLAP数据库：业界代表包括TeraData、Greenplum、GaussDB(DWS)、AnalyticDB、 Bigquery、 Clickhouse等。
+> - 分布式 OLAP 数据库：业界代表包括 TeraData、Greenplum、GaussDB(DWS)、AnalyticDB、 Bigquery、 Clickhouse等。
 > - 常见OLAP引擎对比
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBASVRf5b-D5aaC5q2i5rC0,size_20,color_FFFFFF,t_70,g_se,x_16-20221106205516039.png)
@@ -97,11 +97,11 @@
 
 ## 使用场景
 
-1. OLAP 多维分析
+1. OLAP **多维**分析
 
    利用 StarRocks 的 MPP 框架和向量化执行引擎，用户可以灵活的选择雪花模型，星型模型，宽表模型或者预聚合模型。
 
-2. 实时数据仓库
+2. **实时**数据仓库
 
    实现了 Primary-Key 模型，能够实时更新数据并极速查询，可以秒级同步 **TP** (Transaction Processing) 数据库的变化，构建实时数仓。
 
@@ -109,14 +109,14 @@
    - 物流行业的运单分析
    - 直播质量分析
 
-3. 高并发查询
+3. **高并发**查询
 
    良好的数据分布特性，灵活的索引以及物化视图等特性
 
    - SaaS 行业面向用户分析报表
    - Dashboard 多页面分析
 
-4. 统一分析
+4. **统一**分析
 
    通过使用一套系统解决多维分析、高并发查询、预计算、实时分析查询等场景；
 
@@ -142,7 +142,7 @@ FE 是 StarRocks 的前端节点，负责管理元数据，管理客户端连接
 
 根据配置有**两种角色：Follower 和 Observer**。Follower 会通过类 Paxos 的 BDBJE 协议选主出一个 Leader。三者区别如下：
 - Observer
-  - 主要用于扩展集群的查询并发能力，可选部署。
+  - 主要用于**扩展集群的查询并发能力，可选**部署。
   - **不参与选主**，不会增加集群选主压力。
   - 通过回放 Leader 的元数据日志来异步同步数据。
 - Follower
@@ -181,7 +181,7 @@ BE 是 StarRocks 的后端节点，负责数据存储、SQL执行等工作。
 
 
 - 支持**高并发**的能力
-  - StarRocks 在执行 SQL 语句时，可以对所有 Tablet实现并发处理，从而充分的利用多机、多核提供的计算能力。
+  - StarRocks 在执行 SQL 语句时，可以对所有 Tablet 实现并发处理，从而充分的利用多机、多核提供的计算能力。
   - 用户也可以利用 StarRocks 数据的切分方式，将高并发请求压力分摊到多个物理节点，从而可以通过增加物理节点的方式来扩展系统支持高并发的能力。
 - 支持 **Tablet 多副本存储**
   - 默认副本数为三个。**多副本能够保证数据存储的高可靠以及服务的高可用。**
@@ -248,11 +248,21 @@ StarRocks能够支持秒级的导入延迟，提供准实时的服务能力。
 
 ### 智能的物化视图
 
+- StarRocks 支持用户使用物化视图进行查询加速。（FROM 官方文档）
+  - 可以自动根据原始表更新数据；而且物化视图的选择也是自动进行的。
+
+- 物化视图包含了两个维度的内容，一个维度是物化，一个维度是视图。（FROM 官方知乎社区）
+  - 物化这个维度指的是物化视图要将数据进行物理化存储，这样后续应用就能够直接使用，起到查询加速的效果。
+  - 视图是逻辑层次的概念，表达的是一个查询的结果集，视图可以直接被用来指定进行查询。用户使用视图更多的是想做一个逻辑的抽象，用来简化 SQL。
+  - 所以物化视图是两者的融合，一方面能够通过物理层的存储来加速查询，另一方面提供了逻辑层的抽象，用来简化用户的 SQL 表达。
+
+
+
 ### 数据湖分析
 
 StarRocks不仅能高效的分析本地存储的数据，也可以作为计算引擎直接分析数据湖中的数据。
 
-支持包括Apache Hive、Apache Iceberg、Apache Hudi等数据组织结构，支持 Parquet、ORC、CSV 等文件格式，也支持 HDFS、S3、OSS 等存储方式。
+支持包括 **`Apache Hive`**、**`Apache Iceberg`**、**`Apache Hudi`** （Uber 开源的Data Lakes解决方案）等数据组织结构，支持 Parquet、ORC、CSV 等文件格式，也支持 HDFS、S3、OSS 等存储方式。
 
 在数据湖分析的场景中，StarRocks 主要负责数据的**计算分析**，而数据湖则主要负责数据的**存储、组织和维护**。
 
@@ -363,6 +373,10 @@ SHOW PROC '/frontends'\G
 
 web UI：http://10.11.14.15:8030/system
 
+> 用户名：root
+>
+> 密码：空
+
 
 
 #### （7）部署 FE 节点的高可用集群
@@ -459,6 +473,26 @@ ALTER SYSTEM ADD BROKER mybroker "10.11.14.16:8000";
 # broker 删除
 ALTER SYSTEM DROP BROKER mybroker "10.11.14.16:8000";
 ```
+
+Broker 在系统架构中的位置如下：
+
+```lua
++----+   +----+
+| FE |   | BE |
++-^--+   +--^-+
+  |         |
+  |         |
++-v---------v-+
+|   Broker    |
++------^------+
+       |
+       |
++------v------+
+|HDFS/BOS/AFS |
++-------------+
+```
+
+
 
 
 
@@ -587,6 +621,8 @@ SHOW ALTER TABLE COLUMN\G;
 -- 取消修改表结构（取消当前正在执行的作业）
 CANCEL ALTER TABLE COLUMN FROM table_name\G;
 ```
+
+
 
 ### 创建用户并授权
 
@@ -1453,7 +1489,9 @@ CANCEL EXPORT WHERE queryid = "921d8f80-7c9d-11eb-9342-acde48001122";
 
 # 参考
 
-官方文档：https://docs.starrocks.io/zh-cn/2.3/quick_start/Deploy
+StarRocks 官方文档：https://docs.starrocks.io/zh-cn/2.3/quick_start/Deploy
+
+Doris 官方文档：https://doris.apache.org/zh-CN/docs/dev/summary/basic-summary
 
 Spark 与 Flink 究竟哪家强？：https://zhuanlan.zhihu.com/p/549490227
 
@@ -1465,8 +1503,17 @@ OLAP数据库：https://www.modb.pro/wiki/2279
 
 StarRocks开源——携手未来，星辰大海！：https://zhuanlan.zhihu.com/p/407955287
 
-[StarRocks内部实时更新技术的实现方案 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/566219916)
+StarRocks内部实时更新技术的实现方案：https://zhuanlan.zhihu.com/p/566219916
 
 三大数据模型：星型模型、雪花模型、星座模型：https://www.modb.pro/db/134542
 
 超详细的Kafka架构原理图解：https://blog.csdn.net/SQY0809/article/details/117197036
+
+CSV, JSON, AVRO,Parquet, and ORC：https://www.jianshu.com/p/9009d652ed64
+
+ClickHouse vs StarRocks 选型对比：https://blog.csdn.net/dan20211/article/details/121711042
+
+一起聊聊数仓大宽表：https://zhuanlan.zhihu.com/p/454600683
+
+
+
