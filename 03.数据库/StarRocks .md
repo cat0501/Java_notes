@@ -258,6 +258,8 @@ StarRocks能够支持秒级的导入延迟，提供准实时的服务能力。
 
 
 
+
+
 ### 数据湖分析
 
 StarRocks不仅能高效的分析本地存储的数据，也可以作为计算引擎直接分析数据湖中的数据。
@@ -1478,6 +1480,21 @@ CANCEL EXPORT WHERE queryid = "921d8f80-7c9d-11eb-9342-acde48001122";
 ```
 
 - 最佳实践
+
+
+
+# 参考手册
+
+## 系统限制
+
+- StarRocks 采用 MySQL 协议进行通信，用户可通过 MySQL Client 或者 JDBC 连接到 StarRocks 集群。
+- 建表时，Key列不能使用 FLOAT 或者 DOUBLE 类型，可用 DECIMAL 类型表示小数。
+- StarRocks 不支持修改表中的列名。
+- StarRocks 仅支持 UTF8 编码，不支持 GB 等编码。
+
+
+
+
 
 
 
