@@ -6,6 +6,10 @@
 
 ## 是什么
 
+StarRocks 是下一代亚秒级 MPP 数据库，适用于完整的分析场景，包括多维分析、实时分析和 ad-hoc 查询。
+
+
+
 **新一代极速全场景 MPP (Massively Parallel Processing，大规模并行处理) 数据库**。StarRocks 的愿景是能够让用户的**数据分析变得更加简单和敏捷**。用户无需经过复杂的预处理，就可以用 StarRocks 来支持多种数据分析场景的极速分析。
 
 **架构简洁**，采用了全面向量化引擎，并配备全新设计的 CBO (Cost Based Optimizer) 优化器，**查询速度（尤其是多表关联查询）远超同类产品**。
@@ -69,6 +73,18 @@
 > - 常见OLAP引擎对比
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBASVRf5b-D5aaC5q2i5rC0,size_20,color_FFFFFF,t_70,g_se,x_16-20221106205516039.png)
+
+
+
+- 特性
+  - Native vectorized SQL engine（原生矢量化SQL引擎）
+  - Standard SQL（标准SQL）：与MySQL协议兼容。可以使用各种客户端和BI软件来访问StarRock。
+  - Smart query optimization（智能查询优化）：CBO(基于成本的优化器)可以优化复杂的查询。
+  - Real-time update（实时更新）：可以根据主键执行 upsert/DELETE 操作，在并发更新时实现高效的查询。
+  - Intelligent materialized view（智能实化视图）：可以在数据导入过程中自动更新，并在查询执行时自动选择。
+  - Querying data in data lakes directly（直接查询数据湖中的数据）：直接访问，无需导入。
+  - Resource management（资源管理）：允许StarRock限制查询的资源消耗。
+  - Easy to maintain（易于维护）：简单的架构使其易于部署、维护和扩展。在集群扩展或扩展时平衡资源，并在节点发生故障时自动恢复数据副本。
 
 
 
@@ -136,7 +152,15 @@ FE 和 BE 模块都**可以在线水平扩展**，元数据和业务数据都**�
 
 ### FE（前端节点：管理）
 
-FE 是 StarRocks 的前端节点，负责管理元数据，管理客户端连接，进行查询规划，查询调度等工作。
+FE 是 StarRocks 的前端节点，负责管理元数据，管理客户端连接，进行查询规划，查询调度等工作。使用 Java 语言。
+
+> FE 的主要作用有：
+>
+> - **缓存外部表元数据**。其中，元数据信息分为两类：
+>   - 数据表的基本元信息，如表结构 Schema、存储位置、分区信息、不同类别的统计信息等；
+>   - 数据表下的数据文件信息，如某个分区下的文件列表、大小、压缩格式等。
+> - **查询规划**。包括解析 SQL 文本，生成逻辑执行计划和物理执行计划，对执行计划进行优化，如分区/列裁剪，Join Reorder 等。
+> - **查询调度**。使用上述的外部表元数据，根据数据的分布情况分配可用的 BE 节点资源等信息，规划每个 BE 需要执行的具体计算任务，并使用算法保证数据本地性的同时，尽可能让每个 BE 节点并行地读取大致相同的数据量以提高执行效率。
 
 
 
@@ -163,6 +187,14 @@ BE 是 StarRocks 的后端节点，负责数据存储、SQL执行等工作。
 - 执行 SQL 计算
   - 一条 SQL 语句首先会按照具体的语义规划成**逻辑执行单元**，然后再按照数据的分布情况拆分成**具体的物理执行单元**。
   - 物理执行单元会在对应的数据存储节点上执行，这样可以实现**本地计算**，避免数据的传输与拷贝，从而能够得到极致的查询性能。
+
+
+
+> BE 主要作用有：
+>
+> 1. 执行 FE 分配的计算任务。如 Scan、Join、Shuffle、Aggregate 等。
+>
+> 2. 向 FE 汇报执行状态，传输执行结果。
 
 
 
@@ -1485,6 +1517,92 @@ CANCEL EXPORT WHERE queryid = "921d8f80-7c9d-11eb-9342-acde48001122";
 
 # 参考手册
 
+### SQL 参考
+
+
+
+#### DDL
+
+#### DML
+
+##### Broker Load
+
+```sql
+LOAD LABEL [<database_name>.]<label_name>
+(
+    data_desc[, data_desc ...]
+)
+WITH BROKER "<broker_name>"
+[broker_properties]
+[opt_properties];
+```
+
+- LABEL：指定导入作业的标签。
+  - 每个导入作业都对应一个在该数据库内唯一的标签。通过标签，可以查看对应导入作业的执行情况，并防止导入相同的数据。导入作业的状态为 **FINISHED** 时，其标签不可再复用给其他导入作业。导入作业的状态为 **CANCELLED** 时，其标签可以复用给其他导入作业。
+  - 命名规范，请参见[系统限制](https://docs.starrocks.io/zh-cn/2.3/reference/System_limit)。
+- data_desc：用于描述一批次待导入的数据。声明了本批次待导入数据所属的数据源地址、ETL 函数、StarRocks 表和分区等信息。
+  - Broker Load 支持一次导入多个数据文件。还支持保证单次导入事务的原子性。
+  - data_desc 中的必选参数如下：file_path（待导入数据文件所在的路径）、INTO TABLE（指定目标 StarRocks 表的名称）
+  - data_desc 中的可选参数如下：NEGATIVE（撤销某一批已经成功导入的数据）、PARTITION（指定要把数据导入哪些分区，默认所有分区）、FORMAT AS（指定待导入数据文件的格式。取值包括 `CSV`、`Parquet` 和 `ORC`）、COLUMNS TERMINATED BY（指定待导入数据文件中的列分隔符）、column_list（指定待导入数据文件和 StarRocks 表之间的列对应关系）、COLUMNS FROM PATH AS（指定的文件路径中提取一个或多个分区字段的信息）、SET（将待导入数据文件的某一列按照指定的函数进行转化，然后将转化后的结果落入 StarRocks 表中）、WHERE（指定过滤条件，对做完转换的数据进行过滤）
+- WITH BROKER：用于指定 Broker 的名称
+- broker_properties：提供通过 Broker 访问的数据源的信息
+- opt_properties：指定一些导入相关的可选参数
+  - timeout（导入作业的超时时间）、max_filter_ratio（导入作业的最大容忍率）、load_mem_limit（导入作业的内存限制）、strict_mode（是否开启严格模式）、timezone（导入作业所使用的时区）
+
+
+
+
+
+
+
+##### INSERT
+
+```sql
+INSERT INTO table_name
+[ PARTITION (p1, ...) ]
+[ WITH LABEL label]
+[ (column [, ...]) ]
+{ VALUES ( { expression | DEFAULT } [, ...] ) [, ...] | query }
+```
+
+
+
+| 参数        | 说明                                                         |
+| :---------- | :----------------------------------------------------------- |
+| table_name  | 导入数据的目标表。可以为 `db_name.table_name` 形式。         |
+| partitions  | 导入的目标分区。此参数必须是目标表中存在的分区，多个分区名称用逗号（,）分隔。如果指定该参数，数据只会被导入相应分区内。如果未指定，则默认将数据导入至目标表的所有分区。 |
+| label       | 导入作业的标识，数据库内唯一。如果未指定，StarRocks 会自动为作业生成一个 Label。建议您指定 Label。否则，如果当前导入作业因网络错误无法返回结果，您将无法得知该导入操作是否成功。如果指定了 Label，可以通过 SQL 命令 `SHOW LOAD WHERE label="label"` 查看任务结果。关于 Label 命名限制，参考[系统限制](https://docs.starrocks.io/zh-cn/2.3/reference/System_limit) |
+| column_name | 导入的目标列，必须是目标表中存在的列。该参数的对应关系与列名无关，但与其顺序一一对应。如果不指定目标列，默认为目标表中的所有列。如果源表中的某个列在目标列不存在，则写入默认值。如果当前列没有默认值，导入作业会失败。如果查询语句的结果列类型与目标列的类型不一致，会进行隐式转化，如果不能进行转化，那么 INSERT INTO 语句会报语法解析错误。 |
+| expression  | 表达式，用以为对应列赋值。                                   |
+| DEFAULT     | 为对应列赋予默认值。                                         |
+| query       | 查询语句，查询的结果会导入至目标表中。查询语句支持任意 StarRocks 支持的 SQL 查询语法。 |
+
+
+
+##### SHOW LOAD
+
+查看数据库中指定导入作业的相关信息，包括 Broker Load、Spark Load 和 INSERT。
+
+Stream Load 是同步操作，会直接返回结果，不会通过 SHOW LOAD 展示。
+
+Routine Load 可通过 [SHOW ROUTINE LOAD](https://docs.starrocks.io/zh-cn/2.3/sql-reference/sql-statements/data-manipulation/SHOW ROUTINE LOAD) 查看导入作业的相关信息。
+
+
+
+
+
+
+
+### 函数参考
+
+#### 窗口函数
+
+#### 日期函数
+
+#### 加密函数
+
+
+
 ## 系统限制
 
 - StarRocks 采用 MySQL 协议进行通信，用户可通过 MySQL Client 或者 JDBC 连接到 StarRocks 集群。
@@ -1500,11 +1618,35 @@ CANCEL EXPORT WHERE queryid = "921d8f80-7c9d-11eb-9342-acde48001122";
 
 # Q&A
 
+- Insert 方式 label 作用
+  - 建议您指定 Label。**否则，如果当前导入作业因网络错误无法返回结果，您将无法得知该导入操作是否成功。**如果指定了 Label，可以通过 SQL 命令 `SHOW LOAD WHERE label="label"` 查看任务结果。
+
+- Kafka 指定部分列
+  - 根据 CSV 数据中需要导入的几列（例如除第五列性别外的其余五列需要导入至 StarRocks）， 在 StarRocks 集群的目标数据库 `example_db` 中创建表 `example_tbl1`。
+  - [导入过程中实现数据转换 @ Etl_in_loading @ StarRocks Docs](https://docs.starrocks.io/zh-cn/2.3/loading/Etl_in_loading)
+    - 跳过不需要导入的列：一方面，该功能使您可以**跳过不需要导入的列**；另一方面，当 StarRocks 表与待导入数据文件的列顺序不一致时，您可以通过该功能建立两者之间的**列映射关系**。
+    - 过滤掉不需要导入的列：在导入时，您可以通过指定过滤条件，跳过不需要导入的行，只导入必要的行。
+    - 生成衍生列：将计算后产生的新列落入到 StarRocks 表中。
+
+- 通常情况下，CSV 文件中待导入数据文件中的列，是没有命名的。有些 CSV 文件中，会在首行给出列名，但其实 StarRocks 仍然是不感知的，会当做普通数据处理。因此，在导入 CSV 格式的数据时，您需要在导入命令或者语句中对待导入数据文件中的列**按顺序**依次临时命名。这些临时命名的列，会和 StarRocks 表中的列**按名称**进行对应。这里需要注意以下几点：
+
+  - 待导入数据文件中与 StarRocks 表中都存在、且命名相同的列，其数据会直接导入。
+
+  - 待导入数据文件中存在、但是 StarRocks 表中不存在的列，其数据会在导入过程中忽略掉。
+
+  - 如果有 StarRocks 表中存在、但是未声明的列，会报错。
+
+
+
+
+
 
 
 # 性能测试
 
 # 参考
+
+Github 上：https://github.com/StarRocks/starrocks
 
 StarRocks 官方文档：https://docs.starrocks.io/zh-cn/2.3/quick_start/Deploy
 
