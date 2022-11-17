@@ -1644,6 +1644,116 @@ Routine Load 可通过 [SHOW ROUTINE LOAD](https://docs.starrocks.io/zh-cn/2.3/s
 
 # 性能测试
 
+- 准备 csv 格式数据（2419618条）
+- 导入数据到 StarRocks 库表中
+
+```sh
+curl --location-trusted -u root: -H "label:20221117" \
+    -H "column_separator:," \
+    -H "columns: id, vin, province, city, data_time, veh_category_2, unit_name, un_name, drivemode, kmday, onlinekmsum,carbonsumday, carbonday, onlinecarbonsum, onlinecarbon" \
+    -T carbon_mileage_single.csv -XPUT \
+    http://10.11.14.15:8030/api/example_db/carbon_mileage_single/_stream_load;
+```
+
+- 写SQL测试
+
+
+
+单表 根据主键 id 查询（0.056秒）
+
+```sql
+SELECT id, vin, province, city, data_time, veh_category_2, unit_name, un_name, drivemode, kmday, onlinekmsum, carbonsumday, carbonday, onlinecarbonsum
+onlinecarbon 
+FROM carbon_mileage_single
+WHERE id = 150;
+```
+
+单表（0.083秒）
+
+```sql
+SELECT sum(carbonsumday * kmday) AS carbonsum
+FROM carbon_mileage_single
+WHERE onlinecarbonsum >= 100 AND onlinecarbon <= 1000 AND kmday < 100;
+```
+
+单表（3.682秒）
+
+```sql
+SELECT kmday, onlinekmsum, carbonsumday, carbonday, onlinecarbonsum, onlinecarbon
+FROM carbon_mileage_single
+WHERE onlinecarbonsum >= 100 AND onlinecarbon <= 1000 AND kmday BETWEEN 12 AND 100;
+```
+
+单表（0.080秒）
+
+```sql
+SELECT sum(carbonsumday * kmday) AS carbonsum, drivemode, year(data_time) AS year
+FROM carbon_mileage_single 
+WHERE veh_category_2 = '出租乘用车' AND unit_name = '东风汽车公司'
+GROUP BY year,drivemode
+ORDER BY year,drivemode;
+
+```
+
+单表（0.128秒）
+
+```sql
+SELECT year(data_time) AS year, unit_name, un_name 
+FROM carbon_mileage_single
+WHERE data_time >= '20221026' AND data_time<= '20221027'
+GROUP BY unit_name, un_name, year
+ORDER BY year DESC
+;
+```
+
+单表（19.076秒）
+
+```sql
+SELECT year(data_time) AS year, unit_name, un_name 
+FROM carbon_mileage_single
+WHERE unit_name in ('一汽-大众汽车有限公司', '上汽大众汽车有限公司')
+AND data_time >= '20221026' AND data_time<= '20221031'
+GROUP BY unit_name, un_name, year
+ORDER BY year DESC
+;
+```
+
+单表（0.104秒）
+
+```sql
+SELECT year(data_time) AS year, unit_name, un_name, SUM(onlinekmsum - onlinecarbon) AS profit
+FROM carbon_mileage_single
+WHERE unit_name in ('一汽-大众汽车有限公司', '上汽大众汽车有限公司')
+AND data_time >= '20221026' AND data_time<= '20221031'
+GROUP BY unit_name, un_name, year
+ORDER BY year ASC, unit_name ASC, un_name ASC
+;
+```
+
+
+
+```sql
+-- 0.071
+select count(*),data_time from carbon_mileage_single group by data_time;
+-- 0.073
+select count(DISTINCT data_time) from carbon_mileage_single;
+
+-- 0.086
+select count(*),data_time, city from carbon_mileage_single group by data_time, city;
+-- 0.103
+select count(*) from carbon_mileage_single group by data_time, city;
+```
+
+
+
+
+
+
+
+
+
+
+
 # 参考
 
 Github 上：https://github.com/StarRocks/starrocks
