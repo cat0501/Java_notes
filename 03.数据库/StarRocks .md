@@ -1746,6 +1746,38 @@ select count(*) from carbon_mileage_single group by data_time, city;
 
 
 
+0.205s
+
+```sql
+select
+  province,
+  city,
+  sum(kmday) as sum_kmday,
+  sum(onlinekmsum) as sum_onlinekmsum,
+  avg(carbonsumday) as carbonsumday,
+  avg(carbonday) as carbonday,
+  count(*) as count
+from carbon_mileage_single
+where  data_time <= '20221201'
+group by  province,  city
+order by  province,  city;
+```
+
+
+
+多表 187.703s
+
+```sql
+select vin, province,  city,  data_time,  veh_category_2, unit_name, 
+idnumber,  diastolicPressure,  pluseVal
+from  carbon_mileage_single, healthinforecords
+where
+  province = '山东省'
+  and unit_name like '%比亚迪%'
+order by  data_time desc, unit_name
+LIMIT 10,10;
+```
+
 
 
 
