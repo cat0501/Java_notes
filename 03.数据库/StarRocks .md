@@ -1644,16 +1644,116 @@ Routine Load 可通过 [SHOW ROUTINE LOAD](https://docs.starrocks.io/zh-cn/2.3/s
 
 # 性能测试
 
-- 准备 csv 格式数据（2419618条）
-- 导入数据到 StarRocks 库表中
+## 环境准备
 
-```sh
-curl --location-trusted -u root: -H "label:20221117" \
-    -H "column_separator:," \
-    -H "columns: id, vin, province, city, data_time, veh_category_2, unit_name, un_name, drivemode, kmday, onlinekmsum,carbonsumday, carbonday, onlinecarbonsum, onlinecarbon" \
-    -T carbon_mileage_single.csv -XPUT \
-    http://10.11.14.15:8030/api/example_db/carbon_mileage_single/_stream_load;
-```
+- 集群如下
+
+|        | StarRocks                             | Clickhouse          |
+| ------ | ------------------------------------- | ------------------- |
+| 服务器 | 10.11.14.15、10.11.14.16、10.11.14.13 | 10.11.14.16、17、18 |
+| 配置   | 8/32、4/16、8/32                      | 4/16、8/32、8/32    |
+
+
+
+## 数据准备
+
+- 数据来源
+
+  - 10.11.14.10   root  smc@z9w6
+  - carbon_mileage_single
+  - 数据量：2601948条、429MB
+
+- 数据导入
+
+  - 原有数据转 csv 格式
+  - 导入 StarRocks（已完成）
+
+  ```sql
+  CREATE TABLE `carbon_mileage_single` (
+    `id` int(11) NOT NULL COMMENT "自增主键",
+    `vin` varchar(60) NULL COMMENT "车架号",
+    `province` varchar(60) NULL COMMENT "注册省份",
+    `city` varchar(60) NULL COMMENT "注册地区",
+    `data_time` varchar(60) NULL COMMENT "日期",
+    `veh_category_2` varchar(60) NULL COMMENT "车辆细分用途",
+    `unit_name` varchar(60) NULL COMMENT "生产厂家",
+    `un_name` varchar(60) NULL COMMENT "运营单位",
+    `drivemode` varchar(60) NULL COMMENT "传动模式",
+    `kmday` double NULL COMMENT "日行驶里程Km",
+    `onlinekmsum` double NULL COMMENT "上线至今行驶里程Km",
+    `carbonsumday` double NULL COMMENT "日新增碳减排Kg",
+    `carbonday` double NULL COMMENT "日新增碳排放Kg",
+    `onlinecarbonsum` double NULL COMMENT "上线至今碳减排Kg",
+    `onlinecarbon` double NULL COMMENT "上线至今碳排放Kg"
+  ) ENGINE=OLAP 
+  PRIMARY KEY(`id`)
+  COMMENT "OLAP"
+  DISTRIBUTED BY HASH(`id`) BUCKETS 10 
+  PROPERTIES (
+  "replication_num" = "3",
+  "in_memory" = "false",
+  "storage_format" = "DEFAULT",
+  "enable_persistent_index" = "false"
+  );
+  ```
+
+  
+
+  
+
+  ```sql
+  curl --location-trusted -u root: -H "label:20221117" \
+      -H "column_separator:," \
+      -H "columns: id, vin, province, city, data_time, veh_category_2, unit_name, un_name, drivemode, kmday, onlinekmsum,carbonsumday, carbonday, onlinecarbonsum, onlinecarbon" \
+      -T carbon_mileage_single.csv -XPUT \
+      http://10.11.14.15:8030/api/example_db/carbon_mileage_single/_stream_load;
+  ```
+
+  
+
+  - 导入 Clickhouse（完成中）
+
+  ```sql
+  -- 建库
+  CREATE DATABASE if not exists clickhouse_test ENGINE = Atomic;
+  
+  -- 建表
+   
+  -- 导入数据
+  
+  ```
+
+  查看当前节点所属集群的相关信息：`select * from system.clusters;`
+
+  
+
+  ![](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/image-20221122141441819.png)
+
+
+
+## SQL 场景
+
+
+
+
+
+
+
+
+
+## 测试结果
+
+
+
+
+
+## 需要完善
+
+
+
+
+
+
 
 - 写SQL测试
 
@@ -1662,7 +1762,7 @@ curl --location-trusted -u root: -H "label:20221117" \
 单表 根据主键 id 查询（0.056秒）
 
 ```sql
-SELECT id, vin, province, city, data_time, veh_category_2, unit_name, un_name, drivemode, kmday, onlinekmsum, carbonsumday, carbonday, onlinecarbonsum
+SELECT id, vin, province, city, data_time, veh_category_2, unit_name, un_name, drivemode, kmday, onlinekmsum, carbonsumday, carbonday, onlinecarbonsum,
 onlinecarbon 
 FROM carbon_mileage_single
 WHERE id = 150;
