@@ -1711,16 +1711,36 @@ Routine Load 可通过 [SHOW ROUTINE LOAD](https://docs.starrocks.io/zh-cn/2.3/s
 
   
 
-  - 导入 Clickhouse（完成中）
+  - 导入 Clickhouse（已完成）
 
   ```sql
   -- 建库
   CREATE DATABASE if not exists clickhouse_test ENGINE = Atomic;
   
   -- 建表
-   
+  create table carbon_mileage_single
+      (
+      id              int  comment '自增主键',
+      vin             varchar(60)                 comment '车架号',
+      province        varchar(60)                 comment '注册省份',
+      city            varchar(60)                 comment '注册地区',
+      data_time       varchar(60)                 comment '日期',
+      veh_category_2  varchar(60)                 comment '车辆细分用途',
+      unit_name       varchar(60)                 comment '生产厂家',
+      un_name         varchar(60)                 comment '运营单位',
+      drivemode       varchar(60)                 comment '传动模式',
+      kmday           double              comment '日行驶里程Km',
+      onlinekmsum     double default 0.00  comment '上线至今行驶里程Km',
+      carbonsumday    double               comment '日新增碳减排Kg',
+      carbonday       double               comment '日新增碳排放Kg',
+      onlinecarbonsum double               comment '上线至今碳减排Kg',
+      onlinecarbon    double               comment '上线至今碳排放Kg'
+      )
+      engine = MergeTree
+          order by id;
+          
   -- 导入数据
-  
+  DataGrip
   ```
 
   查看当前节点所属集群的相关信息：`select * from system.clusters;`
@@ -1733,33 +1753,7 @@ Routine Load 可通过 [SHOW ROUTINE LOAD](https://docs.starrocks.io/zh-cn/2.3/s
 
 ## SQL 场景
 
-
-
-
-
-
-
-
-
-## 测试结果
-
-
-
-
-
-## 需要完善
-
-
-
-
-
-
-
-- 写SQL测试
-
-
-
-单表 根据主键 id 查询（0.056秒）
+1. 单表 根据主键 id 查询
 
 ```sql
 SELECT id, vin, province, city, data_time, veh_category_2, unit_name, un_name, drivemode, kmday, onlinekmsum, carbonsumday, carbonday, onlinecarbonsum,
@@ -1768,7 +1762,7 @@ FROM carbon_mileage_single
 WHERE id = 150;
 ```
 
-单表（0.083秒）
+2. 单表
 
 ```sql
 SELECT sum(carbonsumday * kmday) AS carbonsum
@@ -1776,7 +1770,7 @@ FROM carbon_mileage_single
 WHERE onlinecarbonsum >= 100 AND onlinecarbon <= 1000 AND kmday < 100;
 ```
 
-单表（3.682秒）
+3. 单表
 
 ```sql
 SELECT kmday, onlinekmsum, carbonsumday, carbonday, onlinecarbonsum, onlinecarbon
@@ -1784,7 +1778,7 @@ FROM carbon_mileage_single
 WHERE onlinecarbonsum >= 100 AND onlinecarbon <= 1000 AND kmday BETWEEN 12 AND 100;
 ```
 
-单表（0.080秒）
+4. 单表
 
 ```sql
 SELECT sum(carbonsumday * kmday) AS carbonsum, drivemode, year(data_time) AS year
@@ -1792,23 +1786,27 @@ FROM carbon_mileage_single
 WHERE veh_category_2 = '出租乘用车' AND unit_name = '东风汽车公司'
 GROUP BY year,drivemode
 ORDER BY year,drivemode;
-
 ```
 
-单表（0.128秒）
+5. 单表
 
 ```sql
-SELECT year(data_time) AS year, unit_name, un_name 
+SELECT unit_name, un_name
 FROM carbon_mileage_single
 WHERE data_time >= '20221026' AND data_time<= '20221027'
-GROUP BY unit_name, un_name, year
-ORDER BY year DESC
-;
+GROUP BY unit_name, un_name;
 ```
 
-单表（19.076秒）
+6. 单表
 
 ```sql
+SELECT unit_name, un_name
+FROM carbon_mileage_single
+WHERE unit_name in ('一汽-大众汽车有限公司', '上汽大众汽车有限公司')
+AND data_time >= '20221026' AND data_time<= '20221031'
+GROUP BY unit_name, un_name
+;
+
 SELECT year(data_time) AS year, unit_name, un_name 
 FROM carbon_mileage_single
 WHERE unit_name in ('一汽-大众汽车有限公司', '上汽大众汽车有限公司')
@@ -1818,7 +1816,7 @@ ORDER BY year DESC
 ;
 ```
 
-单表（0.104秒）
+7. 单表
 
 ```sql
 SELECT year(data_time) AS year, unit_name, un_name, SUM(onlinekmsum - onlinecarbon) AS profit
@@ -1830,7 +1828,7 @@ ORDER BY year ASC, unit_name ASC, un_name ASC
 ;
 ```
 
-
+8. 单表
 
 ```sql
 -- 0.071
@@ -1844,9 +1842,7 @@ select count(*),data_time, city from carbon_mileage_single group by data_time, c
 select count(*) from carbon_mileage_single group by data_time, city;
 ```
 
-
-
-0.205s
+9. 单表
 
 ```sql
 select
@@ -1865,7 +1861,7 @@ order by  province,  city;
 
 
 
-多表 187.703s
+10. 多表
 
 ```sql
 select vin, province,  city,  data_time,  veh_category_2, unit_name, 
@@ -1876,13 +1872,49 @@ where
   and unit_name like '%比亚迪%'
 order by  data_time desc, unit_name
 LIMIT 10,10;
+
+select vin, province,  city,  data_time,  veh_category_2, unit_name,
+       idnumber,  diastolicPressure,  pluseVal
+from  carbon_mileage_single AS A JOIN healthinforecords AS B
+on A.id=B.id
+where
+  province = '山东省'
+  and unit_name like '%比亚迪%'
+order by  data_time desc, unit_name
+LIMIT 0,10;
+
+select vin, province,  city,  data_time,  veh_category_2, unit_name,
+       C2,  C3,  C5
+from  carbon_mileage_single AS A JOIN healthinforecords AS B
+on A.id=B.C1
+where
+  province = '山东省'
+  and unit_name like '%比亚迪%'
+order by  data_time desc, unit_name
+LIMIT 0,10;
 ```
 
 
 
+## 测试结果
+
+| 序号 | SQL关键字                        | StarRocks（ms） | Clickhouse（ms）   |
+| ---- | -------------------------------- | --------------- | ------------------ |
+| 1    | WHERE                            | 56              | 107                |
+| 2    | sum()、 >=                       | 83              | 189                |
+| 3    | BETWEEN                          | 3682            | 2115               |
+| 4    | GROUP BY                         | 80              | 259                |
+| 5    | >=、GROUP BY                     | 136             | 448                |
+| 6    | >=、GROUP BY                     | 39              | 171                |
+| 7    | in、GROUP BY、ORDER BY           | 87              | 161                |
+| 8    | count(*)、GROUP BY               | 74、64、93、94  | 144、145、130、146 |
+| 9    | sum()、avg()、count(*)、group by | 90              | 221                |
+| 10   | JOIN on                          | 109             | 264                |
+| .... |                                  |                 |                    |
 
 
 
+## 需要完善
 
 
 
@@ -1915,6 +1947,26 @@ CSV, JSON, AVRO,Parquet, and ORC：https://www.jianshu.com/p/9009d652ed64
 ClickHouse vs StarRocks 选型对比：https://blog.csdn.net/dan20211/article/details/121711042
 
 一起聊聊数仓大宽表：https://zhuanlan.zhihu.com/p/454600683
+
+
+
+
+
+
+
+| 序号 | 具体               | 建议                                                         | 不建议                                                       |
+| ---- | ------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 1    | 微信等APP回复消息  | 收到、好的、好嘞、非常感谢                                   | 其它                                                         |
+| 2    | 线下交流需要回复时 | 好的，确实是（支持）、哦，我看下吧（不支持）                 | 其它                                                         |
+| 3    | 工作节奏           | 每天严格（强调顺序，定时，速度）按照飞书云文档的1234....往下做，做完即休息。OK | （1）一会摸鱼一会工作；（2）拖延，解决的办法是定时，不可早不可迟（按照云文档）；（3）不可多做不可少做；（4）.... |
+| 4    | 成长               | （1）英语（2）刷题（3）技术学习（含项目）（4）交流技术点或路线等 | others                                                       |
+| 5    | 现实               | 当下工作70%钱 30%技术。人无远虑必有近忧，早做准备。          | （1）混的想法；（2）加薪，升职的想法。                       |
+| 6    | 心理               | 都是打工人                                                   | （1）不自信（自信即巅峰）；（2）存在领导关系认知（可一定程度向上管理）。 |
+|      | 最后               | 程序（代码执行）                                             | 思想、情感、others                                           |
+
+
+
+
 
 
 
