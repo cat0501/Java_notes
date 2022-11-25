@@ -700,6 +700,19 @@ StarRocks 支持四种数据模型，分别是明细模型 (Duplicate Key Model)
 
 
 
+## 汇总
+
+- 明细：只能追加数据，不能修改历史数据。适合具有非常强的时序性的日志分析类场景。在日志分析的场景中，一般设置的排序键为事件类型和事件时间，这样分析某时间范围的某一类事件时，性能将会得到比较大的提升。
+- 聚合：对于汇总分析统计的场景
+- 更新：聚合模型的一种特殊形式，聚合函数为Replace，即返回具有相同主键的一组数据的最新记录。更新模型依然是追加模式，由于有多个版本，查询时会有比较多的开销，性能上不是太优。
+- 主键：是在1.19版本后增加的，与更新模型类似，但解决了更新模型中最核心的真正更新的逻辑问题。在主键模型中，采取的则是真正的更新模式，非常适合实时和频繁更新的场景，由于不会像更新模型保留多个版本的信息，查询效率也得到很大提升，理论上可以达到3~10倍的提升，具体要看SQL的复杂度。
+  - 主键模型对于频繁增删改查的交易业务场景比较适合，特别适合大数据场景中的实时的增量数据更新场景
+  - 用硬件换性能也是大数据优化的一种常见模式，所以在设计主键模型时，最好有冷热数据的考虑，比如考虑按时间分区，同时主键模型的表的量级不能太大，一般不要超过亿级，否则对内存的消耗会非常大
+  - 最后主键模型采取的Update模式（也是Delete-Insert模式），基于表的主键进行数据的更新操作（主键具备唯一性）
+- 最后，明细模型应用于更新比较少的批量的大数据离线场景，主键模型应用于更新频繁流式的大数据实时场景，离线和实时都得到比较好的支撑。
+
+
+
 ## 明细模型 (Duplicate Key Model)
 
 - 概念：创建表时，支持定义**排序键**。
@@ -1702,7 +1715,7 @@ Routine Load 可通过 [SHOW ROUTINE LOAD](https://docs.starrocks.io/zh-cn/2.3/s
   
 
   ```sql
-  curl --location-trusted -u root: -H "label:20221117" \
+  curl --location-trusted -u root: -H "label:20221125" \
       -H "column_separator:," \
       -H "columns: id, vin, province, city, data_time, veh_category_2, unit_name, un_name, drivemode, kmday, onlinekmsum,carbonsumday, carbonday, onlinecarbonsum, onlinecarbon" \
       -T carbon_mileage_single.csv -XPUT \
@@ -1751,12 +1764,12 @@ Routine Load 可通过 [SHOW ROUTINE LOAD](https://docs.starrocks.io/zh-cn/2.3/s
 
 
 
-## SQL 场景
+## SQL 场景 15个
 
 1. 单表 根据主键 id 查询
 
-- 56ms、107ms
-- 21
+- StarRocks 主键模型：17ms、Clickhouse：107ms
+- StarRocks 更新模型：34
 
 ```sql
 SELECT id, vin, province, city, data_time, veh_category_2, unit_name, un_name, drivemode, kmday, onlinekmsum, carbonsumday, carbonday, onlinecarbonsum,
@@ -1770,8 +1783,8 @@ WHERE id = 150;
 
 2. 单表
 
-- 83、189
-- 44
+- 42、189
+- 89
 
 ```sql
 SELECT sum(carbonsumday * kmday) AS carbonsum
@@ -1782,8 +1795,8 @@ WHERE onlinecarbonsum >= 100 AND onlinecarbon <= 1000 AND kmday < 100;
 
 3. 单表
 
-- 51、658
-- 49
+- 40、658
+- 103
 
 ```sql
 SELECT kmday, onlinekmsum, carbonsumday, carbonday, onlinecarbonsum, onlinecarbon
@@ -1794,8 +1807,8 @@ WHERE onlinecarbonsum >= 100 AND onlinecarbon <= 1000 AND kmday BETWEEN 12 AND 1
 
 4. 单表
 
-- 80、259
-- 60
+- 33、259
+- 71
 
 ```sql
 SELECT sum(carbonsumday * kmday) AS carbonsum, drivemode, year(data_time) AS year
@@ -1808,8 +1821,8 @@ ORDER BY year,drivemode;
 
 5. 单表
 
-- 136、448
-- 49
+- 50、448
+- 73
 
 ```sql
 SELECT unit_name, un_name
@@ -1821,8 +1834,8 @@ GROUP BY unit_name, un_name;
 
 6. 单表
 
-- 39、171
-- 53
+- 33、171
+- 69
 
 ```sql
 SELECT unit_name, un_name
@@ -1844,8 +1857,8 @@ ORDER BY year DESC
 
 7. 单表
 
-- 87、161
-- 64
+- 37、161
+- 76
 
 ```sql
 SELECT year(data_time) AS year, unit_name, un_name, SUM(onlinekmsum - onlinecarbon) AS profit
@@ -1860,7 +1873,8 @@ ORDER BY year ASC, unit_name ASC, un_name ASC
 
 8. 单表
 
-- 74,64,93,94、144,145,130,146
+- 32,29,155,45、144,145,130,146
+- 28，31，46，52
 
 ```sql
 select count(*),data_time from carbon_mileage_single group by data_time;
@@ -1876,6 +1890,7 @@ select count(*) from carbon_mileage_single group by data_time, city;
 9. 单表
 
 - 90、221
+- 67
 
 ```sql
 select
@@ -1896,19 +1911,10 @@ order by  province,  city;
 
 10. 多表
 
-- 109、264
-- 46
+- 49、264
+- 53
 
 ```sql
-select vin, province,  city,  data_time,  veh_category_2, unit_name, 
-idnumber,  diastolicPressure,  pluseVal
-from  carbon_mileage_single, healthinforecords
-where
-  province = '山东省'
-  and unit_name like '%比亚迪%'
-order by  data_time desc, unit_name
-LIMIT 10,10;
-
 select vin, province,  city,  data_time,  veh_category_2, unit_name,
        idnumber,  diastolicPressure,  pluseVal
 from  carbon_mileage_single AS A JOIN healthinforecords AS B
@@ -1934,7 +1940,8 @@ LIMIT 0,10;
 
 11. 多表（子查询）
 
-- 1240ms、2452ms
+- 62ms、2452ms
+- 61
 
 ```sql
 select
@@ -1967,7 +1974,8 @@ order by revenue desc, province;
 
 12. 多表（子查询）
 
-- 73ms、264ms
+- 85ms、264ms
+- 68
 
 ```sql
 select
@@ -1998,7 +2006,8 @@ order by revenue desc, province;
 
 13. 多表
 
-- 81、225
+- 51、225
+- 46
 
 ```sql
 select
@@ -2028,7 +2037,8 @@ order by revenue desc, province;
 
 14. 多表
 
-- 63、258
+- 44、258
+- 46
 
 ```sql
 select
@@ -2061,27 +2071,10 @@ order by province;
 
 15. 多表
 
-- 69、229
+- 50、229
+- 45
 
 ```sql
-select
-  province, sum(onlinekmsum) as revenue, veh_category_2, count(*) as custdist
-from
-    carbon_mileage_single AS A JOIN healthinforecords AS B
-	on A.id=B.C1
-where
-  kmday in (select
-                C3 from healthinforecords
-                   where C1 > 4000
-                   group by C3
-                   having sum(C4) > 150)
-  and data_time <  '20221026'
-group by
-    province, veh_category_2
-order by
-    revenue desc, province;
- 
- 
 select
   province, sum(onlinekmsum) as revenue, veh_category_2, count(*) as custdist
 from
@@ -2098,34 +2091,31 @@ group by
     province, veh_category_2
 order by
     revenue desc, province;
+    
+    
+select
+  province, sum(onlinekmsum) as revenue, veh_category_2, count(*) as custdist
+from
+    carbon_mileage_single AS A JOIN healthinforecords AS B
+	on A.id=B.C1
+where
+  kmday in (select
+                C3 from healthinforecords
+                   where C1 > 4000
+                   group by C3
+                   having sum(C4) > 150)
+  and data_time <  '20221026'
+group by
+    province, veh_category_2
+order by
+    revenue desc, province;
 ```
 
 
 
-16. 更新模型 & 主键模型
+更新模型建表 SQL
 
 ```sql
-CREATE TABLE IF NOT EXISTS `carbon_mileage_single` (
-  vin varchar(60) NULL COMMENT '车架号',
-  kmday decimal NULL COMMENT '日行驶里程Km',
-  id int(11) NOT NULL COMMENT '自增主键',
-  province varchar(60) NULL COMMENT '注册省份',
-  city varchar(60) NULL COMMENT '注册地区',
-  data_time varchar(60) NULL COMMENT '日期',
-  veh_category_2 varchar(60) NULL COMMENT '车辆细分用途',
-  unit_name varchar(60) NULL COMMENT '生产厂家',
-  un_name varchar(60) NULL COMMENT '运营单位',
-  drivemode varchar(60) NULL COMMENT '传动模式',
-  onlinekmsum double NULL COMMENT '上线至今行驶里程Km',
-  carbonsumday double NULL COMMENT '日新增碳减排Kg',
-  carbonday double NULL COMMENT '日新增碳排放Kg',
-  onlinecarbonsum double NULL COMMENT '上线至今碳减排Kg',
-  onlinecarbon double NULL COMMENT '上线至今碳排放Kg'
-)
-UNIQUE KEY(vin,kmday,id)
-DISTRIBUTED BY HASH(`id`) BUCKETS 10
-;
-
 CREATE TABLE `carbon_mileage_single` (
   `id` int(11) NOT NULL COMMENT "自增主键",
   `vin` varchar(60) NULL COMMENT "车架号",
@@ -2158,24 +2148,24 @@ PROPERTIES (
 
 ## 测试结果
 
-| 序号 | SQL关键字                                                    | StarRocks（ms） | Clickhouse（ms）   | Clickhouse/StarRocks |
-| ---- | ------------------------------------------------------------ | --------------- | ------------------ | -------------------- |
-| 1    | WHERE                                                        | 56              | 107                | 1.9                  |
-| 2    | sum()、 >=                                                   | 83              | 189                | 2.2                  |
-| 3    | BETWEEN                                                      | 51              | 658                | 12.9                 |
-| 4    | GROUP BY                                                     | 80              | 259                | 3.2                  |
-| 5    | >=、GROUP BY                                                 | 136             | 448                | 3.2                  |
-| 6    | >=、GROUP BY                                                 | 39              | 171                | 4.3                  |
-| 7    | in、GROUP BY、ORDER BY                                       | 87              | 161                | 1.8                  |
-| 8    | count(*)、GROUP BY                                           | 74、64、93、94  | 144、145、130、146 | 565/325=1.7          |
-| 9    | sum()、avg()、count(*)、group by                             | 90              | 221                | 2.4                  |
-| 10   | JOIN on                                                      | 109             | 264                | 2.4                  |
-| .... |                                                              |                 |                    |                      |
-| 11   | JOIN on、select 子查询、group by、order by                   | 1240            | 2452               | 1.9                  |
-| 12   | JOIN on、select 子查询、group by、order by、count(*)         | 73              | 264                | 3.6                  |
-| 13   | JOIN on、select 子查询、group by、order by、count(*)、having、sum | 81              | 225                | 2.7                  |
-| 14   |                                                              | 63              | 258                | 4                    |
-| 15   |                                                              | 69              | 229                | 3.3                  |
+| 序号 | SQL关键字                                                    | StarRocks PRIMARY KEY（ms） | Clickhouse（ms）   | Clickhouse/StarRocks PRIMARY KEY | StarRocks UNIQUE KEY（ms） |
+| ---- | ------------------------------------------------------------ | --------------------------- | ------------------ | -------------------------------- | -------------------------- |
+| 1    | WHERE                                                        | 17                          | 107                | 6.3                              | 34                         |
+| 2    | sum()、 >=                                                   | 42                          | 189                | 4.5                              | 89                         |
+| 3    | BETWEEN                                                      | 40                          | 658                | 16.4                             | 103                        |
+| 4    | GROUP BY                                                     | 33                          | 259                | 7.8                              | 71                         |
+| 5    | >=、GROUP BY                                                 | 50                          | 448                | 8.9                              | 73                         |
+| 6    | >=、GROUP BY                                                 | 33                          | 171                | 5.1                              | 69                         |
+| 7    | in、GROUP BY、ORDER BY                                       | 37                          | 161                | 4.3                              | 76                         |
+| 8    | count(*)、GROUP BY                                           | 32、29、155、45             | 144、145、130、146 | 565/325=1.7                      | 28、31、46、52             |
+| 9    | sum()、avg()、count(*)、group by                             | 90                          | 221                | 2.4                              | 67                         |
+| 10   | JOIN on                                                      | 49                          | 264                | 2.4                              | 53                         |
+| .... |                                                              |                             |                    |                                  |                            |
+| 11   | JOIN on、select 子查询、group by、order by                   | 62                          | 2452               | 39                               | 61                         |
+| 12   | JOIN on、select 子查询、group by、order by、count(*)         | 85                          | 264                | 3.1                              | 68                         |
+| 13   | JOIN on、select 子查询、group by、order by、count(*)、having、sum | 51                          | 225                | 4.4                              | 46                         |
+| 14   | JOIN on、in、select 子查询、order by                         | 44                          | 258                | 5.8                              | 46                         |
+| 15   | sum、count(*)、select 子查询、group by、having、order by     | 50                          | 229                | 4.6                              | 45                         |
 
 
 
@@ -2225,7 +2215,7 @@ ClickHouse vs StarRocks 选型对比：https://blog.csdn.net/dan20211/article/de
 
 一起聊聊数仓大宽表：https://zhuanlan.zhihu.com/p/454600683
 
-
+StarRocks4种数据模型如何在不同场景中实践：https://www.jianshu.com/p/d0cd3c67002b
 
 
 
