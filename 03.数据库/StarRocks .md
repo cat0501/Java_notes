@@ -252,7 +252,7 @@ BE 是 StarRocks 的后端节点，负责数据存储、SQL执行等工作。
 
 
 
-### CBO 优化器
+### CBO 优化器 ⭐
 
 ![CBO](https://docs.starrocks.io/static/c4f97bfd8a587af0e8c9c24ba2623768/c1b63/1.2-5.png)
 
@@ -261,10 +261,10 @@ BE 是 StarRocks 的后端节点，负责数据存储、SQL执行等工作。
   - 查询中关联表的数目越大，可能的执行计划就越多，在众多的可能中选择一个最优的计划，这是一个NP-Hard的问题。只有优秀的查询优化器，才能选择出相对最优的查询计划，从而实现极致的多表分析性能。
 
 - 设计
-  - StarRocks从零设计并实现了一款全新的，基于代价的优化器CBO（Cost Based Optimizer）。
+  - **StarRocks从零设计并实现了一款全新的，基于代价的优化器CBO（Cost Based Optimizer）**。
 
 - 优势
-  - 由于全新CBO的支持，StarRocks能比同类产品更好地支持多表关联查询，特别是复杂的多表关联查询，让全面向量化引擎能够发挥极致的性能。
+  - 由于全新CBO的支持，StarRocks 能比同类产品**更好地支持多表关联查询，特别是复杂的多表关联查询**，让全面向量化引擎能够发挥极致的性能。
 
 
 
@@ -1532,8 +1532,6 @@ CANCEL EXPORT WHERE queryid = "921d8f80-7c9d-11eb-9342-acde48001122";
 
 ### SQL 参考
 
-
-
 #### DDL
 
 #### DML
@@ -2166,6 +2164,16 @@ PROPERTIES (
 | 13   | JOIN on、select 子查询、group by、order by、count(*)、having、sum | 51                          | 225                | 4.4                              | 46                         |
 | 14   | JOIN on、in、select 子查询、order by                         | 44                          | 258                | 5.8                              | 46                         |
 | 15   | sum、count(*)、select 子查询、group by、having、order by     | 50                          | 229                | 4.6                              | 45                         |
+
+
+
+
+
+ClickHouse 与 StarRocks 都是很优秀的关系型 OLAP 数据库。两者有着很多的相似之处，对于分析类查询都提供了极致的性能，都不依赖于 Hadoop 生态圈。
+
+在一些场景下，StarRocks 相较于 ClickHouse 有更好的表现。一般来说，ClickHouse 适合于维度变化较少的拼宽表的场景，StarRocks 不仅在单表的测试中有着更出色的表现，在多表关联的场景具有更大的优势。
+
+
 
 
 
