@@ -55,10 +55,8 @@
   - 基于 [restify 框架 ](http://restify.com/)，可以快速构建 API 接口项目
   - 读写和操作数据库、创建实用的命令行工具辅助前端开发、etc…
 - 学习路径
-> 浏览器中的 JavaScript 学习路径：JavaScript 基础语法 + 浏览器内置 API（DOM + BOM） + 第三方库（jQuery、art-template 等）
->
-> Node.js 的学习路径：JavaScript 基础语法 + Node.js 内置 API 模块（fs、path、http等）+ 第三方 API 模块（express、mysql 等）
-
+  - 浏览器中的 JavaScript 学习路径：JavaScript 基础语法 + 浏览器内置 API（DOM + BOM） + 第三方库（jQuery、art-template 等）
+  - Node.js 的学习路径：JavaScript 基础语法 + Node.js 内置 API 模块（fs、path、http等）+ 第三方 API 模块（express、mysql 等）
 ### 环境安装
 如果希望通过 Node.js 来运行 Javascript 代码，则必须在计算机上安装 Node.js 环境才行。
 
@@ -81,7 +79,9 @@ fs.readFile(path[, options], callback)
 ```
 
 `path`：文件路径
+
 `options`：配置选项，若是字符串则指定编码格式
+
 `callback`：回调函数
 
 
@@ -108,9 +108,13 @@ fs.readFile('./files/1.txt', 'utf-8', function(err, data) => {
 fs.writeFile(file, data[, options], callback)
 ```
 `file`：文件路径
+
 `data`：写入内容
+
 `options`：配置选项，包含 `encoding, mode, flag`；若是字符串则指定编码格式
+
 `callback`：回调函数
+
 ```javascript
 const fs = require('fs')
 fs.writeFile('./files/2.txt', 'Hello Nodejs', function (err) {
