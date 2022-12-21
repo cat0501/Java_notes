@@ -58,7 +58,7 @@
   - 浏览器中的 JavaScript 学习路径：JavaScript 基础语法 + 浏览器内置 API（DOM + BOM） + 第三方库（jQuery、art-template 等）
   - Node.js 的学习路径：JavaScript 基础语法 + Node.js 内置 API 模块（fs、path、http等）+ 第三方 API 模块（express、mysql 等）
 ### 环境安装
-如果希望通过 Node.js 来运行 Javascript 代码，则必须在计算机上安装 Node.js 环境才行。
+如果希望通过 Node.js 来运行 Javascript 代码，则必须安装 Node.js 环境才行。
 
 ```shell
 # 可查看已安装的 Node.js 的版本号
