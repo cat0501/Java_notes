@@ -19,12 +19,14 @@ public class RoleService {
             );
             var roles = new ArrayList<Role>();
             var resultSet = selectStatement.executeQuery();
+
             while (resultSet.next()) {
                 var role = new Role();
                 role.setId(resultSet.getLong("id"));
                 role.setRoleName(resultSet.getString("role_name"));
                 roles.add(role);
             }
+
             selectStatement.close();
             connection.close();
             return roles;
@@ -41,11 +43,13 @@ public class RoleService {
         try {
             Class.forName(DATABASE.DRIVER);
             var connection = DriverManager.getConnection(DATABASE.URL, DATABASE.USERNAME, DATABASE.PASSWORD);
+            // 内连接
             var selectStatement = connection.prepareStatement(
                     "SELECT role.role_name AS roleName FROM user_role" +
                             "  INNER JOIN role ON user_role.role_id = role.id" +
                             "  WHERE user_role.user_id = ?"
             );
+            // 针对占位符进行赋值
             selectStatement.setLong(1, userId);
             var resultSet = selectStatement.executeQuery();
             var roleName = "";

@@ -12,22 +12,27 @@ public class UserService {
      */
     public static List<User> getAllUsers() {
         try {
+            // 设置驱动
             Class.forName(DATABASE.DRIVER);
+            // 获取数据库的连接
             var connection = DriverManager.getConnection(DATABASE.URL, DATABASE.USERNAME, DATABASE.PASSWORD);
-            var selectStatement = connection.prepareStatement(
-                    "SELECT id, username, password FROM user"
-            );
+            // 构建查询语句
+            var selectStatement = connection.prepareStatement("SELECT id, username, password FROM user");
+            // 执行查询
             var resultSet = selectStatement.executeQuery();
+
             var users = new ArrayList<User>();
             while (resultSet.next()) {
                 var user = new User();
                 user.setId(resultSet.getLong("id"));
                 user.setUsername(resultSet.getString("username"));
                 user.setPassword(resultSet.getString("password"));
+                // 查询角色名
                 user.setRoleName(RoleService.getUserRoleName(resultSet.getLong("id")));
                 users.add(user);
             }
 
+            // 关闭资源
             selectStatement.close();
             connection.close();
             return users;
@@ -121,6 +126,7 @@ public class UserService {
             );
             deleteUserRole.setLong(1, userId);
             deleteUserRole.execute();
+
             deleteUserRole.close();
             connection.close();
         } catch (SQLException | ClassNotFoundException e) {

@@ -10,9 +10,13 @@ import java.util.Date;
  * 非对称加密
  */
 public class JwtHelper {
+    // 令牌的过期时间
     private static long tokenExpiration = 365L * 24 * 60 * 60 * 1000;
+    // 加密的key
     private static Key key = Keys.hmacShaKeyFor("abcdefghijklmnopqrstuvwxyzasdfasdfsadfasdfasdf".getBytes());
 
+    // 生成Token的方法
+    // 根据用户ID和用户名生成令牌
     public static String createToken(Long userId, String userName) {
         return Jwts.builder()
                 .setSubject("P2P-USER")
@@ -23,11 +27,14 @@ public class JwtHelper {
                 .compact();
     }
 
+    // 根据Token提取用户ID
     public static Long getUserId(String token) {
         try {
             if (token == null) return null;
 
-            Jws<Claims> claimsJws = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            //Jws<Claims> claimsJws = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            // 类型推断
+            var claimsJws = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             Claims claims = claimsJws.getBody();
             String userId = claims.get("userId").toString();
             return Long.parseLong(userId);
@@ -37,6 +44,7 @@ public class JwtHelper {
         }
     }
 
+    // 根据Token提取用户名
     public static String getUserName(String token) {
         try {
             if (token == null) return null;

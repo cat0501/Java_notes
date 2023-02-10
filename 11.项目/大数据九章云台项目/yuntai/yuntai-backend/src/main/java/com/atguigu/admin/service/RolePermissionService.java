@@ -24,11 +24,13 @@ public class RolePermissionService {
             );
             selectRolePermissionStatement.setLong(1, roleId);
             var resultSet = selectRolePermissionStatement.executeQuery();
+            // 权限id列表
             var allPermissions = new ArrayList<Long>();
             while (resultSet.next()) {
                 allPermissions.add(resultSet.getLong("permission_id"));
             }
 
+            // 读取所有权限
             var selectPermissionStatement = connection.prepareStatement(
                     "SELECT id, parent_id, permission_name, permission_code FROM permission"
             );

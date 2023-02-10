@@ -2,6 +2,7 @@ package com.atguigu.admin.service;
 
 import com.atguigu.admin.bean.UserLoginInfo;
 
+// 用户登录时获取用户信息
 public class IndexService {
     public static UserLoginInfo getUserInfo(String username) {
         var user = UserService.getUserByName(username);
