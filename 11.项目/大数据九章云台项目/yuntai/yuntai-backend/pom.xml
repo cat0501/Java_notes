@@ -20,6 +20,7 @@
     </parent>
 
     <dependencies>
+        <!--web组件的启动器-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -52,6 +53,7 @@
             <artifactId>neo4j-java-driver</artifactId>
             <version>5.3.0</version>
         </dependency>
+        <!--json web token-->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
@@ -67,11 +69,13 @@
             <artifactId>jjwt-jackson</artifactId>
             <version>0.11.5</version>
         </dependency>
+        <!--定时任务调度模块需要导入quartz-->
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
             <version>2.3.2</version>
         </dependency>
+        <!--计算血缘关系时，需要对sql进行语法分析，antlr：语法分析器生成器-->
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>

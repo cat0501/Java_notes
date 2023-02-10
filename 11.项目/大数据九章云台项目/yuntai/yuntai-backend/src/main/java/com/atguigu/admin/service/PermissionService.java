@@ -28,6 +28,7 @@ public class PermissionService {
                 permission.setPermissionCode(resultSet.getString("permission_code"));
                 permissions.add(permission);
             }
+
             permissions = PermissionHelper.build(permissions);
 
             selectStatement.close();
@@ -46,6 +47,7 @@ public class PermissionService {
         try {
             Class.forName(DATABASE.DRIVER);
             var connection = DriverManager.getConnection(DATABASE.URL, DATABASE.USERNAME, DATABASE.PASSWORD);
+            // 3张表联表查询
             var selectStatement = connection.prepareStatement(
                     "SELECT permission.permission_code AS permissionCode FROM user" +
                             "  INNER JOIN user_role" +

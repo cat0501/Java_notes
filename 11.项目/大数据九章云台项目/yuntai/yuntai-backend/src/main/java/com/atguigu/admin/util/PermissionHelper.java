@@ -16,6 +16,7 @@ public class PermissionHelper {
     public static ArrayList<Permission> build(List<Permission> treeNodes) {
         var trees = new ArrayList<Permission>();
         for (var treeNode : treeNodes) {
+            // 说明是全部权限
             if (treeNode.getParentId() == 0) {
                 treeNode.setLevel(1);
                 trees.add(findChildren(treeNode, treeNodes));
@@ -28,8 +29,10 @@ public class PermissionHelper {
      * 递归查找子节点
      */
     public static Permission findChildren(Permission treeNode, List<Permission> treeNodes) {
+        // 子结点设置为空列表
         treeNode.setChildren(new ArrayList<>());
 
+        // 递归寻找子结点，将子结点插入到列表中 （递归需要再理解下）
         for (var it : treeNodes) {
             if (Objects.equals(treeNode.getId(), it.getParentId())) {
                 it.setLevel(treeNode.getLevel() + 1);
