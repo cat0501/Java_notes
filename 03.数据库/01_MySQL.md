@@ -78,8 +78,6 @@ MySQL主从复制的原理是什么?
 
 ### 介绍
 
-MySQL 是一款非常流行的数据库管理系统
-
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220330133909080.png?w=600)
 
 
@@ -94,17 +92,15 @@ MySQL 是一款非常流行的数据库管理系统
 
 
 
-### 安装
-
-见飞书云文档：https://f6q9xnlo2k.feishu.cn/docx/G544dueVxo0ILRxZIbTc1jqHn7d
-
-
-
-
-
 **关系模型**
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220330232509495.png)
+
+
+
+### 安装
+
+见飞书云文档：https://f6q9xnlo2k.feishu.cn/docx/G544dueVxo0ILRxZIbTc1jqHn7d
 
 
 
@@ -151,8 +147,7 @@ show create table 表名;
 -- 创建表
 create table user
 (
-    id           bigint auto_increment comment 'id'
-        primary key,
+    id           bigint auto_increment comment 'id' primary key,
     username     varchar(256)                       null comment '用户名',
     userAccount  varchar(256)                       null comment '登录账号',
     avatarUrl    varchar(256)                       null comment '头像',
@@ -230,13 +225,8 @@ MySQL中的数据类型有很多，主要分为三类：数值类型、字符串
 
 ### DML（表的增删改）
 
-- 添加数据（INSERT） 
-- 修改数据（UPDATE） 
-- 删除数据（DELETE）
-
-
-
 ```sql
+-- 添加数据（INSERT） 
 insert into 表名 (字段名1,字段名2,...) values (值1,值2,...);
 insert into 表名 values (值1,值2,...);
 
@@ -245,11 +235,11 @@ insert into 表名 (字段名1,字段名2,...) values (值1,值2,...),(值1,值2
 insert into 表名 values (值1,值2,...),(值1,值2,...),(值1,值2,...);
 // 字符串和日期型数据应该包含在引号中。
 
--- 修改数据
+-- 修改数据（UPDATE）
 update 表名 set 字段名1=值1,字段名2=值2,...[where 条件];
 // 注意：修改语句的条件可以有，也可以没有，如果没有条件，则会修改整张表的所有数据。
 
--- 删除数据
+-- 删除数据（DELETE）
 delete from 表名 [where 条件];
 // 注意：DELETE 语句的条件可以有，也可以没有，如果没有条件，则会删除整张表的所有数据。
 ```
@@ -314,7 +304,7 @@ select 字段列表 from 表名 limit 起始索引 查询记录数;
 
 
 
-```sql
+```sh
 // 练习
 1. 查询年龄为20,21,22,23岁的员工信息。
 2. 查询性别为 男 ，并且年龄在 20-40 岁(含)以内的姓名为三个字的员工。
@@ -390,8 +380,6 @@ revoke 权限列表 on 数据库名.表名 from '用户名'@'主机名';
 
 ## 3. 函数（功能强大的内置函数、其应用场景）
 
-是指一段可以直接被另一段程序调用的程序或代码。
-
 ### 字符串函数
 
 | 函数                       | 功能                                                         |
@@ -409,8 +397,8 @@ revoke 权限列表 on 数据库名.表名 from '用户名'@'主机名';
 ```sql
 select 函数(参数);
 
-// 练习：由于业务需求变更，企业员工的工号，统一为5位数，目前不足5位数的全部在前面补0。比如： 1号员
-工的工号应该为00001。
+-- 练习：由于业务需求变更，企业员工的工号，统一为5位数，目前不足5位数的全部在前面补0。
+-- 比如：1号员工的工号应该为00001。
 ```
 
 
@@ -428,11 +416,8 @@ select 函数(参数);
 
 
 ```sql
-//通过数据库的函数，生成一个六位数的随机验证码。
-
+-- 通过数据库的函数，生成一个六位数的随机验证码。
 ```
-
-
 
 
 
@@ -452,7 +437,7 @@ select 函数(参数);
 
 
 ```sql
-// 查询所有员工的入职天数，并根据入职天数倒序排序。	
+-- 查询所有员工的入职天数，并根据入职天数倒序排序。	
 ```
 
 
@@ -473,7 +458,7 @@ select 函数(参数);
 
 
 ```sql
-统计班级各个学员的成绩，展示的规则如下：
+-- 统计班级各个学员的成绩，展示的规则如下：
 • >= 85，展示优秀
 • >= 60，展示及格
 • 否则，展示不及格
@@ -482,13 +467,16 @@ select 函数(参数);
 
 
 ```sql
-1. 字符串函数
+-- 1. 字符串函数
 concat lower upper lpad rpad trim sunstring
-2. 数值函数
+
+-- 2. 数值函数
 ceil floor mod rand round
-3. 日期函数
+
+-- 3. 日期函数
 curdate curtime now year month day date_add adtediff 
-4. 流程函数
+
+-- 4. 流程函数
 if ifnull case[...]when...then...else...end
 ```
 
@@ -500,11 +488,9 @@ if ifnull case[...]when...then...else...end
 
 ### 概述
 
-1. 概念：约束是作用于表中字段上的规则，用于限制存储在表中的数据。
-
-2. 目的：保证数据库中数据的正确、有效性和完整性。
-
-3. 分类：
+- 概念：约束是作用于表中字段上的规则，用于限制存储在表中的数据。
+- 目的：保证数据库中数据的正确性、有效性和完整性。
+- 分类
 
 | 约束                       | 描述                                                     | 关键字      | 例如                      |
 | -------------------------- | -------------------------------------------------------- | ----------- | ------------------------- |
@@ -515,7 +501,7 @@ if ifnull case[...]when...then...else...end
 | 检查约束（8.0.16版本之后） | 保证字段值满足某一个条件                                 | check       | 大于0并且小于等于120      |
 | 外键约束                   | 用来让两张表的数据之间建立连接，保证数据的一致性和完整性 | foreign key |                           |
 
-注意：约束是作用于表中字段上的，可以在创建表/修改表的时候添加约束。
+- 注意：约束是作用于表中字段上的，可以在创建表/修改表的时候添加约束。
 
 
 
@@ -551,7 +537,7 @@ create table tb_user(
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220331131724487.png)
 
-注意：目前上述的两张表，在数据库层面，并未建立外键关联，所以是无法保证数据的一致性和完整性的。
+以上两张表，在数据库层面并未建立外键关联，所以是无法保证数据的一致性和完整性的。
 
 
 
@@ -560,7 +546,6 @@ create table tb_user(
 create table 表名(
     字段名  数据类型
   ...
-  
   [constraint][外键名称] foreign key (外键字段名) references 主表(主表列名);
 )
 alter table 表名 add constraint 外键名称 foreign key(外键字段名) references 主表(主表列名);
@@ -584,7 +569,8 @@ alter table 表名 drop foreign key 外键名称;
 
 
 ```sql
-alter table 表名 add constraint 外键名称 foreign key（外键字段） references 主表名( 主表字段名)  on update cascade on default cascade;
+alter table 表名 add constraint 外键名称 foreign key（外键字段） references 主表名( 主表字段名)  
+on update cascade on default cascade;
 ```
 
 
@@ -595,7 +581,7 @@ alter table 表名 add constraint 外键名称 foreign key（外键字段） ref
 
 ### 多表关系
 
-在数据库表结构设计时，会根据业务需求及业务模块之间的关系，分析并设计表结构，由于业务之间相互关联，所以各个表结构之间也存在着各种联系，基本上分为三种：
+在数据库表结构设计时，会根据业务需求及业务模块之间的关系，分析并设计表结构。由于业务之间相互关联，所以各个表结构之间也存在着各种联系，基本上分为三种：
 
 - 一对多（多对一）
   - 案例：部门 与 员工的关系
@@ -638,9 +624,9 @@ alter table 表名 add constraint 外键名称 foreign key（外键字段） ref
 - 右外连接：查询右表所有数据，以及两张表交集部分数据
 - 自连接：当前表与自身的连接查询，自连接必须使用表别名
 
+#### 子查询（交集）
 
-#### 子查询
-交集
+
 
 ### 内连接
 
@@ -659,7 +645,7 @@ alter table 表名 add constraint 外键名称 foreign key（外键字段） ref
 ```sql
 -- 左外连接: 相当于查询表1(左表)的所有数据 包含 表1和表2交集部分的数据
 select 字段列表 from 表1 left[outer] join 表2 on 条件...;
--- 左外连接
+-- 右外连接
 select 字段列表 from 表1 right[outer] join 表2 on 条件...;
 ```
 
@@ -683,7 +669,7 @@ select 字段列表 from 表B...
 
 ### 子查询
 
-概念：SQL语句中嵌套SELECT语句，称为嵌套查询，又称子查询。
+即SQL语句中嵌套 `SELECT` 语句，称为嵌套查询，又称子查询。
 
 ```sql
 select * from t1 where column1 = (select column1 from t2);
@@ -720,24 +706,16 @@ select * from t1 where column1 = (select column1 from t2);
 12. 查询所有学生的选课情况, 展示出学生名称, 学号, 课程名称
 ```
 
-
-
 ### 总结
-
 多表关系
-
 - 一对多：在多的一方设置外键，关联一的一方的主键
-
 - 多对多：建立中间表，中间表包含两个外键，关联两张表的主键
-
 - 一对一：用于表结构拆分，在其中任何一方设置外键unique ，关联另一方的主键
-
 
 
 多表查询
 
 - 内连接
-
 ```sql
 select 字段列表 from 表1,表2 where 条件...;
 
@@ -745,36 +723,33 @@ select 字段列表 from 表1 [inner] join 表2 on 连接条件...;
 ```
 
 - 外连接
-
 ```sql
 select 字段列表 from 表1 left[outer] join 表2 on 条件...;
 ```
 
 - 自连接
-
 ```sql
 select 字段列表 from 表A 别名A join 表B 别名B on 条件...;
 ```
 
 - 子查询
-
 ```sql
 标量子查询、列子查询、行子查询、表子查询
 ```
 
 
 
-
-
 ## 6. 事务（保证数据的安全性）
+
+事务是一组操作的集合，这组操作，要么全部执行成功，要么全部执行失败。
+
+
 
 ### 事务简介
 
-事务 是一组操作的集合，它是一个不可分割的工作单位，事务会把所有的操作作为一个整体一起向系统提交或撤销操作
+事务是一组操作的集合，它是一个不可分割的工作单位，事务会把所有的操作作为一个整体一起向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时失败。
 
-请求，即这些操作要么同时成功，要么同时失败。
-
-**默认MySQL的事务是自动提交的，也就是说，当执行一条DML语句，MySQL会立即隐式的提交事务。**
+**MySQL 的事务默认是自动提交的。即当执行一条 DML 语句，MySQL 会立即隐式的提交事务。**
 
 
 
@@ -795,7 +770,7 @@ rollback;
 
 
 
-### 事务四大特性AIDC
+### 事务四大特性 AIDC
 
 - 原子性（Atomicity）：事务是不可分割的最小操作单元，要么全部成功，要么全部失败。
 - 一致性（Consistency）：执⾏事务前后，数据保持⼀致，多个事务对同⼀个数据读取的结果是相同的。
@@ -810,13 +785,13 @@ rollback;
 | ---------- | ------------------------------------------------------------ |
 | 脏读       | 一个事务读到另外一个事务还没有提交的数据。                   |
 | 不可重复读 | 一个事务先后读取同一条记录，但两次读取的数据不同，称之为不可重复读。 |
-| 幻读       | 一个事务按照条件查询数据时，没有对应的数据行，但是在插入数据时，又发现这行数据已经存在，好像出现了 |
-
-
+| 幻读       | 一个事务按照条件查询数据时，没有对应的数据行，但是在插入数据时，又发现这行数据已经存在，好像出现了。 |
 
 
 
 ### 事务隔离级别
+
+事务隔离级别越高，数据越安全，但是性能越低。
 
 | 隔离级别                | 脏读 | 不可重复读 | 幻读 |
 | ----------------------- | ---- | ---------- | ---- |
@@ -832,51 +807,9 @@ rollback;
 select @@transaction_isolation;
 
 -- 设置事务隔离级别
-set [session | global] transaction isolation level [Read uncommitted | Read committed | Repeatable Read | Serializable]
+set [session | global] transaction isolation level [Read uncommitted | Read committed | 
+                                                    Repeatable Read | Serializable]
 ```
-
-
-
-**注意：事务隔离级别越高，数据越安全，但是性能越低。**
-
-
-
-
-
-### 总结
-
-1. 事务简介
-
-事务是一组操作的集合，这组操作，要么全部执行成功，要么全部执行失败。
-
-2. 事务操作
-
-```sql
--- 开启事务
-start transaction 或 begin;
--- 提交事务
-commit;
--- 回滚事务
-rollback;
-```
-
-
-
-3. 事务四大特性
-
-原子性 Atomicity 、一致性 Consistency 、隔离性 Isolation 、持久性 Durability 
-
-4. 并发事务问题
-
-脏读、不可重复读、幻读
-
-5. 事务隔离级别
-
-Read uncommitted | Read committed | Repeatable Read | Serializable
-
-
-
-
 
 
 
@@ -912,9 +845,7 @@ Read uncommitted | Read committed | Repeatable Read | Serializable
 
 ### 存储引擎简介
 
-存储引擎就是存储数据、建立索引、更新/查询数据等技术的实现方式 。存储引擎是基于表的，而不是基于库的，所以存储引擎也可被
-
-称为表类型。
+存储引擎就是存储数据、建立索引、更新/查询数据等技术的实现方式 。存储引擎是基于表的，而不是基于库的，所以存储引擎也可被称为表类型。
 
 
 
@@ -942,67 +873,43 @@ show engines;
 
 #### InnoDB
 
-介绍：InnoDB是一种兼顾高可靠性和高性能的通用存储引擎，在 MySQL 5.5 之后，InnoDB是默认的 MySQL 存储引擎。
+- 介绍：InnoDB是一种**兼顾高可靠性和高性能**的通用存储引擎，在 MySQL 5.5 之后，InnoDB 是默认的 MySQL 存储引擎。
+- 特点
+  - DML操作遵循ACID模型，支持事务 ；
+  - 行级锁 ，提高并发访问性能；
+  - 支持外键 FOREIGN KEY约束，保证数据的完整性和正确性；
+- 文件
+  - xxx.ibd：xxx代表的是表名，innoDB引擎的每张表都会对应这样一个表空间文件，存储该表的表结构（frm、sdi）、数据和索引。
+  - 参数：innodb_file_per_table
 
-特点：
-
-- DML操作遵循ACID模型，支持事务 ；
-
-- 行级锁 ，提高并发访问性能；
-
-- 支持外键 FOREIGN KEY约束，保证数据的完整性和正确性；
-
-文件：
-
-xxx.ibd：xxx代表的是表名，innoDB引擎的每张表都会对应这样一个表空间文件，存储该表的表结构（frm、sdi）、数据和索引。
-
-参数：innodb_file_per_table
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220331145439040.png)
 
 
 
-
-
 #### MyISAM
 
-介绍：MyISAM是MySQL早期的默认存储引擎。
-
-特点：
-
-- 不支持事务，不支持外键
-
-- 支持表锁，不支持行锁
-
-- 访问速度快
-
-文件：
-
-xxx.sdi：存储表结构信息
-
-xxx.MYD: 存储数据
-
-xxx.MYI: 存储索引
-
+- 介绍：MyISAM是MySQL早期的默认存储引擎。
+- 特点
+  - 不支持事务，不支持外键
+  - 支持表锁，不支持行锁
+  - 访问速度快
+- 文件
+  - xxx.sdi：存储表结构信息
+  - xxx.MYD: 存储数据
+  - xxx.MYI: 存储索引
 
 
 #### Memory
 
-介绍：Memory引擎的表数据是存储在内存中的，由于受到硬件问题、或断电问题的影响，只能将这些表作为临时表或缓存使用。
+- 介绍：Memory引擎的表数据是存储在内存中的，由于受到硬件问题、或断电问题的影响，只能将这些表作为临时表或缓存使用。
+- 特点
+  - 内存存放
+  - hash索引（默认）
+- 文件
+  - xxx.sdi：存储表结构信息
 
-特点：
-
-- 内存存放
-
-- hash索引（默认）
-
-文件
-
-xxx.sdi：存储表结构信息
-
-
-
-![image-20220331145726518](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220331145726518.png)
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220331145726518.png)
 
 
 
@@ -1016,17 +923,17 @@ xxx.sdi：存储表结构信息
 
 性，数据操作除了插入和查询之外，还包含很多的更新、删除操作，那么InnoDB存储引擎是比较合适的选择。
 
-➢ MyISAM ： 如果应用是以读操作和插入操作为主，只有很少的更新和删除操作，并且对事务的完整性、并发性要求不是很高，那
+➢ MyISAM ： 如果应用是**以读操作和插入操作为主**，只有很少的更新和删除操作，并且对事务的完整性、并发性要求不是很高，那
 
 么选择这个存储引擎是非常合适的。
 
-➢ MEMORY：将所有数据保存在内存中，访问速度快，通常用于临时表及缓存。MEMORY的缺陷就是对表的大小有限制，太大的表
+➢ MEMORY：将所有数据保存在内存中，访问速度快，通常用于**临时表及缓存**。MEMORY的缺陷就是对表的大小有限制，太大的表
 
 无法缓存在内存中，而且无法保障数据的安全性。
 
 
 
-## 8. 索引index ⭐️
+## 8. 索引 index ⭐️
 
 ### 索引概述、优缺点
 
