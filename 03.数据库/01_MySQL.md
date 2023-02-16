@@ -912,9 +912,7 @@ Read uncommitted | Read committed | Repeatable Read | Serializable
 
 ### 存储引擎简介
 
-存储引擎就是存储数据、建立索引、更新/查询数据等技术的实现方式 。存储引擎是基于表的，而不是基于库的，所以存储引擎也可被
-
-称为表类型。
+存储引擎就是存储数据、建立索引、更新/查询数据等技术的实现方式 。存储引擎是基于表的，而不是基于库的，所以存储引擎也可被称为表类型。
 
 
 
@@ -1131,7 +1129,7 @@ MySQL索引数据结构对经典的B+Tree进行了优化。在原B+Tree的基础
 
 #### Hash
 
-哈希索引就是采用一定的hash算法，将键值换算成新的hash值，映射到对应的槽位上，然后存储在hash表中。
+哈希索引就是采用一定的 hash 算法，将键值换算成新的hash值，映射到对应的槽位上，然后存储在hash表中。
 
 如果两个(或多个)键值，映射到一个相同的槽位上，他们就产生了hash冲突（也称为hash碰撞），可以通过链表来解决。
 
@@ -2988,13 +2986,11 @@ source /root/xxx.sql
 
 # 运维篇
 
-## 14. 日志（各种日志以及日志的作用）
+## 14. 日志（类别、作用）
 
 ### 14.1 错误日志
 
-错误日志是 MySQL 中最重要的日志之一，它记录了当 mysqld 启动和停止时，以及服务器在运行过程中发生任何严重错误时的相关信
-
-息。当数据库出现任何故障导致无法正常使用时，建议首先查看此日志。
+错误日志是 MySQL 中最重要的日志之一，它记录了当 mysqld 启动和停止时，以及服务器在运行过程中发生任何严重错误时的相关信息。当数据库出现任何故障导致无法正常使用时，建议首先查看此日志。
 
 
 
@@ -3012,11 +3008,11 @@ show variables like %log_error%;
 
 #### 介绍
 
-二进制日志（BINLOG）记录了所有的 DDL（数据定义语言）语句和 DML（数据操纵语言）语句，**但不包括数据查询（SELECT、**
+二进制日志（BINLOG）记录了所有的 DDL（数据定义语言）语句和 DML（数据操纵语言）语句，**但不包括数据查询（SELECT、SHOW）语句。**
 
-**SHOW）语句。**
+作用：①. 灾难时的数据恢复；②. MySQL的主从复制。
 
-作用：①. 灾难时的数据恢复；②. MySQL的主从复制。在MySQL8版本中，默认二进制日志是开启着的，涉及到的参数如下：
+在MySQL8版本中，默认二进制日志是开启着的，涉及到的参数如下：
 
 ```sql
 show variables like '%log_bin%';
@@ -3030,21 +3026,19 @@ show variables like '%log_bin%';
 
 #### 日志格式
 
-MySQL服务器中提供了多种格式来记录二进制日志，具体格式及特点如下：
+MySQL 服务器中提供了多种格式来记录二进制日志，具体格式及特点如下：
 
 | 日志格式  | 含义                                                         |
 | --------- | ------------------------------------------------------------ |
 | statement | 基于SQL语句的日志记录，记录的是SQL语句，对数据进行修改的SQL都会记录在日志文件中。 |
 | row       | 基于行的日志记录，记录的是每一行的数据变更。（默认）         |
-| mixed     | 混合了STATEMENT和ROW两种格式，默认采用STATEMENT，在某些特殊情况下会自动切换为ROW进行记录。 |
+| mixed     | 混合了 STATEMENT 和 ROW 两种格式，默认采用STATEMENT，在某些特殊情况下会自动切换为ROW进行记录。 |
 
 
 
 ```sql
 show variables like '%binlog_format%';
 ```
-
-
 
 row：如果使用update更新了3行，那么会记录这三行数据变化前后的样子，使用如下命令查看
 
@@ -3066,7 +3060,7 @@ mysqlbinlog binlog.000003
 
 #### 日志查看
 
-由于日志是以二进制方式存储的，不能直接读取，需要通过二进制日志查询工具 mysqlbinlog 来查看，具体语法：
+由于日志是以二进制方式存储的，不能直接读取，需要通过二进制日志查询工具 `mysqlbinlog` 来查看，具体语法：
 
 ```bash
 mysqlbinlog [参数选项] logfilename
@@ -3084,9 +3078,7 @@ mysqlbinlog [参数选项] logfilename
 
 #### 日志删除
 
-对于比较繁忙的业务系统，每天生成的binlog数据巨大，如果长时间不清除，将会占用大量磁盘空间。可以通过以下几种方式清理日
-
-志：
+对于比较繁忙的业务系统，每天生成的 binlog 数据巨大，如果长时间不清除，将会占用大量磁盘空间。可以通过以下几种方式清理日志：
 
 | 指令                                             | 含义                                                         |
 | ------------------------------------------------ | ------------------------------------------------------------ |
@@ -3104,13 +3096,11 @@ show variables like '%binlog_expire_logs_seconds%';
 
 
 
-
-
 ### 14.3 查询日志（记录所有sql语句，默认不开启）
 
-查询日志中记录了客户端的所有操作语句，而二进制日志不包含查询数据的SQL语句。默认情况下， 查询日志是未开启
+记录了客户端的所有操作语句，而二进制日志不包含查询数据的SQL语句。
 
-的。如果需要开启查询日志，可以设置以下配置 ：
+默认未开启。开启查询日志配置如下：
 
 ```sql
 show variables like '%general%';
@@ -3124,13 +3114,9 @@ general_log_file=mysql_query.log
 
 
 
-
-
 ### 14.4 慢查询日志
 
-慢查询日志记录了所有执行时间超过参数 `long_query_time` 设置值并且扫描记录数不小于 min_examined_row_limit
-
-的所有的SQL语句的日志，默认未开启。long_query_time 默认为 10 秒，最小为 0， 精度可以到微秒。
+慢查询日志记录了所有执行时间超过参数 `long_query_time` 设置值并且扫描记录数不小于min_examined_row_limit 的所有的SQL语句的日志，默认未开启。long_query_time 默认为 10 秒，最小为 0，精度可以到微秒。
 
 ```bash
 # 开启慢查询日志
@@ -3141,11 +3127,7 @@ long_query_time=2
 
 
 
-
-
-默认情况下，不会记录管理语句，也不会记录不使用索引进行查找的查询。可以使用log_slow_admin_statements和
-
-log_queries_not_using_indexes更改此行为，如下所述。
+默认情况下，不会记录管理语句，也不会记录不使用索引进行查找的查询。可以使用log_slow_admin_statements 和 log_queries_not_using_indexes更改此行为，如下：
 
 ```sql
 -- 记录执行较慢的管理语句
@@ -3156,19 +3138,13 @@ log_queries_not_using_indexes=1
 
 
 
-
-
-
-
 ## 15. 主从复制（概念、原理、搭建集群）
 
 ### 15.1 概述
 
 
 
-主从复制是指将主数据库的DDL 和 DML 操作通过二进制日志传到从库服务器中，然后在从库上对这些日志重新执行（也叫重做），
-
-从而使得从库和主库的数据保持同步。
+主从复制是指将主数据库的DDL 和 DML 操作通过二进制日志传到从库服务器中，然后在从库上对这些日志重新执行（也叫重做），从而使得从库和主库的数据保持同步。
 
 
 
@@ -3194,7 +3170,7 @@ MySQL支持一台主库同时向多台从库进行复制， 从库同时也可�
 
 2. 从库读取主库的二进制日志文件 Binlog ，写入到从库的中继日志 Relay Log 。
 
-3. slave重做中继日志中的事件，将改变反映它自己的数据。
+3. slave 重做中继日志中的事件，将改变反映它自己的数据。
 
 
 
@@ -3264,8 +3240,6 @@ binlog_ignore_db : 指定不需要同步的数据库
 
 #### 配置从库
 
-
-
 - 修改配置文件 /etc/my.cnf
 
 ```bash
@@ -3284,7 +3258,8 @@ systemctl restart mysqld
 - 登录mysql，设置主库配置
 
 ```sql
-change replication source to source_host 'xxx.xxx', source_user='xxx', source_password='xxx', source_log_file='xxx', source_log_pos='xxx';
+change replication source to source_host 'xxx.xxx', source_user='xxx', source_password='xxx', source_log_file='xxx', 
+source_log_pos='xxx';
 ```
 
 
@@ -3292,7 +3267,8 @@ change replication source to source_host 'xxx.xxx', source_user='xxx', source_pa
 上述是8.0.23中的语法。如果是之前版本，执行如下sql
 
 ```sql
-change master to master_host 'xxx.xxx', master_user='xxx', master_password='xxx', master_log_file='xxx', master_log_pos='xxx';
+change master to master_host 'xxx.xxx', master_user='xxx', 
+master_password='xxx', master_log_file='xxx', master_log_pos='xxx';
 ```
 
 
@@ -3314,18 +3290,12 @@ start replica;  # 8.0.22之后
 start slave;  # 8.0.22之前
 ```
 
-
-
-
-
 -  查看主从同步状态
 
 ```bash
 show replica status;  # 8.0.22之后
 show slave status;  # 8.0.22之前
 ```
-
-
 
 
 
@@ -3342,17 +3312,16 @@ show slave status;  # 8.0.22之前
 
 
 
-
-<hr>
-
 ```bash
 # 概述
 将主库的数据变更同步到从库，从而保证主库和从库数据一致。
 数据备份、失败迁移，读写分离，降低单库读写压力。
+
 # 原理
 ① 主库会把数据变更记录在二进制日志文件binlog中。
 ② 从库连接主库，读取binlog日志，并写入自身中继日志 relaylog。 
 ③ slave重做中继日志，将改变反映它自己的数据。
+
 # 搭建
 ① 准备服务器
 ② 配置主库
@@ -3360,9 +3329,7 @@ show slave status;  # 8.0.22之前
 ④ 测试主从复制
 
 # 思考🤔
-Master主动向Slave发送binlog?还是Slave主动向Master要binlog?
-
-
+Master主动向 Slave 发送 binlog？还是Slave主动向 Master 要 binlog？
 
 https://blog.csdn.net/crty2245/article/details/100238847
 ```
@@ -3385,9 +3352,7 @@ https://blog.csdn.net/crty2245/article/details/100238847
 
 
 
-分库分表的中心思想都是将数据分散存储，使得单一数据库/表的数据量变小来缓解单一数据库的性能问题，从而达到提升数据库性能
-
-的目的。
+分库分表的中心思想都是将数据分散存储，使得单一数据库/表的数据量变小来缓解单一数据库的性能问题，从而达到提升数据库性能的目的。
 
 
 
@@ -3409,21 +3374,16 @@ https://blog.csdn.net/crty2245/article/details/100238847
 
 
 
-- shardingJDBC：基于AOP原理，在应用程序中对本地执行的SQL进行拦截，解析、改写、路由处理。需要自行编码配置实现，只
-
-  支持java语言，性能较高。
+- shardingJDBC：基于AOP原理，在应用程序中对本地执行的SQL进行拦截，解析、改写、路由处理。需要自行编码配置实现，只支持java语言，性能较高。
 
 - MyCat：数据库分库分表中间件，不用调整代码即可实现分库分表，支持多种语言，性能不及前者。
 
 
 
-<hr>
 
 ### Mycat概述
 
-Mycat是开源的、活跃的、基于Java语言编写的MySQL**数据库中间件**。**可以像使用mysql一样来使用mycat**，对于开发人员来说根
-
-本感觉不到mycat的存在。
+Mycat是开源的、活跃的、基于Java语言编写的MySQL**数据库中间件**。**可以像使用mysql一样来使用mycat**，对于开发人员来说根本感觉不到mycat的存在。
 
 
 
@@ -3438,23 +3398,17 @@ Mycat是开源的、活跃的、基于Java语言编写的MySQL**数据库中间�
 
 #### 下载及安装
 
-Mycat是采用java语言开发的开源的数据库中间件，支持Windows和Linux运行环境，下面介绍MyCat的Linux中的环境搭建。我们需要
-
-在准备好的服务器中安装如下软件。
+Mycat 是采用 java 语言开发的开源的数据库中间件，支持 Windows 和 Linux 运行环境，下面介绍MyCat的 Linux中的环境搭建。我们需要在准备好的服务器中安装如下软件。
 
 - MySQL
-
 - Jdk
 - MyCat
-
 
 
 | 服务器         | 安装软件          | 说明                          |
 | -------------- | ----------------- | ----------------------------- |
 | 101.42.229.218 | Jdk、MySQL、MyCat | MyCat中间件服务器、分片服务器 |
 | 39.101.189.62  | MySQL             | 分片服务器                    |
-
-
 
 
 
@@ -3467,12 +3421,14 @@ tar -zxvf Mycat-server-1.6.7.3-release-20210913163959-linux.tar.gz -C /usr/local
 
 
 
-#### 目录结构
+#### Mycat 目录结构
 
-- bin : 存放可执行文件，用于启动停止mycat
-- conf：存放mycat的配置文件
-- lib：存放mycat的项目依赖包（jar）
-- logs：存放mycat的日志文件
+| 文件 | 内容                               |
+| ---- | ---------------------------------- |
+| bin  | 存放可执行文件，用于启动停止 mycat |
+| conf | 配置文件                           |
+| lib  | 项目依赖包（jar）                  |
+| logs | 日志文件                           |
 
 
 
@@ -3482,9 +3438,7 @@ tar -zxvf Mycat-server-1.6.7.3-release-20210913163959-linux.tar.gz -C /usr/local
 
 ### Mycat入门
 
-由于 tb_order 表中数据量很大，磁盘IO及容量都到达了瓶颈，现在需要对 tb_order表进行数据分片，分为三个数据节点，每一个节
-
-点主机位于不同的服务器上, 具体的结构，参考下图：
+由于 tb_order 表中数据量很大，磁盘IO及容量都到达了瓶颈，现在需要对 tb_order表进行数据分片，分为三个数据节点，每一个节点主机位于不同的服务器上, 具体的结构，参考下图：
 
 
 
@@ -3530,7 +3484,7 @@ https://blog.csdn.net/zhangjunfei12103323/article/details/72654308
 
 #### 分片配置（server.xml）
 
-配置mycat的用户及用户的权限信息:
+配置 Mycat 的用户及用户的权限信息:
 
 ```xml
 	<user name="root" defaultAccount="true">
@@ -3559,7 +3513,7 @@ https://blog.csdn.net/zhangjunfei12103323/article/details/72654308
 
 #### 启动服务
 
-切换到Mycat的安装目录，执行如下指令，启动Mycat：
+切换到 Mycat 的安装目录，执行如下指令，启动 Mycat：
 
 ```bash
 # 启动，占用端口号 8066。
