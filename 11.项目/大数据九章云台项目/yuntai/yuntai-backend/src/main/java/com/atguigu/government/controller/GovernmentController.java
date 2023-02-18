@@ -8,6 +8,7 @@ import org.neo4j.driver.AuthTokens;
 import org.neo4j.driver.GraphDatabase;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.DriverManager;
@@ -22,6 +23,7 @@ public class GovernmentController {
      * 计算血缘关系
      */
     @GetMapping("lineage")
+    //@RequestMapping(method = RequestMethod.POST)
     public String getLineage() {
         // 更新血缘图
         var edges = TableLineageService.generateEdges();
