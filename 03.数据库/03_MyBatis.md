@@ -1319,7 +1319,7 @@ List<Emp> getDeptAndEmpByStepTwo(@Param("did") Integer did);
 
 
 
-## 4.4 map集合类型的参数
+## 4.4 map 集合类型的参数
 
 若mapper接口中的方法需要的参数为多个时，此时可以手动创建map集合，将这些数据放在map中
 
@@ -1332,7 +1332,7 @@ List<Emp> getDeptAndEmpByStepTwo(@Param("did") Integer did);
 </select>
 ```
 
-<br>
+
 
 ```java
 @Test
@@ -1353,27 +1353,63 @@ public void checkLoginByMap() {
 
 ## 4.5 实体类对象类型的方法参数
 
-可以使用\${}和#{}，**通过访问实体类对象中的属性名获取属性值**，注意${}需要手动加单引号
-
-```xml
-<!--int insertUser(User user);-->
-<insert id="insertUser">
-	insert into t_user values(null,#{username},#{password},#{age},#{sex},#{email})
-</insert>
-```
-
-<br>
+1. 使用 @Param 注解，则必须使用对象.属性的方式取值。
 
 ```java
-@Test
-public void insertUser() {
-	SqlSession sqlSession = SqlSessionUtils.getSqlSession();
-	ParameterMapper mapper = sqlSession.getMapper(ParameterMapper.class);
-  
-	User user = new User(null,"Tom","123456",12,"男","123@321.com");
-	mapper.insertUser(user);
+@Repository
+public interface DepartmentMemberDao {
+    List<DepartmentMember> findAllByCondition(
+        @Param("departmentMemberListQo") DepartmentMemberListQo departmentMemberListQo);
 }
 ```
+
+
+
+```xml
+<select id="findAllByCondition" resultType="entity.group.DepartmentMember">
+    select <include refid="selectFields"/> from t_department_member
+    <where>
+        <if test='departmentMemberListQo.name != null and departmentMemberListQo.name != ""'>
+            and name like concat('%',#{departmentMemberListQo.name},'%')
+        </if>
+        <if test="departmentMemberListQo.deptId != null">
+            and deptId = #{departmentMemberListQo.deptId}
+        </if>
+    </where>
+</select>
+```
+
+
+
+
+
+2. 不使用 @Param 注解，直接使用属性值即可。
+
+```java
+@Repository
+public interface DepartmentMemberDao {
+    List<DepartmentMember> findAllByCondition(
+		DepartmentMemberListQo departmentMemberListQo);
+}
+```
+
+
+
+```xml
+<select id="findAllByCondition" resultType="entity.group.DepartmentMember">
+    select <include refid="selectFields"/> from t_department_member
+    <where>
+        <if test='name != null and name != ""'>
+            and name like concat('%',#{name},'%')
+        </if>
+        <if test="deptId != null">
+            and deptId = #{deptId}
+        </if>
+    </where>
+</select>
+```
+
+
 
 
 
@@ -2585,9 +2621,40 @@ public void testPageHelper() throws IOException {
 
 
 
+# 9 问题解决
+
+1、error:attempted to return null from a method with a primitive return type (int）
+
+查询结果返回为null，int初始化为0，不能为空。
+
+实质是逻辑错误导致，注意 `deleteTaskDefinitionNotOnline` 方法和 查询关联 code 的顺序 ，如下
+
+```java
+@Transactional
+@Override
+public Map<String, Object> deleteAllTaskDefinition(User loginUser, long projectCode, long code) {
+    Map<String, Object> result = new HashMap<>();
+    //taskDefinitionNotOnlineMapper.deleteTaskDefinitionNotOnline(projectCode, code);
+    // 查询关联code
+    TaskDefinitionNotOnline taskDefinitionNotOnline = taskDefinitionNotOnlineMapper.selectRelationCode(projectCode, code);
+    Long relationCode = taskDefinitionNotOnline.getRelationCode();
+    taskDefinitionNotOnlineMapper.deleteTaskDefinitionNotOnline(projectCode, code);
+    taskDefinitionService.deleteTaskDefinitionByCode(loginUser, projectCode, relationCode);
+
+    putMsg(result, Status.SUCCESS);
+    return result;
+}
+```
 
 
-# 9 写在后面
+
+
+
+
+
+
+
+# 10 写在后面
 
 
 

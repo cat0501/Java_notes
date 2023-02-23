@@ -198,10 +198,13 @@ ThreadPoolExecutor(
 
 ## 三、数据库
 
-### 推荐
+- 01_MySQL笔记-总.md
+- 02_Redis笔记-总.md
+- 03_MyBatis笔记-总.md
 
 
 
+**推荐**
 
 
 - [手写几万行的Mybatis，把原理搞的透透的！（小傅哥）](https://www.bilibili.com/video/BV1nY4y1B7eT?from=search&seid=13067334712884217946&spm_id_from=333.337.0.0)
@@ -211,23 +214,10 @@ ThreadPoolExecutor(
 
 像我们之前完成[手写 Spring](https://mp.weixin.qq.com/s/g7YdIe_FSrk-WE8nQRO3TA)一样，拆解功能、简化流程、渐进实现，让读者能够更容易的学习到最有价值的知识。
 
-<br>
 
 在手写的过程中学习 Mybatis 从解析、绑定、反射、缓存，到回话和事务操作，以及如何与 Spring 进行关联注册 Bean 对象，完成整合部分功能逻辑。通过这些内容的拆解实现，读者伙伴就可以非常清楚的知道这些核心功能都是如何实现的了，以后再阅读 Mybatis 源码也就知道从哪开始到哪结束了。
 
-
-
-### 笔记
-
-- 01_MySQL笔记-总.md
-
-- 02_Redis笔记-总.md
-
-- 03_MyBatis笔记-总.md
-
-
-
-### 总结
+### MySQL
 
 MySQL 隔离级别
 
@@ -240,11 +230,13 @@ MySQL 隔离级别
 
 
 
-Jdbc
+### MyBatis
+
+### Jdbc
 
 
 
-MySQL
+
 
 
 
