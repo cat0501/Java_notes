@@ -20,50 +20,9 @@
 
 
 
-## 推荐⭐
+# 所有笔记
 
-- [Java 学习 + 面试指南（JavaGuide）](https://javaguide.cn/)
-
-- [bugstack 虫洞栈（小傅哥）](https://bugstack.cn/)
-
-![](./img/小傅哥.png)
-
-
-
-- [陌溪的学习笔记](https://gitee.com/moxi159753/LearningNotes)
-
-
-
-- [芋道源码_知识星球](http://svip.iocoder.cn/index/index.html)
-
-- 微信公众号【芋道源码】发送对应关键字
-
-| 项目             | 描述                 | 关键字    |
-| ---------------- | -------------------- | --------- |
-| Dubbo            | 分布式 RPC 服务框架  | github000 |
-| RocketMQ         | 分布式消息队列       | github001 |
-| Sharding-JDBC    | 数据库分库分表中间件 | github002 |
-| MyCAT            | 数据库分库分表中间件 | github003 |
-| Elasti-Job-Lite  | 分布式作业系统       | github004 |
-| Elasti-Job-Cloud | 分布式作业系统       | github005 |
-| TCC-Transaction  | 分布式事务中间件     | github006 |
-| Eureka           | 注册中心             | github007 |
-| Hystrix          | 熔断器               | github008 |
-| SkyWalking       | 分布式追踪 && APM    | github009 |
-| Netty            | 网络应用框架         | github010 |
-| Spring           | J2EE 框架            | github011 |
-| MyBatis          | 数据持久层框架       | github012 |
-| Spring MVC       | MVC 框架             | github014 |
-| Spring Boot      | Spring 应用开发框架  | github015 |
-| JDK              | Java 开发工具包      | github016 |
-
-
-
-# 笔记总结
-
-## 一、Java基础
-
-### 笔记
+## 一、Java 基础
 
 - [00_Typora使用](01.Java语言基础/00_Typora使用.md)
 - [01_Java基础-总](01.Java语言基础/01_Java基础-总.md)
@@ -127,11 +86,10 @@
 
 
 
-### 一点总结
-
-#### JDK 中常用的包有哪些
+### JDK
 
 ```bash
+# 常用的包
 java.lang：这个是系统的基础类；
 java.io：这里面是所有输入输出有关的类，比如文件操作等；
 java.nio：为了完善 io 包中的功能，提高 io 包中性能而写的一个新包；
@@ -142,7 +100,45 @@ java.sql：这个是数据库操作的类。
 
 
 
-#### 常见面试问题
+### 线程池
+
+Java 提供的线程池相关的工具类中，最核心的是 **ThreadPoolExecutor**，其构造函数如下（有 7 个参数）
+
+```java
+
+ThreadPoolExecutor(
+  int corePoolSize,
+  int maximumPoolSize,
+  long keepAliveTime,
+  TimeUnit unit,
+  BlockingQueue<Runnable> workQueue,
+  ThreadFactory threadFactory,
+  RejectedExecutionHandler handler) 
+```
+
+
+
+| 序号 | 参数            | 说明                                             |
+| ---- | --------------- | ------------------------------------------------ |
+| 1    | corePoolSize    | 核心线程数量                                     |
+| 2    | maximumPoolSize | 最大线程数量                                     |
+| 3    | keepAliveTime   | 当前线程数大于corePoolSize时，空闲线程的存活时间 |
+| 4    | unit            | keepAliveTime的时间单位                          |
+| 5    | workQueue       | 任务队列，被提交但尚未被执行的任务存放的地方     |
+| 6    | threadFactory   | 线程工厂，用于创建线程                           |
+| 7    | handler         | 任务拒绝策略                                     |
+
+
+
+### JVM
+
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220605131230324-20220605165328496.png)
+
+
+
+
+
+### 常见面试问题
 
 ```bash
 # 8种基本数据类型
@@ -172,47 +168,9 @@ java.sql：这个是数据库操作的类。
 
 
 
-#### 线程池
-
-Java 提供的线程池相关的工具类中，最核心的是 **ThreadPoolExecutor**，其构造函数如下（有 7 个参数）
-
-```java
-
-ThreadPoolExecutor(
-  int corePoolSize,
-  int maximumPoolSize,
-  long keepAliveTime,
-  TimeUnit unit,
-  BlockingQueue<Runnable> workQueue,
-  ThreadFactory threadFactory,
-  RejectedExecutionHandler handler) 
-```
-
-<br>
-
-| 序号 | 参数            | 说明                                             |
-| ---- | --------------- | ------------------------------------------------ |
-| 1    | corePoolSize    | 核心线程数量                                     |
-| 2    | maximumPoolSize | 最大线程数量                                     |
-| 3    | keepAliveTime   | 当前线程数大于corePoolSize时，空闲线程的存活时间 |
-| 4    | unit            | keepAliveTime的时间单位                          |
-| 5    | workQueue       | 任务队列，被提交但尚未被执行的任务存放的地方     |
-| 6    | threadFactory   | 线程工厂，用于创建线程                           |
-| 7    | handler         | 任务拒绝策略                                     |
 
 
-
-#### JVM
-
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220605131230324-20220605165328496.png)
-
-
-
-
-
-
-
-## 二、spring家族框架
+## 二、Spring
 
 
 
@@ -221,20 +179,6 @@ ThreadPoolExecutor(
 
 
 
-
-## 三、分布式&微服务
-
-### 推荐
-
-
-
-
-
-### 笔记
-
-
-
-### 总结
 
 
 
@@ -250,46 +194,9 @@ ThreadPoolExecutor(
 
 
 
-## 四、数据结构与算法（加油⭐️）
-
-[leetcode](https://leetcode-cn.com/problemset/all/)
-
-[labuladong 的算法小抄](https://labuladong.gitee.io/algo/)
 
 
-
-| 阶段     | 练剑                                                         | 学习算法的过程                                               |
-| -------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| 第⼀阶段 | ⻘光利剑，凌厉刚猛，⽆坚不摧，弱冠前以之与河朔群雄争锋。     | 虽然算法技巧的储备⽐较匮乏，刷题⽐较吃⼒，但每每遇到新的算法技巧，都会⼤呼精妙，学习 的乐趣会抵消挫败感。 |
-| 第⼆阶段 | 紫薇软剑，三⼗岁前所⽤，误伤义⼠不祥，悔恨⽆已，乃弃之深⾕。 | 对常⻅的算法技巧都已有了⼀定的知识储备，却苦于⽆法⾃如运⽤这些技巧，看到⼀道算法题很 难洞悉其本质，⽆法转化成⾃⼰熟悉的题型来解决。 |
-| 第三阶段 | ⽞铁剑，重剑⽆锋，⼤巧不⼯。四⼗岁前恃之横⾏天下。           | 各种算法技巧已⽐较纯熟，理解到计算机算法的本质即为穷举，看到⼀道题⽬，⼤致就知道要⽤ 什么技巧来解决。 |
-| 第四阶段 | 四⼗岁后，不滞于物，草⽊⽵⽯均可为剑。⾃此精修，渐进于⽆剑胜有剑之境。 | 随着持续刷题精进，通汇贯通，不只把算法当做⾯试的⼯具，进⽽将算法融⼊⼯作和⽣活，解决 实际问题。 |
-
-
-
-
-
-## 五、环境配置
-
-- 01_Linux笔记-总
-
-- docker
-
-
-
-## 六、前端基础
-
-
-
-
-
-## 七、项目一mall
-
-
-
-
-
-## 八、数据库
+## 三、数据库
 
 ### 推荐
 
@@ -339,41 +246,111 @@ Jdbc
 
 MySQL
 
-## 九、面试
 
 
 
 
 
 
+## 四、数据结构与算法⭐️
+
+[leetcode](https://leetcode-cn.com/problemset/all/)
+
+[labuladong 的算法小抄](https://labuladong.gitee.io/algo/)
+
+
+
+| 阶段     | 练剑                                                         | 学习算法的过程                                               |
+| -------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 第⼀阶段 | ⻘光利剑，凌厉刚猛，⽆坚不摧，弱冠前以之与河朔群雄争锋。     | 虽然算法技巧的储备⽐较匮乏，刷题⽐较吃⼒，但每每遇到新的算法技巧，都会⼤呼精妙，学习 的乐趣会抵消挫败感。 |
+| 第⼆阶段 | 紫薇软剑，三⼗岁前所⽤，误伤义⼠不祥，悔恨⽆已，乃弃之深⾕。 | 对常⻅的算法技巧都已有了⼀定的知识储备，却苦于⽆法⾃如运⽤这些技巧，看到⼀道算法题很 难洞悉其本质，⽆法转化成⾃⼰熟悉的题型来解决。 |
+| 第三阶段 | ⽞铁剑，重剑⽆锋，⼤巧不⼯。四⼗岁前恃之横⾏天下。           | 各种算法技巧已⽐较纯熟，理解到计算机算法的本质即为穷举，看到⼀道题⽬，⼤致就知道要⽤ 什么技巧来解决。 |
+| 第四阶段 | 四⼗岁后，不滞于物，草⽊⽵⽯均可为剑。⾃此精修，渐进于⽆剑胜有剑之境。 | 随着持续刷题精进，通汇贯通，不只把算法当做⾯试的⼯具，进⽽将算法融⼊⼯作和⽣活，解决 实际问题。 |
 
 
 
 
 
-## 十一、项目二litemall（进行中）
+## 五、应用框架
 
-> 完整资料备份至阿里云盘。
+- 01_Linux笔记-总
 
-
-
-
+- docker
 
 
 
-
-
-## 十二、项目三pinda_authority
-
-
-
-## 十三、
+## 六、前端开发
 
 
 
 
 
-# 书籍阅读
+## 七、计算机基础
+
+
+
+
+
+## 八、面试
+
+
+
+## 九、杂记&其它项目
+
+
+
+
+
+## 十一、项目
+
+
+
+
+
+# 推荐参考⭐
+
+
+
+## 平台
+
+- [Java 学习 + 面试指南（JavaGuide）](https://javaguide.cn/)
+
+- [bugstack 虫洞栈（小傅哥）](https://bugstack.cn/)
+
+![](./img/小傅哥.png)
+
+
+
+- [陌溪的学习笔记](https://gitee.com/moxi159753/LearningNotes)
+
+
+
+- [芋道源码_知识星球](http://svip.iocoder.cn/index/index.html)
+
+- 微信公众号【芋道源码】发送对应关键字
+
+| 项目             | 描述                 | 关键字    |
+| ---------------- | -------------------- | --------- |
+| Dubbo            | 分布式 RPC 服务框架  | github000 |
+| RocketMQ         | 分布式消息队列       | github001 |
+| Sharding-JDBC    | 数据库分库分表中间件 | github002 |
+| MyCAT            | 数据库分库分表中间件 | github003 |
+| Elasti-Job-Lite  | 分布式作业系统       | github004 |
+| Elasti-Job-Cloud | 分布式作业系统       | github005 |
+| TCC-Transaction  | 分布式事务中间件     | github006 |
+| Eureka           | 注册中心             | github007 |
+| Hystrix          | 熔断器               | github008 |
+| SkyWalking       | 分布式追踪 && APM    | github009 |
+| Netty            | 网络应用框架         | github010 |
+| Spring           | J2EE 框架            | github011 |
+| MyBatis          | 数据持久层框架       | github012 |
+| Spring MVC       | MVC 框架             | github014 |
+| Spring Boot      | Spring 应用开发框架  | github015 |
+| JDK              | Java 开发工具包      | github016 |
+
+
+
+## 书籍
 
 - 《Offer来了 Java面试核心知识点精讲 原理篇》 <u>进行中</u>
   - JVM
@@ -419,7 +396,7 @@ MySQL
 
 
 
-# 优秀文章记录
+## 优秀文章记录
 
 
 

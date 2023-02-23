@@ -84,10 +84,10 @@
 
 ## 特性
 
-1. MyBatis 是支持定制化 SQL、存储过程以及高级映射的优秀的持久层框架
-2. MyBatis 避免了几乎所有的 JDBC 代码和手动设置参数以及获取结果集
-3. MyBatis可以使用简单的XML或注解用于配置和原始映射，将接口和Java的POJO（Plain Old Java Objects，普通的Java对象）映射成数据库中的记录
-4. MyBatis 是一个 半自动的ORM（Object Relation Mapping）框架
+1. MyBatis 是支持定制化 SQL、存储过程以及高级映射的优秀的持久层框架；
+2. MyBatis 避免了几乎所有的 JDBC 代码和手动设置参数以及获取结果集；
+3. MyBatis 可以使用简单的 XML 或注解用于配置和原始映射，将接口和 Java 的 POJO（Plain Old Java Objects，普通的Java对象）映射成数据库中的记录；
+4. MyBatis 是一个 半自动的 ORM（Object Relation Mapping）框架。
 
 
 
@@ -104,15 +104,13 @@
   - 基于全映射的全自动框架，大量字段的 POJO 进行部分映射时比较困难。  
   - 反射操作太多，导致数据库性能下降
 - MyBatis
-  - 轻量级，性能出色  
-  - SQL 和 Java 编码分开，功能边界清晰。Java代码专注业务、SQL语句专注数据  
-  - 开发效率稍逊于HIbernate，但是完全能够接受
+  - 轻量级，性能出色； 
+  - SQL 和 Java 编码分开，功能边界清晰。Java代码专注业务、SQL语句专注数据 ； 
+  - 开发效率稍逊于HIbernate，但是完全能够接受。
 
 
 
 ## 搭建
-
-### 开发环境
 
 - IDE：idea 2019.2  
 - 构建工具：maven 3.5.4  
@@ -135,7 +133,7 @@
 
 
 
-### （1）创建maven工程
+### 1）创建 maven 工程
 
 - 打包方式：jar
 - 引入依赖
@@ -167,13 +165,11 @@
 
 
 
-### （2）创建MyBatis的核心配置文件
+### 2）创建 MyBatis 的核心配置文件
 
-- 习惯上命名为`mybatis-config.xml`，这个文件名仅仅只是建议，并非强制要求。
-  - 将来整合Spring之后，这个配置文件可以省略，所以大家操作时可以直接复制、粘贴。
-
-- 主要用于**配置连接数据库的环境**以及**MyBatis的全局配置信息**
-- 存放的位置是`src/main/resources`目录下
+- 习惯命名为 `mybatis-config.xml`，但只是建议，并非强制要求。整合Spring之后，这个配置文件可以省略。
+- 主要用于配置 连接数据库的环境 和 MyBatis 的全局配置信息。
+- 存放的位置是 `src/main/resources` 目录下。
 
 
 
@@ -203,9 +199,9 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 </configuration>
 ```
 
-### （3）创建mapper接口
+### 3）创建mapper接口
 
-MyBatis中的mapper接口相当于以前的dao。但是区别在于，mapper仅仅是接口，**我们不需要提供实现类**
+MyBatis 中的 mapper 接口相当于以前的 dao。区别在于，mapper 仅仅是接口，**不需要提供实现类。**
 
 ```java
 package com.atguigu.mybatis.mapper;  
@@ -218,19 +214,21 @@ public interface UserMapper {
 }
 ```
 
-#### 最佳实践中，通常一个 XML 映射文件，都会写一个 Mapper 接口与之对应。请问，这个 Mapper 接口的工作原理是什么？Mapper 接口里的方法，参数不同时，方法能重载吗？（京东）
+
+
+**问题1：最佳实践中，通常一个 XML 映射文件，都会写一个 Mapper 接口与之对应。请问，这个 Mapper 接口的工作原理是什么？Mapper 接口里的方法，参数不同时，方法能重载吗？（京东）**
 
 Mapper 接口，对应的关系如下：
 
-- 接口的全限名，就是映射文件中的 `"namespace"` 的值。
-- 接口的方法名，就是映射文件中 MappedStatement 的 `"id"` 值。
+- 接口的全限名，就是映射文件中的 `"namespace"` 的值；
+- 接口的方法名，就是映射文件中 MappedStatement 的 `"id"` 值；
 - 接口方法内的参数，就是传递给 SQL 的参数。
 
 
 
 Mapper 接口是没有实现类的，当调用接口方法时，接口全限名 + 方法名拼接字符串作为 key 值，可唯一定位一个对应的 MappedStatement 。举例：`com.mybatis3.mappers.StudentDao.findStudentById` ，可以唯一找到 `"namespace"` 为 `com.mybatis3.mappers.StudentDao` 下面 `"id"` 为 `findStudentById` 的 MappedStatement 。
 
-<br>
+
 
 总结来说，在 Mybatis 中，每一个 `<select />`、`<insert />`、`<update />`、`<delete />` 标签，都会被解析为一个 MappedStatement 对象。
 
@@ -256,17 +254,19 @@ public void select(String statement, Object parameter, RowBounds rowBounds, Resu
 
 Mapper 接口里的方法，**是不能重载的**，因为是**全限名 + 方法名**的保存和寻找策略。😈 所以有时，想个 Mapper 接口里的方法名，还是蛮闹心的，嘿嘿。
 
-#### Mapper 接口绑定有几种实现方式,分别是怎么实现的?
+
+
+**问题2：Mapper 接口绑定有几种实现方式,分别是怎么实现的?**
 
 - （1）通过 **XML** 里面写 SQL 来绑定。在这种情况下，要指定 XML 映射文件里面的 `"namespace"` 必须为接口的全路径名。
 - （2）通过**注解**绑定，就是在接口的方法上面加上 `@Select`、`@Update`、`@Insert`、`@Delete` 注解，里面包含 SQL 语句来绑定。
 - （3）是第二种的特例，也是通过**注解**绑定，在接口的方法上面加上 `@SelectProvider`、`@UpdateProvider`、`@InsertProvider`、`@DeleteProvider` 注解，通过 Java 代码，生成对应的动态 SQL 。
 
-<br>
-
 实际场景下，最最最推荐的是**第一种**方式。因为，SQL 通过注解写在 Java 代码中，会非常杂乱。而写在 XML 中，更加有整体性，并且可以更加方便的使用 OGNL 表达式。
 
-### （4）创建MyBatis的映射文件
+
+
+### 4）创建MyBatis的映射文件
 
 - 相关概念：ORM（Object Relationship Mapping）对象关系映射。  
   - 对象：Java的实体类对象  
@@ -279,7 +279,7 @@ Mapper 接口里的方法，**是不能重载的**，因为是**全限名 + 方�
 | 属性     | 字段/列    |
 | 对象     | 记录/行    |
 
-<br>
+
 
 **映射文件的命名规则：**
 
@@ -317,7 +317,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 
-#### Mybatis 的 XML Mapper文件中，不同的 XML 映射文件，id 是否可以重复？
+**问题1：Mybatis 的 XML Mapper文件中，不同的 XML 映射文件，id 是否可以重复？**
 
 要看是否配置了namespace。毕竟`"namespace"` 不是必须的，只是最佳实践而已。`namespace + id` 是作为 `Map<String, MappedStatement>` 的 key 使用的。
 
@@ -326,11 +326,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 - 如果没有配置 `"namespace"` ，那么 id 不能重复。
   -  id 重复会导致数据互相覆盖。
 
-#### 如何获取自动生成的(主)键值?
 
-不同的数据库，获取自动生成的(主)键值的方式是不同的。
 
-MySQL 有两种方式，其中方式一较为常用。
+**问题2：如何获取自动生成的(主)键值?**
+
+不同的数据库，获取自动生成的主键值的方式是不同的。MySQL 有两种方式，其中方式一较为常用。Oracle 有两种方式，序列和触发器。 
 
 ```xml
 // 方式一，使用 useGeneratedKeys + keyProperty 属性
@@ -350,18 +350,16 @@ MySQL 有两种方式，其中方式一较为常用。
 </insert>
 ```
 
-Oracle 有两种方式，**序列**和**触发器**。
 
 
+### 5）通过junit测试功能
 
-### （5）通过junit测试功能
-
-- SqlSession：代表Java程序和**数据库**之间的**会话**。（HttpSession是Java程序和浏览器之间的会话）
+- SqlSession：代表 Java 程序和**数据库**之间的**会话**。（HttpSession是Java程序和浏览器之间的会话）
 - SqlSessionFactory：是生产 SqlSession 的 工厂。
   - 工厂模式：如果创建某一个对象，使用的过程基本固定，那么我们就可以把创建这个对象的相关代码封装到一个“工厂类”中，以后都使用这个工厂类来“生产”我们需要的对象
 
 
-<br>
+
 
 `SqlSessionFactoryBuilder` `SqlSessionFactory` `SqlSession` `UserMapper`
 
@@ -383,7 +381,8 @@ SqlSession sqlSession = sqlSessionFactory.openSession(true);
 //通过代理模式创建UserMapper接口的 【代理实现类对象】
 UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
 
-//调用UserMapper接口中的方法，就可以根据UserMapper的全类名匹配元素文件，通过调用的方法名匹配映射文件中的SQL标签，并执行标签中的SQL语句
+//调用UserMapper接口中的方法，就可以根据UserMapper的全类名匹配元素文件，通过调用的方法名匹配映射文件中的SQL标签，
+//并执行标签中的SQL语句
 int result = userMapper.insertUser();
 
 //提交事务
@@ -394,9 +393,9 @@ System.out.println("result:" + result);
 
 
 
-### （6）加入log4j日志功能
+### 6）加入log4j日志功能
 
-1. 加入依赖
+1. 添加依赖
 
 ```xml
 <!-- log4j日志 -->
@@ -407,9 +406,9 @@ System.out.println("result:" + result);
 </dependency>
 ```
 
-2. 加入log4j的配置文件
+2. 添加 log4j 的配置文件
 
-- log4j的配置文件名为`log4j.xml`，存放的位置是`src/main/resources`目录下
+- log4j 的配置文件名为`log4j.xml`，存放的位置是`src/main/resources`目录下
 - 日志的级别：FATAL(致命) > ERROR(错误) > WARN(警告) > INFO(信息) > DEBUG(调试) 从左到右打印的内容越来越详细
 
 ```xml
@@ -548,7 +547,7 @@ plugins、environments、databaseIdProvider、mappers
 
 通过`insert` `delete` `update` `select` 标签。
 
-<br>
+
 
 1. 添加
 
@@ -595,7 +594,7 @@ plugins、environments、databaseIdProvider、mappers
    </select>
    ```
 
-<br>
+
 
 注意：
 
@@ -1269,7 +1268,9 @@ List<Emp> getDeptAndEmpByStepTwo(@Param("did") Integer did);
 
 ## 4.2 单个字面量类型的方法参数
 
-可以使用\${}和#{}以任意的名称（最好见名识意）获取参数的值，注意${}需要手动加单引号
+可以使用 \${}和#{}以任意的名称（最好见名识意）获取参数的值，注意${}需要手动加单引号
+
+
 
 ```xml
 <!--User getUserByUsername(String username);-->
@@ -1451,7 +1452,7 @@ xml中
 </select>
 ```
 
-<br>
+
 
 ```java
 @Test
@@ -1467,8 +1468,9 @@ public void checkLoginByParam() {
 
 建议分成两种情况进行处理：
 
-1. 实体类类型的参数
-2. 使用@Param标识参数
+1. 实体类类型的参数；
+2. 使用 @Param 标识参数。
+
 
 
 # 5 动态SQL
@@ -1649,8 +1651,6 @@ public void getEmpByChoose() {
 
 
 
-<br>
-
 .xml
 
 ```xml
@@ -1706,7 +1706,7 @@ public void deleteMoreByArray() {
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/foreach%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C1.png)
 
-<br>
+
 
 ```java
 @Test
@@ -2451,11 +2451,9 @@ mapper.updateByPrimaryKeySelective(new Emp(2,"admin2",22,null,"456@qq.com",3));
 
 
 
-# 8 分页插件
+# 8 分页插件  pagehelper
 
-## 分页插件使用步骤
-
-### 添加依赖
+- 添加依赖
 
 ```xml
 <!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper -->
@@ -2466,9 +2464,9 @@ mapper.updateByPrimaryKeySelective(new Emp(2,"admin2",22,null,"456@qq.com",3));
 </dependency>
 ```
 
-### 配置分页插件
+- 配置
 
-在MyBatis的核心配置文件（mybatis-config.xml）中配置插件
+在 MyBatis 的核心配置文件（mybatis-config.xml）中配置插件
 
 ```xml
 <plugins>
@@ -2479,14 +2477,11 @@ mapper.updateByPrimaryKeySelective(new Emp(2,"admin2",22,null,"456@qq.com",3));
 
 
 
-## 分页插件的使用
+- 开启分页功能
 
-### 开启分页功能
+在查询功能之前使用 `PageHelper.startPage(int pageNum, int pageSize)` 开启分页功能，
 
-在查询功能之前使用`PageHelper.startPage(int pageNum, int pageSize)`开启分页功能
-
-- pageNum：当前页的页码  
-- pageSize：每页显示的条数
+其中 `pageNum` 是当前页的页码  、`pageSize` 是每页显示的条数。
 
 
 
@@ -2498,7 +2493,7 @@ public void testPageHelper() throws IOException {
 	SqlSessionFactory sqlSessionFactory = sqlSessionFactoryBuilder.build(is);
 	SqlSession sqlSession = sqlSessionFactory.openSession(true);
 	EmpMapper mapper = sqlSession.getMapper(EmpMapper.class);
-	//访问第一页，每页四条数据
+	// 访问第一页，每页四条数据
 	PageHelper.startPage(1,4);
 	List<Emp> emps = mapper.selectByExample(null);
 	emps.forEach(System.out::println);
@@ -2509,91 +2504,84 @@ public void testPageHelper() throws IOException {
 
 
 
+- 分页相关数据
+
+  - 方法一：直接输出
+
+  ```java
+  @Test
+  public void testPageHelper() throws IOException {
+  	InputStream is = Resources.getResourceAsStream("mybatis-config.xml");
+  	SqlSessionFactoryBuilder sqlSessionFactoryBuilder = new SqlSessionFactoryBuilder();
+  	SqlSessionFactory sqlSessionFactory = sqlSessionFactoryBuilder.build(is);
+  	SqlSession sqlSession = sqlSessionFactory.openSession(true);
+  	EmpMapper mapper = sqlSession.getMapper(EmpMapper.class);
+  	//访问第一页，每页四条数据
+  	Page<Object> page = PageHelper.startPage(1, 4);
+  	List<Emp> emps = mapper.selectByExample(null);
+  	//在查询到List集合后，打印分页数据
+  	System.out.println(page);
+  }
+  ```
+
+  分页相关数据
+
+  ```java
+  Page{count=true, pageNum=1, pageSize=4, startRow=0, endRow=4, total=8, pages=2, reasonable=false, pageSizeZero=false}[Emp{eid=1, empName='admin', age=22, sex='男', email='456@qq.com', did=3}, Emp{eid=2, empName='admin2', age=22, sex='男', email='456@qq.com', did=3}, Emp{eid=3, empName='王五', age=12, sex='女', email='123@qq.com', did=3}, Emp{eid=4, empName='赵六', age=32, sex='男', email='123@qq.com', did=1}]
+  ```
+
+  - 方法二：使用PageInfo
+
+    在查询获取list集合之后，使用`PageInfo<T> pageInfo = new PageInfo<>(List<T> list, intnavigatePages)`获取分页相关数据
+
+    其中，list 是分页之后的数据  、navigatePages 是导航分页的页码数
+
+    ```java
+    @Test
+    public void testPageHelper() throws IOException {
+        InputStream is = Resources.getResourceAsStream("mybatis-config.xml");
+        SqlSessionFactoryBuilder sqlSessionFactoryBuilder = new SqlSessionFactoryBuilder();
+        SqlSessionFactory sqlSessionFactory = sqlSessionFactoryBuilder.build(is);
+        SqlSession sqlSession = sqlSessionFactory.openSession(true);
+        EmpMapper mapper = sqlSession.getMapper(EmpMapper.class);
+        PageHelper.startPage(1, 4);
+        List<Emp> emps = mapper.selectByExample(null);
+      
+        PageInfo<Emp> page = new PageInfo<>(emps,5);
+        System.out.println(page);
+    }
+    ```
+
+    
+
+    ```java
+    PageInfo{
+    pageNum=1, pageSize=4, size=4, startRow=1, endRow=4, total=8, pages=2, 
+    list=Page{count=true, pageNum=1, pageSize=4, startRow=0, endRow=4, total=8, pages=2, reasonable=false, pageSizeZero=false}[Emp{eid=1, empName='admin', age=22, sex='男', email='456@qq.com', did=3}, Emp{eid=2, empName='admin2', age=22, sex='男', email='456@qq.com', did=3}, Emp{eid=3, empName='王五', age=12, sex='女', email='123@qq.com', did=3}, Emp{eid=4, empName='赵六', age=32, sex='男', email='123@qq.com', did=1}], 
+    prePage=0, nextPage=2, isFirstPage=true, isLastPage=false, hasPreviousPage=false, hasNextPage=true, navigatePages=5, navigateFirstPage=1, navigateLastPage=2, navigatepageNums=[1, 2]}
+    ```
+
+    其中list中的数据等同于方法一中直接输出的page数据
 
 
 
 
-### 分页相关数据
 
-#### 方法一：直接输出
-
-```java
-@Test
-public void testPageHelper() throws IOException {
-	InputStream is = Resources.getResourceAsStream("mybatis-config.xml");
-	SqlSessionFactoryBuilder sqlSessionFactoryBuilder = new SqlSessionFactoryBuilder();
-	SqlSessionFactory sqlSessionFactory = sqlSessionFactoryBuilder.build(is);
-	SqlSession sqlSession = sqlSessionFactory.openSession(true);
-	EmpMapper mapper = sqlSession.getMapper(EmpMapper.class);
-	//访问第一页，每页四条数据
-	Page<Object> page = PageHelper.startPage(1, 4);
-	List<Emp> emps = mapper.selectByExample(null);
-	//在查询到List集合后，打印分页数据
-	System.out.println(page);
-}
-```
-
-分页相关数据
-
-```java
-Page{count=true, pageNum=1, pageSize=4, startRow=0, endRow=4, total=8, pages=2, reasonable=false, pageSizeZero=false}[Emp{eid=1, empName='admin', age=22, sex='男', email='456@qq.com', did=3}, Emp{eid=2, empName='admin2', age=22, sex='男', email='456@qq.com', did=3}, Emp{eid=3, empName='王五', age=12, sex='女', email='123@qq.com', did=3}, Emp{eid=4, empName='赵六', age=32, sex='男', email='123@qq.com', did=1}]
-```
+| 序号 | 字段                        | 内容                         |
+| ---- | --------------------------- | ---------------------------- |
+| 1    | pageNum                     | 当前页的页码                 |
+| 2    | pageSize                    | 每页显示的条数               |
+| 3    | size                        | 当前页显示的真实条数         |
+| 4    | total                       | 总记录数                     |
+| 5    | pages                       | 总页数                       |
+| 6    | prePage                     | 上一页的页码                 |
+| 7    | nextPage                    | 下一页的页码                 |
+| 8    | isFirstPage/isLastPage      | 是否为第一页/最后一页        |
+| 9    | hasPreviousPage/hasNextPage | 是否存在上一页/下一页        |
+| 10   | navigatePages               | 导航分页的页码数             |
+| 11   | navigatepageNums            | 导航分页的页码，\[1,2,3,4,5] |
 
 
-
-#### 方法二：使用PageInfo
-
-在查询获取list集合之后，使用`PageInfo<T> pageInfo = new PageInfo<>(List<T> list, intnavigatePages)`获取分页相关数据
-
-- list：分页之后的数据  
-- navigatePages：导航分页的页码数
-
-
-
-```java
-@Test
-public void testPageHelper() throws IOException {
-    InputStream is = Resources.getResourceAsStream("mybatis-config.xml");
-    SqlSessionFactoryBuilder sqlSessionFactoryBuilder = new SqlSessionFactoryBuilder();
-    SqlSessionFactory sqlSessionFactory = sqlSessionFactoryBuilder.build(is);
-    SqlSession sqlSession = sqlSessionFactory.openSession(true);
-    EmpMapper mapper = sqlSession.getMapper(EmpMapper.class);
-    PageHelper.startPage(1, 4);
-    List<Emp> emps = mapper.selectByExample(null);
-  
-    PageInfo<Emp> page = new PageInfo<>(emps,5);
-    System.out.println(page);
-}
-```
-
-
-
-```java
-PageInfo{
-pageNum=1, pageSize=4, size=4, startRow=1, endRow=4, total=8, pages=2, 
-list=Page{count=true, pageNum=1, pageSize=4, startRow=0, endRow=4, total=8, pages=2, reasonable=false, pageSizeZero=false}[Emp{eid=1, empName='admin', age=22, sex='男', email='456@qq.com', did=3}, Emp{eid=2, empName='admin2', age=22, sex='男', email='456@qq.com', did=3}, Emp{eid=3, empName='王五', age=12, sex='女', email='123@qq.com', did=3}, Emp{eid=4, empName='赵六', age=32, sex='男', email='123@qq.com', did=1}], 
-prePage=0, nextPage=2, isFirstPage=true, isLastPage=false, hasPreviousPage=false, hasNextPage=true, navigatePages=5, navigateFirstPage=1, navigateLastPage=2, navigatepageNums=[1, 2]}
-```
-
-其中list中的数据等同于方法一中直接输出的page数据
-
-
-
-<br>
-
-**常用数据：**
-
-- pageNum：当前页的页码  
-- pageSize：每页显示的条数  
-- size：当前页显示的真实条数  
-- total：总记录数  
-- pages：总页数  
-- prePage：上一页的页码  
-- nextPage：下一页的页码
-- isFirstPage/isLastPage：是否为第一页/最后一页  
-- hasPreviousPage/hasNextPage：是否存在上一页/下一页  
-- navigatePages：导航分页的页码数  
-- navigatepageNums：导航分页的页码，\[1,2,3,4,5]
 
 
 
