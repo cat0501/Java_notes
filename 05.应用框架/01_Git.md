@@ -1,6 +1,6 @@
 
 
-# 命令
+# Command
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220327224143107.png)
 
@@ -56,7 +56,7 @@ git status
 git add .
 
 # 提交更新到 版本库
-git commit -m "clean";
+git commit -m "commit message";
 
 # 推送改动到 远程仓库
 git push github master
@@ -72,19 +72,6 @@ git commit --amend
 git rebase -i HEAD~2
 // 或者
 git rebase -i {commitID} // 例如 git rebase -i d95ddfb
-```
-
-- 配置大小写敏感、乱码问题
-
-```sh
-# git配置大小写敏感
-$ git config core.ignorecase
-true
-# 下面设置大小写敏感为敏感
-$ git config core.ignorecase false
-
-# cmd git页面中文显示为数字,不是乱码
-$ git config --global core.quotepath false
 ```
 
 
@@ -139,6 +126,19 @@ git merge test
    git revert <commit>
    ```
 
+3. 配置大小写敏感、乱码问题
+
+```sh
+# git配置大小写敏感
+$ git config core.ignorecase
+true
+# 下面设置大小写敏感为敏感
+$ git config core.ignorecase false
+
+# cmd git页面中文显示为数字,不是乱码
+$ git config --global core.quotepath false
+```
+
 
 
 # Tools
@@ -149,7 +149,7 @@ git merge test
 
 2. IDEA Git 插件
 
-IDEA Git 插件越来越强大，很多时候，我们日常使用 Git ，更多使用它。具体的教程，可以看看 [《IntelliJ IDEA 下的使用 git》](https://blog.csdn.net/huangfan322/article/details/53220060) 。
+日常使用这个就够了。具体教程可参考 [《IntelliJ IDEA 下的使用 git》](https://blog.csdn.net/huangfan322/article/details/53220060) 。
 
 3. SourceTree
 
@@ -214,13 +214,13 @@ IDEA Git 插件越来越强大，很多时候，我们日常使用 Git ，更多
 > 注意，Gitlab 和 Bitbucket 也提供公有服务的方案。
 
 - 一般情况下，大多数公司使用 GitLab 作为 Git 服务器。
-  - GitLab是一个利用 [Ruby on Rails](http://www.oschina.net/p/ruby+on+rails) 开发的开源应用程序，实现一个自托管的 [Git](http://www.oschina.net/p/git) 项目仓库，可通过Web界面进行访问公开的或者私人的项目。
+  - GitLab 是一个利用 [Ruby on Rails](http://www.oschina.net/p/ruby+on+rails) 开发的开源应用程序，实现一个自托管的 [Git](http://www.oschina.net/p/git) 项目仓库，可通过 Web 界面进行访问公开的或者私人的项目。
   - 因为 GitLb 使用 Ruby on Rails 实现，所以占用的系统资源会比较多。
   - 它拥有与 [Github](http://www.oschina.net/p/github) 类似的功能，能够浏览源代码，管理缺陷和注释。可以管理团队对仓库的访问，它非常易于浏览提交过的版本并提供一个文件历史库。它还提供一个代码片段收集功能可以轻松实现代码复用，便于日后有需要的时候进行查找。
 
 
 
-## 安装环境
+## Install
 
 - 官网下载：https://git-scm.com/download
 - 直接 Next 安装即可
@@ -311,13 +311,11 @@ ssh-keygen -t rsa -C "pxzjl123@icloud.com"
 
 3. 关联 GitHub 和 Gitee
 
-- 关联 GitHub 远程库
+- 关联 GitHub 远程库（注意，远程库的名称叫 github，不叫 origin 了）
 
 ```bash
 $ git remote add github git@github.com:tianqixin/runoob-git-test.git
 ```
-
-> 注意，远程库的名称叫 github，不叫 origin 了。
 
 - 关联 Gitee 远程库
 
@@ -378,6 +376,12 @@ git push gitee master
 - 第一次加了参数 `-u` 后，以后即可直接用 `git push` 代替 `git push origin master`
 
 - https://blog.csdn.net/chenzz444/article/details/104408607
+
+
+
+## git 未提交，pull 导致本地被覆盖该怎么办
+
+IDEA 右键文件-->Local History-->Show History
 
 
 

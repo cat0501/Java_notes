@@ -1,5 +1,3 @@
-# 
-
 
 
 # 写在前面
@@ -2866,7 +2864,7 @@ JDK 提供了很多内置的注解（比如 `@Override` 、`@Deprecated`），�
 
 
 
-Collection 接口是 List、Set 和 Queue 接口的父接口，该接口里定义的方法可用于操作 Set 集合、List集合 和 Queue 集合。
+Collection 接口是 List、Set 和 Queue 接口的父接口，该接口里定义的方法可用于操作 Set 集合、List 集合 和 Queue 集合。
 
 
 
@@ -2884,7 +2882,7 @@ Collection 接口是 List、Set 和 Queue 接口的父接口，该接口里定�
 | hashCode()                                                   | 获取集合对象的哈希值 |                                            |
 | iterator()                                                   | 遍历                 | 返回迭代器对象，用于集合遍历               |
 
-<br>
+
 
 ```bash
 #### Collection体系的特点、使用场景总结
@@ -2920,15 +2918,10 @@ Collection接口继承了java.lang.Iterable接口，该接口有一个iterator()
 **集合对象每次调用iterator()方法都得到一个全新的迭代器对象**，默认游标都在集合的第一个元素之前。
 
 
-
 ## 3 （一）List接口（可重复）
-
-- 鉴于Java中数组用来存储数据的局限性，我们通常使用List替代数组。
-
-- List集合类中**元素有序、且可重复**，集合中的每个元素都有其对应的顺序索引。
-
-- List除了从Collection接口继承的方法外，List 集合里添加了一些根据索引来操作集合元素的方法。
-
+- 鉴于 Java 中数组用来存储数据的局限性，我们通常使用 List 替代数组。
+- List 集合类中**元素有序、且可重复**，集合中的每个元素都有其对应的顺序索引。
+- List 除了从 Collection 接口继承的方法外，List 集合里添加了一些根据索引来操作集合元素的方法。
 
 
 ### List实现类之一：ArrayList（基于数组）
@@ -2987,11 +2980,8 @@ public ArrayList(Collection<? extends E> c) {
   - 两者都是用来减少空数组的创建，所有空 ArrayList 都共享空数组
 
 
-
 - ArrayList 在 JDK1.8之前与之后的实现区别？
-
   - JDK1.7：ArrayList 像饿汉式，直接创建一个初始容量为10的数组
-
   - JDK1.8：ArrayList 像懒汉式，一开始创建一个长度为 0 的数组，当添加第一个元素时再创建一个始容量为 10 的数组
 
 
