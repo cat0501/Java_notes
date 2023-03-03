@@ -144,19 +144,12 @@ $ git config --global core.quotepath false
 # Tools
 
 1. 命令行
-
    cmd、IDEA 的终端
-
 2. IDEA Git 插件
-
-日常使用这个就够了。具体教程可参考 [《IntelliJ IDEA 下的使用 git》](https://blog.csdn.net/huangfan322/article/details/53220060) 。
-
+   日常使用这个就够了。具体教程可参考 [《IntelliJ IDEA 下的使用 git》](https://blog.csdn.net/huangfan322/article/details/53220060) 。
 3. SourceTree
-
    一个图形化的 Git 增强工具，其最好用的功能就在于它集成了 GitFlow ，让开发者可以更简单、更规范的去做一些 Git 操作；
-
    另外它还提供了更友好的 merge 界面，但是操作起来不是很顺手，因为它只支持整行删除。
-
 4. 其它
    - [SmartGit](https://www.syntevo.com/smartgit/)
    - [Tower](https://www.git-tower.com/mac)
