@@ -160,7 +160,13 @@ $ git config --global core.quotepath false
    - [Tower](https://www.git-tower.com/mac)
    - Atom
 
-# Introduction
+# Introduction&Concept
+
+## Fork
+
+相当于你在原项目的主分支上又建立了一个分支，你可以在该分支上任意修改。如果想将你的修改合并到原项目中时，可以 pull request，这样原项目的作者就可以将你修改的东西合并到原项目的主分支上去，这样你就为开源项目贡献了代码，开源项目就会在大家共同的努力下不断壮大和完善。
+
+
 
 ## Git 相比 SVN 的优缺点？
 
