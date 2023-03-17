@@ -88,7 +88,7 @@ $ git branch
 $ git branch -r
 ```
 
-- 创建、切换
+- 创建、切换、删除
 
 ```bash
 # 新建一个本地分支 test
@@ -101,6 +101,9 @@ $ git checkout -b feature_x
 
 # 切换到主分支
 git checkout master
+
+# 删除分支
+git branch --delete main
 ```
 
 - 合并

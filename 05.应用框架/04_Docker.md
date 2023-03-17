@@ -3,6 +3,21 @@
 # 常用总结
 
 ```sh
+docker pull mysql/mysql-server:latest
+docker images
+docker run --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -d mysql/mysql-server:latest
+docker ps -a
+
+docker exec -it 877e1c3790cd bash
+```
+
+
+
+
+
+
+
+```sh
 # 概念和命令总结一下
 
 1）镜像：将应⽤程序及其依赖、环境、配置打包在⼀起
