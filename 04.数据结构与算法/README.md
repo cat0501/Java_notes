@@ -50,6 +50,50 @@
 
 
 
+
+
+# 刷题
+
+## 数组
+
+
+
+数组输出
+
+```java
+Arrays.toString(nums)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # 一、无剑篇、刷题心法
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220420123641875.png)
