@@ -7,6 +7,8 @@ package algorithm;
  */
 public class Test03 {
     public static void main(String[] args) {
+        // System.lineSeparator();
+        //
         String sb = "aaa" +
                 System.lineSeparator() +
                 "bbb" +
@@ -14,11 +16,15 @@ public class Test03 {
                 "ccc";
         //System.out.println(sb + ";");
 
-        String a = new String("adsadsasw");
         // Common
         /**
-         遗礼可以拿，主要是为了没人打你也能吃桃刷技能
+         When things are uncertain, you can ask the spring breeze.
+        下班打印英语真题
+
          */
+
+        // String API
+        String a = new String("adsadsasw");
         a = a.substring(0, a.length() - 1);
         System.out.println(a);
         /**
