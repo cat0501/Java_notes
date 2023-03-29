@@ -12,11 +12,34 @@ public class Test03 {
                 "bbb" +
                 System.lineSeparator() +
                 "ccc";
-        System.out.println(sb + ";");
+        //System.out.println(sb + ";");
+
+        String a = new String("adsadsasw");
+        // Common
+        /**
+         遗礼可以拿，主要是为了没人打你也能吃桃刷技能
+         */
+        a = a.substring(0, a.length() - 1);
+        System.out.println(a);
         /**
          aaa
          bbb
          ccc
          */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
+
 }
