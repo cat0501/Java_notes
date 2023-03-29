@@ -1,7 +1,8 @@
+-----------------------------------说明
 basic 主要为 Java 基础代码
 algorithm 主要为 Leetcode 刷题
 
-
+-----------------------------------刷题
 M54 螺旋矩阵 spiral-matrix
 给你一个 m 行 n 列的矩阵 matrix ，请按照 顺时针螺旋顺序 ，返回矩阵中的所有元素。
 
@@ -19,6 +20,16 @@ M128 最长连续序列 longest-consecutive-sequence
 
 -----------------------------------一些心理感受
 2023-03-28 莫听穿林打叶声，何妨吟啸且徐行。
+1.工作难受啊啊啊
+
+2023-03-29
+1.想到一句话
+遇事不决，可问春风。春风不语，既随本心。
+When things are uncertain, you can ask the spring breeze.The spring breeze does not speak, both with the heart.
+
+2.看到别人英语1 96分，这也太强了叭。
+3.刷题又停滞了好多天，下班就想打游戏和睡觉，不行啊。
+
 
 
 
