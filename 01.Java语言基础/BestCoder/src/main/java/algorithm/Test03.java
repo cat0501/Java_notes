@@ -20,6 +20,10 @@ public class Test03 {
 
         String typeWithLength = Objects.equals(fieldLength, "null") ? fieldType : fieldType + fieldLength;
         System.out.println(typeWithLength);
+        // 某种可能：不工作了。回家休息。五一回家。
+        // 28、29（周六）、30、1、2、3。
+        // 标记 牌 内容 效果
+        //   
 
         // -------------------------------------------------------------if EXTERNAL table or not
         //String str = "CREATE EXTERNAL TABLE 1()";
