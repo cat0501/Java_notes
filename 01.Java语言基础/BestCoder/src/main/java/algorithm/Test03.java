@@ -9,7 +9,7 @@ import java.util.*;
  */
 public class Test03 {
     public static void main(String[] args) {
-
+        // -------------------------------------------------------------test varchar(20) or varchar
         Map<String, String> field = new HashMap<>();
         field.put("fieldType", "varchar");
         //field.put("fieldLength", "");
@@ -21,6 +21,7 @@ public class Test03 {
         String typeWithLength = Objects.equals(fieldLength, "null") ? fieldType : fieldType + fieldLength;
         System.out.println(typeWithLength);
 
+        // -------------------------------------------------------------if EXTERNAL table or not
         //String str = "CREATE EXTERNAL TABLE 1()";
         //String[] tables = str.split("TABLE");
         //
@@ -33,6 +34,7 @@ public class Test03 {
         //    System.out.println("yes");
         //}
 
+        // -------------------------------------------------------------String spit by ( or <
         //String str = "varchar(100)";
         //String str2 = "dec(100,2)";
         //String str3 = "dec<100,2>";
@@ -55,37 +57,21 @@ public class Test03 {
         //    System.out.println("Part 2: " + part2);  // 输出 "(world)"
         //}
 
-
-        //ArrayList<String> list = new ArrayList<>();
-        //list.add("id");
-        //list.add("vin");
-        //
-        //if (list.contains("id")){
-        //    System.out.println("yes");
-        //}
-        //
+        // -------------------------------------------------------------String replace
         //String[] str = {"2","2","200","xian2","huizhou2"};
         //System.out.println(Arrays.toString(str));
         //System.out.println(Arrays.toString(str).replace(","," "));
         //System.out.println(Arrays.toString(str).replace("[","").replace("]",""));
 
-        //// System.lineSeparator();
-        ////
+        // -------------------------------------------------------------lineSeparator
         //String sb = "aaa" +
         //        System.lineSeparator() +
         //        "bbb" +
         //        System.lineSeparator() +
         //        "ccc";
         ////System.out.println(sb + ";");
-        //
-        //// Common
-        ///**
-        // When things are uncertain, you can ask the spring breeze.
-        //下班打印英语真题
-        //
-        // */
-        //
-        //// String API
+
+        /// -------------------------------------------------------------String substring
         //String a = new String("adsadsasw");
         //a = a.substring(0, a.length() - 1);
         //System.out.println(a);
@@ -94,20 +80,6 @@ public class Test03 {
         // bbb
         // ccc
         // */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
 }
