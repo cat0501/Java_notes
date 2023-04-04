@@ -2565,11 +2565,9 @@ Thread常用方法：
 ### 1 String
 
 - Java 程序中的所有字符串字面值（如 "abc" ）都作为此类的实例实现。
-
-- String是一个final类，代表不可变的字符序列。 
+- String是一个 final 类，代表不可变的字符序列。 
   - 字符串是常量，用双引号引起来表示。它们的值在创建之后不能更改。
-
-- String对象的字符内容是存储在一个 字符数组 **value[]** 中的。
+- String 对象的字符内容是存储在一个 字符数组 **value[]** 中的。
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220412105855093.png?w=550)
 

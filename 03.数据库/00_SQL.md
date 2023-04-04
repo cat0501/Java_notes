@@ -44,6 +44,12 @@ list()和listFiles();
 
 
 
+
+
+
+
+
+
 ## IO流的分类
 
 - 按数据单位
@@ -97,6 +103,42 @@ IDEA 将一段代码抽取为一个方法
 
 
 
+### 获取分区字段
+
+![](https://java-notes-1308812086.cos.ap-beijing.myqcloud.com/image-20230403132756688.png)
+
+
+
+```java
+ResultSet rs = statement.executeQuery("DESCRIBE " + tableName);
+
+List<HashMap<String, Object>> partitionMaps = new ArrayList<>();
+ArrayList<String> partitionFieldList = new ArrayList<>();
+while (rs.next()) {
+    String colName = rs.getString(1);
+    // Check if the column is a partition column
+    if (colName.equals("# col_name")) {
+        break;
+    }
+}
+while (rs.next()){
+    HashMap<String, Object> partitionMap = new HashMap<>();
+    partitionMap.put("partitionName", rs.getString("col_name"));
+    partitionMap.put("partitionType", rs.getString("data_type"));
+    partitionMap.put("partitionComment", rs.getString("comment"));
+    partitionMaps.add(partitionMap);
+
+    partitionFieldList.add(rs.getString("col_name"));
+}
+fieldInfo.put("partitionField", partitionMaps);
+```
+
+
+
+
+
+
+
 ### Q&A
 
 **hive 使用 `load` 导入数据时是否可以指定分隔符？**
@@ -137,8 +179,6 @@ public static ArrayList<String> readCsvByBufferedReader(String filePath) {
     return records;
 }
 ```
-
-
 
 
 
