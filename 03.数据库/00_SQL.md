@@ -101,6 +101,36 @@ IDEA 将一段代码抽取为一个方法
 
 
 
+```java
+// 普通插入
+@Test
+public void bulkSubmissionTest1() {
+    long start = System.currentTimeMillis();//开始计时【单位：毫秒】
+    Connection conn = jdbcUtils.getConnection();//获取数据库连接
+    String sql = "insert into a(id, name) VALUES (?,null)";
+    PreparedStatement ps = null;
+    try {
+        ps = conn.prepareStatement(sql);
+        for (int i = 1; i <= 1000000; i++) {
+            ps.setObject(1, i);//填充sql语句种得占位符
+            ps.execute();//执行sql语句
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } finally {
+        jdbcUtils.close(conn, ps, null);
+    }
+    //打印耗时【单位：毫秒】
+    System.out.println("百万条数据插入用时：" + (System.currentTimeMillis() - start)+"【单位：毫秒】");
+}
+```
+
+
+
+
+
+
+
 
 
 ### 获取分区字段
