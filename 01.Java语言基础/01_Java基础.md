@@ -3571,7 +3571,7 @@ class Car{
 
 
 
-# 十、I/O流 stream
+# 十、I/O流 Stream
 
 Java程序中，对于数据的输入/输出操作以“流(stream)” 的方式进行。
 
@@ -3583,7 +3583,7 @@ Java程序中，对于数据的输入/输出操作以“流(stream)” 的方式
 
 - 按流的流向不同分为：输入流（数据从其他设备上读取到内存），输出流
 
-- 按流的角色的不同分为：节点流，处理流
+- 按流的角色不同分为：节点流，处理流
 
 
 
@@ -3752,7 +3752,11 @@ public static void main(String[] args) {
 
 问题本质想问：**不管是文件读写还是网络发送接收，信息的最小存储单元都是字节，那为什么 I/O 流操作要分为字节流操作和字符流操作呢？**
 
-回答：字符流是由 Java 虚拟机将字节转换得到的，问题就出在这个过程还算是非常耗时，并且，如果我们不知道编码类型就很容易出现乱码问题。所以， I/O 流就干脆提供了一个直接操作字符的接口，方便我们平时对字符进行流操作。如果音频文件、图片等媒体文件用字节流比较好，如果涉及到字符的话使用字符流比较好。
+回答1：字符流是由 Java 虚拟机将字节转换得到的，问题就出在这个过程还算是非常耗时，并且，如果我们不知道编码类型就很容易出现乱码问题。所以， I/O 流就干脆提供了一个直接操作字符的接口，方便我们平时对字符进行流操作。如果音频文件、图片等媒体文件用字节流比较好，如果涉及到字符的话使用字符流比较好。
+
+回答2：因为字节流转换成字符流，过程很耗时。如果你必须要使用字符流，但你只得到了字节流，就要经历这个转换，其中编码也容易出问题。所以就直接把字符流单独作为了一个部分，从而提高使用字符流的效率。
+
+
 
 ### 字符
 
@@ -4250,8 +4254,6 @@ Lambda 表达式的类型依赖于上下文环境，是由编译器推断出来�
 
 ## 4 强大的Stream API（核心2）⭐️
 
-[Stream 流的常用方法](https://blog.csdn.net/qq_43386944/article/details/122606088)
-
 
 
 Java8中有两大最为重要的改变。第一个是 `Lambda` 表达式；另外一个则是 `Stream API`。
@@ -4313,6 +4315,21 @@ public class ArrayGetStream {
 
 ### 常用方法
 
+| 方法    | 作用     |
+| ------- | -------- |
+| foreach | 逐一处理 |
+| filter  | 过滤     |
+| map     | 映射     |
+| limit   | 截取     |
+| skip    | 跳过     |
+| concat  | 合并     |
+
+
+
+
+
+可参考：[Stream 流的常用方法](https://blog.csdn.net/qq_43386944/article/details/122606088)
+
 #### 逐一处理：forEach
 
 ```java
@@ -4368,11 +4385,11 @@ public class StreamMap {
     public static void main(String[] args) {
         Stream<String> original = Stream.of("10", "12", "18");
         Stream<Integer> result = original.map(str->Integer.parseInt(str));
-	}
+    }
 }
 ```
 
-#### 取用前几个：limit
+#### 截取前几个：limit
 
 - 对流进行截取，只取用前n个
 
@@ -4392,7 +4409,7 @@ public class StreamLimit {
 }
 ```
 
-#### 组合：concat
+#### 流的合并：concat
 
 - 如果有两个流，希望合并成为一个流，那么可以使用 Stream 接口的静态方法 concat
 
@@ -4412,7 +4429,7 @@ public class StreamConcat {
 
 
 
-#### 统计个数：count（终止cao'zuo）
+#### 统计个数：count（终止操作）
 
 - 提供 `long count()` 方法来数一数其中的元素个数，该方法返回一个 long 值代表元素个数
 
@@ -4434,7 +4451,7 @@ public class StreamCount {
 
 ### Stream 的实现原理
 
-jdk的stream源码是高度工程化的代码，工程化的代码为了效率和满足各式各样的需求，会将代码实现的极其复杂，不易理解。
+jdk 的 `Stream` 源码是高度工程化的代码，工程化的代码为了效率和满足各式各样的需求，会将代码实现的极其复杂，不易理解。
 
 https://www.cnblogs.com/xiaoxiongcanguan/p/10511233.html
 
@@ -4446,11 +4463,11 @@ https://www.cnblogs.com/xiaoxiongcanguan/p/10511233.html
 
 到目前为止，臭名昭著的空指针异常是导致Java应用程序失败的最常见原因。
 
-以前，为了解决空指针异常，Google公司著名的Guava项目引入了Optional类，Guava通过使用检查空值的方式来防止代码污染，它鼓励程序员写更干净的代码。受到Google Guava的启发，Optional类已经成为Java 8类库的一部分。
+以前，为了解决空指针异常，Google公司著名的 `Guava` 项目引入了 `Optional` 类，Guava通过使用检查空值的方式来防止代码污染，它鼓励程序员写更干净的代码。受到Google Guava的启发，Optional类已经成为Java 8类库的一部分。
 
 
 
-Optional<T> 类(java.util.Optional) 是一个容器类，它可以保存类型T的值，代表这个值存在。或者仅仅保存`null`，表示这个值不存在。原来用 null 表示一个值不存在，现在 Optional 可以更好的表达这个概念。并且可以避免空指针异常。
+Optional<T> 类(java.util.Optional) 是一个容器类，它可以保存类型 `T` 的值，代表这个值存在。或者仅仅保存`null`，表示这个值不存在。原来用 null 表示一个值不存在，现在 Optional 可以更好的表达这个概念。并且可以避免空指针异常。
 
 
 
