@@ -13,8 +13,9 @@ public class Test03 {
         Map<String, String> field = new HashMap<>();
         field.put("fieldType", "varchar");
         //field.put("fieldLength", "");
-        // 
-        //
+        /**
+
+         */
 
         field.put("fieldLength", "(20)");
 
