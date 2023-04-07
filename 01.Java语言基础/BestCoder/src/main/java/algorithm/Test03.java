@@ -13,14 +13,17 @@ public class Test03 {
         Map<String, String> field = new HashMap<>();
         field.put("fieldType", "varchar");
         //field.put("fieldLength", "");
-        // ：
-        // 称号 拥有“七十二名泉”，素有“天下第一泉”和“四面荷花三面柳，一城山色半城湖”的美誉。
+        // 
+        //
 
         field.put("fieldLength", "(20)");
 
         String fieldType = field.get("fieldType");
         String fieldLength = field.get("fieldLength");
 
+        if (fieldLength  == null){
+            System.out.println("error...");
+        }
         String typeWithLength = Objects.equals(fieldLength, "null") ? fieldType : fieldType + fieldLength;
         System.out.println(typeWithLength);
         // -------------------------------------------------------------if EXTERNAL table or not
