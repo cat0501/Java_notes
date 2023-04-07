@@ -13,14 +13,18 @@ public class Test03 {
         Map<String, String> field = new HashMap<>();
         field.put("fieldType", "varchar");
         //field.put("fieldLength", "");
-        //
-        //
+        /**
+
+         */
 
         field.put("fieldLength", "(20)");
 
         String fieldType = field.get("fieldType");
         String fieldLength = field.get("fieldLength");
 
+        if (fieldLength  == null){
+            System.out.println("error...");
+        }
         String typeWithLength = Objects.equals(fieldLength, "null") ? fieldType : fieldType + fieldLength;
         System.out.println(typeWithLength);
         // -------------------------------------------------------------if EXTERNAL table or not
