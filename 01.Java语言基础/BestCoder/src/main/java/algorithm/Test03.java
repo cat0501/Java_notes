@@ -1,5 +1,6 @@
 package algorithm;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -9,6 +10,16 @@ import java.util.*;
  */
 public class Test03 {
     public static void main(String[] args) {
+        String str = "varchar(20)";
+        byte[] bytes = str.getBytes(StandardCharsets.UTF_8);
+        for (int i = 0; i < bytes.length; i++) {
+            System.out.println(bytes[i]);
+            //System.out.println((char) bytes[i]);
+            System.out.println("-------------------------");
+        }
+        //
+
+
         // -------------------------------------------------------------test varchar(20) or varchar
         Map<String, String> field = new HashMap<>();
         field.put("fieldType", "varchar");
