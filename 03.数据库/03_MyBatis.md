@@ -2648,6 +2648,22 @@ public Map<String, Object> deleteAllTaskDefinition(User loginUser, long projectC
 
 
 
+2、Invalid bound statement (not found)
+
+大部分原因是没有找到XML 或者命名的问题。
+
+结果：`mapper` 接口和 `xml`所在包名不一致，统一为`org/blxy/zhongtai/dao/xxx` 后解决。
+
+其它可能的原因：检查 `namespace`、检查 `id`、检查编译后的 `target`下是否存在
+
+
+
+参考：https://blog.csdn.net/qq_43780761/article/details/126494026
+
+
+
+
+
 
 
 

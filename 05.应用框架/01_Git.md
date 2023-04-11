@@ -34,7 +34,9 @@ git log
 git log --author=bob
 
 # 用户名和邮箱配置（项目级别）
-git config user.name Lemonade19
+git config user.name # 查看
+git config user.name Lemonade19 
+git config user.name zhangjianlin # 设置
 git config user.email 17782975312@163.com
 ```
 
@@ -112,6 +114,16 @@ git branch --delete main
 # 合并分支(可能会有冲突)
 git merge test
 ```
+
+- else
+
+```sh
+git push --set-upstream origin develop
+```
+
+
+
+
 
 
 
