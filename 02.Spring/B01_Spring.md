@@ -1000,13 +1000,17 @@ public class BookDaoImpl implements BookDao {
 
 ### 8.3 自动配置 autowire属性
 
-前面花了大量的时间把Spring的注入去学习了下，总结起来就一个字麻烦。
+以上的 Spring 注入，很麻烦。
+
+
 
 #### 8.3.1 什么是依赖自动装配?
 
-IoC容器根据bean所依赖的资源在容器中自动查找并注入到bean中的过程称为自动装配
+`IoC` 容器根据 `bean` 所依赖的资源在容器中自动查找并注入到 `bean` 中的过程，称为自动装配。
 
-#### 8.3.2 自动装配方式有哪些?
+
+
+#### 8.3.2 自动装配方式有哪些？
 
 - 按类型（常用）
 
@@ -1021,17 +1025,18 @@ IoC容器根据bean所依赖的资源在容器中自动查找并注入到bean中
 ```xml
 <bean class="com.itheima.dao.impl.BookDaoImpl"/>
 <!--autowire属性：开启自动装配，通常使用按类型装配-->
+
 <bean id="bookService" class="com.itheima.service.impl.BookServiceImpl" autowire="byType"/>
 ```
 
 注意事项：
 ```bash
-# 需要注入属性的类中对应属性的setter方法不能省略
-# 被注入的对象必须要被Spring的IOC容器管理
-# 按照类型在Spring的IOC容器中如果找到多个对象，会报NoUniqueBeanDefinitionException
-# 一个类型在IOC中有多个对象，还想要注入成功，这个时候就需要按照名称注入byName
-# 按照名称注入中的名称指的是什么
-- 对外部类来说，setBookDao方法名，去掉set后首字母小写是其属性名
+# 需要注入属性的类中对应属性的 setter 方法不能省略
+# 被注入的对象必须要被 Spring 的 IOC 容器管理
+
+# 按照类型在 Spring 的 IOC 容器中如果找到多个对象，会报 NoUniqueBeanDefinitionException 异常
+## 一个类型在 IOC 中有多个对象，还想要注入成功，这个时候就需要按照名称注入 byName
+## 按照名称注入中的名称指的是什么？ 对外部类来说，setBookDao方法名，去掉set后首字母小写是其属性名
 
 # 两种方式介绍完后，以后用的更多的是按照类型注入
 ```
@@ -1040,18 +1045,18 @@ IoC容器根据bean所依赖的资源在容器中自动查找并注入到bean中
 
 ```bash
 1. 自动装配用于引用类型依赖注入，不能对简单类型进行操作
-2. 使用按类型装配时（byType）必须保障容器中相同类型的bean唯一，推荐使用
-3. 使用按名称装配时（byName）必须保障容器中具有指定名称的bean，因变量名与配置耦合，不推荐使用
-4. 自动装配优先级低于setter注入与构造器注入，同时出现时自动装配配置失效
+2. 使用按类型装配时（byType）必须保障容器中相同类型的 bean唯一（推荐使用）
+3. 使用按名称装配时（byName）必须保障容器中具有指定名称的 bean，因变量名与配置耦合（不推荐使用）
+4. 自动装配优先级低于 setter 注入与构造器注入，同时出现时自动装配配置失效
 ```
 
 
 
 ### 8.4 集合注入
 
-前面我们已经能完成引用数据类型和简单数据类型的注入，但是还有一种数据类型集合，集合中既可以装简单数据类型也可以装引用数据
+以上，完成引用数据类型和简单数据类型的注入。但集合中既可以装简单数据类型也可以装引用数据，在 Spring 中该如何注入呢?
 
-类型，对于集合，在Spring中该如何注入呢?
+
 
 ```bash
 # 先来回顾下，常见的集合类型有哪些?
@@ -1064,7 +1069,7 @@ Properties
 # 针对不同的集合类型，该如何实现注入呢?
 ```
 
-下面的所有配置方式，都是在bookDao的bean标签中进行注入
+下面的所有配置方式，都是在 `bookDao` 的 `bean` 标签中进行注入
 
 ```xml
 <bean id="bookDao" class="com.itheima.dao.impl.BookDaoImpl"> 
@@ -1086,7 +1091,7 @@ Properties
 
 
 
-#### 8.4.2 注入List类型数据
+#### 8.4.2 注入List 类型数据
 
 ```xml
 <!--list集合注入-->
@@ -1118,7 +1123,7 @@ Properties
 
 
 
-#### 8.4.4 注入map类型数据
+#### 8.4.4 注入 map 类型数据
 
 ```xml
 <!--map集合注入-->
@@ -1133,7 +1138,7 @@ Properties
 
 
 
-#### 8.4.5 注入Properties类型数据
+#### 8.4.5 注入 Properties 类型数据
 
 ```xml
 <!--Properties注入-->
@@ -1153,17 +1158,17 @@ Properties
 ```bash
 book dao save ...
 遍历数组:[100, 200, 300]
-遍历List[itcast, itheima, boxuegu, chuanzhihui]
-遍历Set[itcast, itheima, boxuegu]
-遍历Map{country=china, province=henan, city=kaifeng}
-遍历Properties{province=henan, city=kaifeng, country=china}
+遍历 List[itcast, itheima, boxuegu, chuanzhihui]
+遍历 Set[itcast, itheima, boxuegu]
+遍历 Map{country=china, province=henan, city=kaifeng}
+遍历 Properties{province=henan, city=kaifeng, country=china}
 ```
 
 说明
 
 ```bash
-# property标签表示setter方式注入，构造方式注入constructor-arg标签内部也可以写<array>、<list>、<set>、<map>、<props>标签
-# List的底层也是通过数组实现的，所以<list>和<array>标签是可以混用
+# property 标签表示 setter 方式注入，构造方式注入 constructor-arg 标签内部也可以写<array>、<list>、<set>、<map>、<props>标签
+# List 的底层也是通过数组实现的，所以 <list> 和 <array> 标签是可以混用
 # 集合中要添加引用类型，只需要把<value>标签改成<ref>标签，这种方式用的比较少
 ```
 
