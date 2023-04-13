@@ -382,20 +382,25 @@ public class BookServiceImpl implements BookService {
 
 ### 7.1 bean基础配置
 
-#### 7.1.1 bean基础配置(id与class)
+获取 `bean` 无论是通过 `id` 还是 `name` 获取，如果无法获取到，将抛出异常  `NoSuchBeanDefinitionException`
+
+
+
+#### 7.1.1 bean基础配置（id与class）
 
 bean标签的功能、使用方式以及id和class属性的作用，我们通过一张图来描述下
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220427103736803.png)
 
 ```bash
-# class属性能不能写接口如BookDao的类全名呢?
-答案肯定是不行，因为接口是没办法创建对象的。
+# class 属性能不能写接口如BookDao的类全名呢?
+不行，因为接口是没办法创建对象的。
+
 # 前面提过为bean设置id时，id必须唯一，但是如果由于命名习惯而产生了分歧后，该如何解决?
 配置别名
 ```
 
-#### 7.1.2 bean的name属性指定别名
+#### 7.1.2 bean 的name 属性指定别名
 
 ```xml
 <!--name:为bean指定别名，别名可以有多个，使用逗号，分号，空格进行分隔-->
@@ -410,8 +415,6 @@ bean标签的功能、使用方式以及id和class属性的作用，我们通过
 
 
 
-获取bean无论是通过id还是name获取，如果无法获取到，将抛出异常 **NoSuchBeanDefinitionException**
-
 #### 7.1.3 bean作用范围scope配置
 
 ```xml
@@ -425,7 +428,7 @@ bean标签的功能、使用方式以及id和class属性的作用，我们通过
 
 ```bash
 # 为什么bean默认为单例?
-bean为单例的意思是在Spring的IOC容器中只会有该类的一个对象
+bean为单例即在 Spring 的 IOC 容器中只会有该类的一个对象
 bean对象只有一个就避免了对象的频繁创建与销毁，达到了bean对象的复用，性能高
 
 # 哪些bean对象适合交给容器进行管理?
@@ -440,14 +443,16 @@ bean对象只有一个就避免了对象的频繁创建与销毁，达到了bean
 
 
 
-那么单例 bean是怎么造出来的呢？
+
 
 ### 7.2 bean实例化
 
-```bash
-# 在讲解这三种创建方式之前，我们需要先确认一件事:
-bean本质上就是对象，对象在new的时候会使用构造方法完成，那创建bean也是使用构造方法完成的。
-```
+`bean` 本质上就是对象，对象在 `new` 的时候会使用构造方法完成，那创建 `bean` 也是使用构造方法完成的。
+
+- 构造方法（常用）
+- 静态工厂（了解）
+- 实例工厂（了解）
+	- FactoryBean（实用）
 
 
 
@@ -469,13 +474,11 @@ public class BookDaoImpl implements BookDao {
 }
 ```
 
-Spring底层用的是反射。
+Spring 底层用的是反射。底层使用类的无参构造方法。
 
-Spring底层使用的是类的无参构造方法。
+> 因为每一个类默认都会提供一个无参构造函数，所以真正在使用这种方式的时候，我们什么也不需要做。这也是我们以后比较常用的一种方式。
 
-> 因为每一个类默认都会提供一个无参构造函数，所以其实真正在使用这种方式的时候，我们什么也不需要做。这也是我们以后比较常用的一种方式。
-
-分析Spring的错误信息：错误信息从下往上依次查看，因为上面的错误大都是对下面错误的一个包装，最核心错误是在最下面。
+分析Spring的错误信息时：错误信息从下往上依次查看，因为上面的错误大都是对下面错误的一个包装，最核心错误是在最下面。
 
 
 
@@ -492,7 +495,7 @@ public class OrderDaoFactory {
 }
 ```
 
-在spring的配置文件 applicationContext.xml中
+在 `Spring` 的配置文件 `applicationContext.xml` 中
 
 ```xml
 <!--方式二：使用静态工厂实例化bean-->
@@ -501,7 +504,7 @@ public class OrderDaoFactory {
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220427124231411.png?w=600)
 
-这种方式一般是用来兼容早期的一些老系统，所以**了解为主**。
+这种方式一般是用来兼容早期的一些老系统，了解为主。
 
 
 
@@ -524,7 +527,9 @@ public class UserDaoFactory {
 <bean id="userDao" factory-method="getUserDao" factory-bean="userFactory"/>
 ```
 
-实例工厂实例化的方式就已经介绍完了，配置的过程还是比较复杂，所以Spring为了简化这种配置方式就提供了一种叫FactoryBean的方式来简化开发。
+配置过程复杂，所以 `Spring` 为了简化这种配置方式就提供了一种叫 `FactoryBean` 的方式来简化开发。
+
+
 
 #### 7.2.4 方法4：使用FactoryBean实例化bean（务必掌握）
 
@@ -539,7 +544,6 @@ public class UserDaoFactoryBean implements FactoryBean<UserDao> {
     public Class<?> getObjectType() {
         return UserDao.class;
     }
-
 }
 ```
 
@@ -552,36 +556,23 @@ public class UserDaoFactoryBean implements FactoryBean<UserDao> {
 
 
 
-这种方式在Spring去整合其他框架的时候会被用到，所以这种方式需要大家理解掌握。
-
-<br>
-
-总结一下：
-
-```bash
-- 构造方法(常用)
-- 静态工厂(了解)
-- 实例工厂(了解)
-	- FactoryBean(实用)
-```
-
-
+这种方式在 `Spring` 去整合其他框架的时候会被用到，所以这种方式需要理解掌握。
 
 
 
 ### 7.3 bean的生命周期
 
-对于生命周期，我们主要围绕着bean生命周期控制来讲解。
+主要是bean生命周期控制
 
 ```bash
 # 生命周期
 从创建到消亡的完整过程
 
 # bean生命周期
-bean对象从创建到销毁的整体过程。
+bean对象从创建到销毁的整体过程
 
 # bean生命周期控制
-在bean创建后到销毁前做一些事情。
+在bean创建后到销毁前做一些事情
 ```
 
 添加初始化和销毁方法
@@ -599,7 +590,6 @@ public class BookDaoImpl implements BookDao {
     public void destroy(){
         System.out.println("destroy...");
     }
-
 }
 ```
 
@@ -714,7 +704,7 @@ destroy...
 
 ## 8 DI相关内容
 
-接下来就进入第二个大的模块DI依赖注入
+第二个大的模块 `DI` 依赖注入
 
 ```bash
 # 思考🤔：向一个类中传递数据的方式有几种?
@@ -734,6 +724,8 @@ destroy...
 	-简单类型
 	-引用类型
 ```
+
+
 
 ### 8.1 setter注入 property
 
@@ -1013,13 +1005,9 @@ public class BookDaoImpl implements BookDao {
 #### 8.3.2 自动装配方式有哪些？
 
 - 按类型（常用）
-
 - 按名称
-
 - 按构造方法
-
 - 不启用自动装配
-
 
 
 ```xml
@@ -1192,21 +1180,21 @@ book dao save ...
 
 ## 9 IOC/DI配置管理第三方bean
 
-前面所讲的知识点都是基于我们自己写的类，现在如果有需求让我们去管理第三方jar包中的类，该如何管理?
+以上都是基于我们自己写的类，如何管理第三方 `jar` 包中的类？
 
 ### 9.1 案例：数据源对象管理
 
-在这一节中，我们将通过一个案例来学习下对于第三方bean该如何进行配置管理。
+通过一个案例来学习对于第三方bean该如何进行配置管理。以后我们会用到很多第三方的bean。
 
-以后我们会用到很多第三方的bean，本次案例将使用咱们前面提到过的数据源Druid(德鲁伊)和C3P0来配置学习下。
+如下配置数据源 `Druid`（德鲁伊）和 `C3P0`：
 
 #### 思路分析
 
 ```bash
 # 需求:使用Spring的IOC容器来管理Druid连接池对象
 
-1.使用第三方的技术，需要在pom.xml添加依赖
-2.在配置文件中将【第三方的类】制作成一个bean，让IOC容器进行管理
+1.使用第三方的技术，需要在 pom.xml 添加依赖
+2.在配置文件中将【第三方的类】制作成一个bean，让 IOC 容器进行管理
 3.数据库连接需要基础的四要素驱动、连接、用户名和密码，【如何注入】到对应的bean中
 4.从IOC容器中获取对应的bean对象，将其打印到控制台查看结果
 ```
@@ -1215,7 +1203,7 @@ book dao save ...
 
 #### 实现Druid的管理
 
-步骤1：导入druid的依赖
+1）导入 `druid` 依赖
 
 ```xml
 <dependency>
@@ -1225,7 +1213,7 @@ book dao save ...
 </dependency>
 ```
 
-步骤2：配置第三方bean
+2）配置第三方bean
 
 在applicationContext.xml配置文件中添加DruidDataSource的配置
 
@@ -1239,9 +1227,9 @@ book dao save ...
 </bean>
 ```
 
-步骤3：从IOC容器中获取对应的bean对象
+3）从IOC容器中获取对应的bean对象
 
-步骤4：运行程序
+4）运行程序
 
 ```bash
 # 思考🤔
@@ -1253,7 +1241,7 @@ setter注入
 
 
 
-#### 实现C3P0管理
+#### 实现C3P0 管理
 
 同上
 
@@ -1937,7 +1925,7 @@ public DataSource dataSource(BookDao bookDao){
 
 Spring有一个容器，叫做IoC容器，里面保存bean。
 
-在进行企业级开发的时候，其实除了将自己写的类让Spring管理之外，还有一部分重要的工作就是使用第三方的技术。
+开发时，除了将自己写的类让Spring管理之外，还有一部分重要的工作就是使用第三方的技术。
 
 前面已经讲了如何管理第三方bean了，下面结合IoC和DI，整合2个常用技术，进一步加深对Spring的使用理解。
 
@@ -2209,13 +2197,11 @@ Junit运行后是基于Spring环境运行的，所以Spring提供了一个专用
 
 # 六、AOP（代理模式）
 
-Spring有两个核心的概念，一个是IOC/DI，一个是AOP。
+Spring 有两个核心的概念，一个是 `IOC/DI`，一个是 `AOP`。
 
+AOP 是在不改原有代码的前提下对其进行增强。
 
-
-对于AOP,我们前面提过一句话是：**AOP是在不改原有代码的前提下对其进行增强**。
-
-对于下面的内容，我们主要就是围绕着这一句话进行展开学习
+<br/>
 
 ## 16 AOP简介
 
