@@ -1,7 +1,16 @@
 package algorithm;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONPath;
+import com.alibaba.fastjson.parser.Feature;
+import com.google.gson.JsonParser;
+import com.sun.org.apache.xalan.internal.templates.Constants;
+
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Lemonade
@@ -10,13 +19,62 @@ import java.util.*;
  */
 public class Test03 {
     public static void main(String[] args) {
-        String str = "varchar(20)";
-        byte[] bytes = str.getBytes(StandardCharsets.UTF_8);
-        for (int i = 0; i < bytes.length; i++) {
-            System.out.println(bytes[i]);
-            //System.out.println((char) bytes[i]);
-            System.out.println("-------------------------");
-        }
+
+        String str = "{\"postStatements\":[],\"connParams\":\"\",\"segmentSeparator\":\"\",\"rawScript\":\"\",\"udfs\":\"\",\"type\":\"HIVE\",\"sql\":\"\",\"preStatements\":[],\"sqlType\":\"0\",\"customConfig\":1,\"displayRows\":10,\"json\":\"{\\\"job\\\":{\\\"setting\\\":{\\\"speed\\\":{\\\"channel\\\":3},\\\"errorLimit\\\":{\\\"record\\\":0,\\\"percentage\\\":0.02}},\\\"content\\\":[{\\\"reader\\\":{\\\"name\\\":\\\"oraclereader\\\",\\\"parameter\\\":{\\\"userPassword\\\":\\\"\\\",\\\"password\\\":\\\"ev\\\",\\\"address\\\":[],\\\"dbName\\\":\\\"oracle\\\",\\\"column\\\":[\\\"ID\\\",\\\"PARENT_ID\\\"],\\\"dbType\\\":\\\"5\\\",\\\"connection\\\":[{\\\"jdbcUrl\\\":[\\\"jdbc:oracle:thin:@//10.11.3.33:1521/evmsc\\\"],\\\"table\\\":[\\\"BASE_AREA\\\"]}],\\\"userName\\\":\\\"\\\",\\\"splitter\\\":\\\",\\\",\\\"collectionName\\\":\\\"\\\",\\\"username\\\":\\\"ev\\\"}},\\\"writer\\\":{\\\"name\\\":\\\"hdfswriter\\\",\\\"parameter\\\":{\\\"path\\\":\\\"/datacenter/default/default_table\\\",\\\"fileName\\\":\\\"ppp\\\",\\\"compress\\\":\\\"snappy\\\",\\\"dbName\\\":\\\"数据中台hive\\\",\\\"column\\\":[{\\\"name\\\":\\\"vin\\\",\\\"type\\\":\\\"STRING\\\"},{\\\"name\\\":\\\"veh_type\\\",\\\"type\\\":\\\"INT\\\"}],\\\"defaultFS\\\":\\\"hdfs://10.11.14.30:8020\\\",\\\"dbType\\\":\\\"2\\\",\\\"targetTableName\\\":\\\"dim_data_analysis_forecast_new_sy\\\",\\\"writeMode\\\":\\\"append\\\",\\\"fieldDelimiter\\\":\\\"\\\",\\\"splitter\\\":\\\",\\\",\\\"fileType\\\":\\\"orc\\\"}}}]}}\",\"localParams\":[],\"resourceList\":[]}";
+
+        String jsons = JSONObject.parseObject(str).getString("json").toString();
+        String jsonsGet = JSON.parseObject(jsons).toString();
+
+        String jobs = JSONObject.parseObject(jsonsGet).getString("job");
+        String jobsGet = JSON.parseObject(jobs).toString();
+
+        String contents = JSONObject.parseObject(jobsGet).getString("content");
+        String contentsGet = JSON.parseArray(contents).get(0).toString();
+
+        String writers = JSONObject.parseObject(contentsGet).getString("writer").toString();
+        String parameters = JSONObject.parseObject(writers).getString("parameter").toString();
+        String paths = JSONObject.parseObject(parameters).getString("path").toString();
+
+        System.out.println(paths);
+        JSONObject newData = JSONObject.parseObject(parameters).fluentPut("path", "111111");
+        System.out.println(newData.toJSONString());
+
+        System.out.println("拼装结果............");
+        JSONObject newRanks = JSONObject.parseObject(writers).fluentPut("parameter", JSON.parseObject(JSONObject.toJSONString(newData)));//这个[]括号，是因为当时拿的数据结构是数组，所以需要这种方式转换成数组，暂时没想到更好的方式
+        System.out.println("parameter--------------------->" + newRanks.toJSONString());
+
+        JSONObject newPages = JSONObject.parseObject(contentsGet).fluentPut("writer", JSON.parseObject(JSONObject.toJSONString(newRanks)));
+        System.out.println("writer--------------------->" + newPages.toJSONString());
+
+        JSONObject newPages2 = JSONObject.parseObject(jobsGet).fluentPut("content", JSON.parseArray("[" + JSONObject.toJSONString(newPages) + "]"));
+        System.out.println("content--------------------->" + newPages2.toJSONString());
+
+        JSONObject newPages3 = JSONObject.parseObject(jsonsGet).fluentPut("job", JSON.parseObject(JSONObject.toJSONString(newPages2)));
+        System.out.println("job--------------------->" + newPages3.toJSONString());
+        String s = newPages3.toJSONString();
+
+
+
+
+
+        //System.out.println(jsonObject.toString());
+
+        //jsonObject.getJSONObject("json")
+        //        .getJSONObject("job")
+        //        .getJSONObject("content")
+        //        .getJSONObject("writer")
+        //        .getJSONObject("parameter")
+        //        .getJSONObject("path")
+        //        .fluentPut("path", "1");
+
+
+        //String str = "varchar(20)";
+        //byte[] bytes = str.getBytes(StandardCharsets.UTF_8);
+        //for (int i = 0; i < bytes.length; i++) {
+        //    System.out.println(bytes[i]);
+        //    //System.out.println((char) bytes[i]);
+        //    System.out.println("-------------------------");
+        //}
         //
         /**
          我搜集了部分资料，和你交流下。
@@ -28,23 +86,23 @@ public class Test03 {
 
 
         // -------------------------------------------------------------test varchar(20) or varchar
-        Map<String, String> field = new HashMap<>();
-        field.put("fieldType", "varchar");
-        //field.put("fieldLength", "");
-        /**
-
-         */
-
-        field.put("fieldLength", "(20)");
-
-        String fieldType = field.get("fieldType");
-        String fieldLength = field.get("fieldLength");
-
-        if (fieldLength  == null){
-            System.out.println("error...");
-        }
-        String typeWithLength = Objects.equals(fieldLength, "null") ? fieldType : fieldType + fieldLength;
-        System.out.println(typeWithLength);
+        //Map<String, String> field = new HashMap<>();
+        //field.put("fieldType", "varchar");
+        ////field.put("fieldLength", "");
+        ///**
+        //
+        // */
+        //
+        //field.put("fieldLength", "(20)");
+        //
+        //String fieldType = field.get("fieldType");
+        //String fieldLength = field.get("fieldLength");
+        //
+        //if (fieldLength  == null){
+        //    System.out.println("error...");
+        //}
+        //String typeWithLength = Objects.equals(fieldLength, "null") ? fieldType : fieldType + fieldLength;
+        //System.out.println(typeWithLength);
         // -------------------------------------------------------------if EXTERNAL table or not
         //String str = "CREATE EXTERNAL TABLE 1()";
         //String[] tables = str.split("TABLE");
