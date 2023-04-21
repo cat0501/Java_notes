@@ -3,58 +3,94 @@ package algorithm;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.JSONPath;
-import com.alibaba.fastjson.parser.Feature;
-import com.google.gson.JsonParser;
-import com.sun.org.apache.xalan.internal.templates.Constants;
 
-import java.nio.charset.StandardCharsets;
-import java.util.*;
-import java.util.stream.Collectors;
-
-/**
- * @author Lemonade
- * @description
- * @updateTime 2023/3/20 14:21
- */
 public class Test03 {
     public static void main(String[] args) {
 
-        String str = "{\"postStatements\":[],\"connParams\":\"\",\"segmentSeparator\":\"\",\"rawScript\":\"\",\"udfs\":\"\",\"type\":\"HIVE\",\"sql\":\"\",\"preStatements\":[],\"sqlType\":\"0\",\"customConfig\":1,\"displayRows\":10,\"json\":\"{\\\"job\\\":{\\\"setting\\\":{\\\"speed\\\":{\\\"channel\\\":3},\\\"errorLimit\\\":{\\\"record\\\":0,\\\"percentage\\\":0.02}},\\\"content\\\":[{\\\"reader\\\":{\\\"name\\\":\\\"oraclereader\\\",\\\"parameter\\\":{\\\"userPassword\\\":\\\"\\\",\\\"password\\\":\\\"ev\\\",\\\"address\\\":[],\\\"dbName\\\":\\\"oracle\\\",\\\"column\\\":[\\\"ID\\\",\\\"PARENT_ID\\\"],\\\"dbType\\\":\\\"5\\\",\\\"connection\\\":[{\\\"jdbcUrl\\\":[\\\"jdbc:oracle:thin:@//10.11.3.33:1521/evmsc\\\"],\\\"table\\\":[\\\"BASE_AREA\\\"]}],\\\"userName\\\":\\\"\\\",\\\"splitter\\\":\\\",\\\",\\\"collectionName\\\":\\\"\\\",\\\"username\\\":\\\"ev\\\"}},\\\"writer\\\":{\\\"name\\\":\\\"hdfswriter\\\",\\\"parameter\\\":{\\\"path\\\":\\\"/datacenter/default/default_table\\\",\\\"fileName\\\":\\\"ppp\\\",\\\"compress\\\":\\\"snappy\\\",\\\"dbName\\\":\\\"数据中台hive\\\",\\\"column\\\":[{\\\"name\\\":\\\"vin\\\",\\\"type\\\":\\\"STRING\\\"},{\\\"name\\\":\\\"veh_type\\\",\\\"type\\\":\\\"INT\\\"}],\\\"defaultFS\\\":\\\"hdfs://10.11.14.30:8020\\\",\\\"dbType\\\":\\\"2\\\",\\\"targetTableName\\\":\\\"dim_data_analysis_forecast_new_sy\\\",\\\"writeMode\\\":\\\"append\\\",\\\"fieldDelimiter\\\":\\\"\\\",\\\"splitter\\\":\\\",\\\",\\\"fileType\\\":\\\"orc\\\"}}}]}}\",\"localParams\":[],\"resourceList\":[]}";
+        //JSONObject jsonObject = JSONObject.parseObject(taskDefinitionJson);
+        //String path = "/111111111111111111111111";
+        //JSONObject json = jsonObject.getJSONObject("json");
+        //if (json != null){
+        //    JSONObject job = json.getJSONObject("job");
+        //    job.getJSONObject("content").getJSONObject("writer").getJSONObject("parameter").put("path", path);
+        //}
+        //
+        //System.out.println("new string------->" + jsonObject.toString());
 
-        String jsons = JSONObject.parseObject(str).getString("json").toString();
-        String jsonsGet = JSON.parseObject(jsons).toString();
+        String taskDefinitionJson = "{\"postStatements\":[],\"connParams\":\"\",\"segmentSeparator\":\"\",\"rawScript\":\"\",\"udfs\":\"\",\"type\":\"HIVE\",\"sql\":\"\",\"preStatements\":[],\"sqlType\":\"0\",\"customConfig\":1,\"displayRows\":10,\"json\":\"{\\\"job\\\":{\\\"setting\\\":{\\\"speed\\\":{\\\"channel\\\":3},\\\"errorLimit\\\":{\\\"record\\\":0,\\\"percentage\\\":0.02}},\\\"content\\\":[{\\\"reader\\\":{\\\"name\\\":\\\"oraclereader\\\",\\\"parameter\\\":{\\\"userPassword\\\":\\\"\\\",\\\"password\\\":\\\"ev\\\",\\\"address\\\":[],\\\"dbName\\\":\\\"oracle\\\",\\\"column\\\":[\\\"ID\\\",\\\"PARENT_ID\\\"],\\\"dbType\\\":\\\"5\\\",\\\"connection\\\":[{\\\"jdbcUrl\\\":[\\\"jdbc:oracle:thin:@//10.11.3.33:1521/evmsc\\\"],\\\"table\\\":[\\\"BASE_AREA\\\"]}],\\\"userName\\\":\\\"\\\",\\\"splitter\\\":\\\",\\\",\\\"collectionName\\\":\\\"\\\",\\\"username\\\":\\\"ev\\\"}},\\\"writer\\\":{\\\"name\\\":\\\"hdfswriter\\\",\\\"parameter\\\":{\\\"path\\\":\\\"/datacenter/default/default_table\\\",\\\"fileName\\\":\\\"ppp\\\",\\\"compress\\\":\\\"snappy\\\",\\\"dbName\\\":\\\"数据中台hive\\\",\\\"column\\\":[{\\\"name\\\":\\\"vin\\\",\\\"type\\\":\\\"STRING\\\"},{\\\"name\\\":\\\"veh_type\\\",\\\"type\\\":\\\"INT\\\"}],\\\"defaultFS\\\":\\\"hdfs://10.11.14.30:8020\\\",\\\"dbType\\\":\\\"2\\\",\\\"targetTableName\\\":\\\"dim_data_analysis_forecast_new_sy\\\",\\\"writeMode\\\":\\\"append\\\",\\\"fieldDelimiter\\\":\\\"\\\",\\\"splitter\\\":\\\",\\\",\\\"fileType\\\":\\\"orc\\\"}}}]}}\",\"localParams\":[],\"resourceList\":[]}";
 
-        String jobs = JSONObject.parseObject(jsonsGet).getString("job");
-        String jobsGet = JSON.parseObject(jobs).toString();
+        JSONObject jsonObjects = JSON.parseObject(taskDefinitionJson);
+        JSONObject json = jsonObjects.getJSONObject("json");
+        JSONObject job = json.getJSONObject("job");
+        job.getJSONArray("content").getJSONObject(0).getJSONObject("writer").getJSONObject("parameter").put("path", "/11111");
 
-        String contents = JSONObject.parseObject(jobsGet).getString("content");
-        String contentsGet = JSON.parseArray(contents).get(0).toString();
+        System.out.println("result------->" + jsonObjects.fluentPut("json", json.toString()).toString());
 
-        String writers = JSONObject.parseObject(contentsGet).getString("writer").toString();
-        String parameters = JSONObject.parseObject(writers).getString("parameter").toString();
-        String paths = JSONObject.parseObject(parameters).getString("path").toString();
 
-        System.out.println(paths);
-        JSONObject newData = JSONObject.parseObject(parameters).fluentPut("path", "111111");
-        System.out.println(newData.toJSONString());
-
-        System.out.println("拼装结果............");
-        JSONObject newRanks = JSONObject.parseObject(writers).fluentPut("parameter", JSON.parseObject(JSONObject.toJSONString(newData)));//这个[]括号，是因为当时拿的数据结构是数组，所以需要这种方式转换成数组，暂时没想到更好的方式
-        System.out.println("parameter--------------------->" + newRanks.toJSONString());
-
-        JSONObject newPages = JSONObject.parseObject(contentsGet).fluentPut("writer", JSON.parseObject(JSONObject.toJSONString(newRanks)));
-        System.out.println("writer--------------------->" + newPages.toJSONString());
-
-        JSONObject newPages2 = JSONObject.parseObject(jobsGet).fluentPut("content", JSON.parseArray("[" + JSONObject.toJSONString(newPages) + "]"));
-        System.out.println("content--------------------->" + newPages2.toJSONString());
-
-        JSONObject newPages3 = JSONObject.parseObject(jsonsGet).fluentPut("job", JSON.parseObject(JSONObject.toJSONString(newPages2)));
-        System.out.println("job--------------------->" + newPages3.toJSONString());
-        String s = newPages3.toJSONString();
+        //.getJSONObject("parameter").put("path", "/1111111111111");
 
 
 
+
+
+
+
+
+        //System.out.println("-------------------------------------------->");
+        //
+        //JSONObject jsonObject = JSONObject.parseObject(str);
+        //String jsons = JSONObject.parseObject(str).getString("json");
+        //System.out.println("jsons------>" + jsons);
+        //String jsonsGet = JSON.parseObject(jsons).toString();
+        //System.out.println("jsonsGet------>" + jsonsGet);
+        //
+        //String jobs = JSONObject.parseObject(jsonsGet).getString("job");
+        //String jobsGet = JSON.parseObject(jobs).toString();
+        //
+        //String contents = JSONObject.parseObject(jobsGet).getString("content");
+        ////String contentsGet = JSON.parseArray(contents).get(0).toString();
+        //
+        //String writers = JSONObject.parseObject(contentsGet).getString("writer").toString();
+        //String parameters = JSONObject.parseObject(writers).getString("parameter").toString();
+        //String paths = JSONObject.parseObject(parameters).getString("path").toString();
+        //
+        //System.out.println(paths);
+        //JSONObject newData = JSONObject.parseObject(parameters).fluentPut("path", "111111");
+        //System.out.println(newData.toJSONString());
+        //
+        //System.out.println("拼装结果............");
+        //JSONObject newRanks = JSONObject.parseObject(writers).fluentPut("parameter", JSON.parseObject(JSONObject.toJSONString(newData)));//这个[]括号，是因为当时拿的数据结构是数组，所以需要这种方式转换成数组，暂时没想到更好的方式
+        //System.out.println("parameter--------------------->" + newRanks.toJSONString());
+        //
+        //JSONObject newPages = JSONObject.parseObject(contentsGet).fluentPut("writer", JSON.parseObject(JSONObject.toJSONString(newRanks)));
+        //System.out.println("writer--------------------->" + newPages.toJSONString());
+        //
+        //JSONObject newPages2 = JSONObject.parseObject(jobsGet).fluentPut("content", JSON.parseArray("[" + JSONObject.toJSONString(newPages) + "]"));
+        //System.out.println("content--------------------->" + newPages2.toJSONString());
+        //
+        //JSONObject newPages3 = JSONObject.parseObject(jsonsGet).fluentPut("job", JSON.parseObject(JSONObject.toJSONString(newPages2)));
+        //System.out.println("job--------------------->" + newPages3.toJSONString());
+        //
+        //JSONObject newPages4 = jsonObject.fluentPut("json", newPages3.toString());
+        //
+        //System.out.println("task_params--------------------->" + newPages4.toString());
+
+        // 今年五一期间，十大热门到达城市，分别为：北京、广州、上海、成都、武汉、杭州、西安、南京、长沙、重庆。
+        //
+        //String lo = "STRINGddd";
+        //System.out.println(lo.toLowerCase());
+
+        //String pathTmp = "hdfs://nameservice1/datacenter/bitnei_dim/dim_veh_model_zn";
+        //int index1 = pathTmp.indexOf("1");
+        //if (index1 != -1) {
+        //    String part1 = pathTmp.substring(0, index1);
+        //    String part2 = pathTmp.substring(index1 + 1);
+        //
+        //    System.out.println("Part 1: " + part1);  // 输出 "Hello "
+        //    System.out.println("Part 2: " + part2);  // 输出 "(world)"
+        //}
+        //
+        //System.out.println("--------------------------------------");
 
 
         //System.out.println(jsonObject.toString());
@@ -76,13 +112,7 @@ public class Test03 {
         //    System.out.println("-------------------------");
         //}
         //
-        /**
-         我搜集了部分资料，和你交流下。
 
-         我理解的这个地方专项计划就是，低于投档线二三十分就有挺大概率录取了。
-         举个例子，比如
-
-         */
 
 
         // -------------------------------------------------------------test varchar(20) or varchar
