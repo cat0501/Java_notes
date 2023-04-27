@@ -154,7 +154,7 @@ b.  又新学一种代码之间解耦途径
 
 ### BeanFactory实现（了解DefaultListableBeanFactory就够了）
 
-原始功能并不丰富，扩展功能是通过后处理器完成。
+原始功能并不丰富，扩展功能是通过**后处理器**完成。
 
 ```java
 public static void main(String[] args) {
