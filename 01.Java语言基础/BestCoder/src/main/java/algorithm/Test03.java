@@ -7,6 +7,10 @@ import com.alibaba.fastjson.JSONObject;
 public class Test03 {
     public static void main(String[] args) {
 
+        String sql = "111111;";
+        sql = sql.substring(0, sql.length() - 1);
+        System.out.println(sql);
+
         //JSONObject jsonObject = JSONObject.parseObject(taskDefinitionJson);
         //String path = "/111111111111111111111111";
         //JSONObject json = jsonObject.getJSONObject("json");
@@ -17,14 +21,14 @@ public class Test03 {
         //
         //System.out.println("new string------->" + jsonObject.toString());
 
-        String taskDefinitionJson = "{\"postStatements\":[],\"connParams\":\"\",\"segmentSeparator\":\"\",\"rawScript\":\"\",\"udfs\":\"\",\"type\":\"HIVE\",\"sql\":\"\",\"preStatements\":[],\"sqlType\":\"0\",\"customConfig\":1,\"displayRows\":10,\"json\":\"{\\\"job\\\":{\\\"setting\\\":{\\\"speed\\\":{\\\"channel\\\":3},\\\"errorLimit\\\":{\\\"record\\\":0,\\\"percentage\\\":0.02}},\\\"content\\\":[{\\\"reader\\\":{\\\"name\\\":\\\"oraclereader\\\",\\\"parameter\\\":{\\\"userPassword\\\":\\\"\\\",\\\"password\\\":\\\"ev\\\",\\\"address\\\":[],\\\"dbName\\\":\\\"oracle\\\",\\\"column\\\":[\\\"ID\\\",\\\"PARENT_ID\\\"],\\\"dbType\\\":\\\"5\\\",\\\"connection\\\":[{\\\"jdbcUrl\\\":[\\\"jdbc:oracle:thin:@//10.11.3.33:1521/evmsc\\\"],\\\"table\\\":[\\\"BASE_AREA\\\"]}],\\\"userName\\\":\\\"\\\",\\\"splitter\\\":\\\",\\\",\\\"collectionName\\\":\\\"\\\",\\\"username\\\":\\\"ev\\\"}},\\\"writer\\\":{\\\"name\\\":\\\"hdfswriter\\\",\\\"parameter\\\":{\\\"path\\\":\\\"/datacenter/default/default_table\\\",\\\"fileName\\\":\\\"ppp\\\",\\\"compress\\\":\\\"snappy\\\",\\\"dbName\\\":\\\"数据中台hive\\\",\\\"column\\\":[{\\\"name\\\":\\\"vin\\\",\\\"type\\\":\\\"STRING\\\"},{\\\"name\\\":\\\"veh_type\\\",\\\"type\\\":\\\"INT\\\"}],\\\"defaultFS\\\":\\\"hdfs://10.11.14.30:8020\\\",\\\"dbType\\\":\\\"2\\\",\\\"targetTableName\\\":\\\"dim_data_analysis_forecast_new_sy\\\",\\\"writeMode\\\":\\\"append\\\",\\\"fieldDelimiter\\\":\\\"\\\",\\\"splitter\\\":\\\",\\\",\\\"fileType\\\":\\\"orc\\\"}}}]}}\",\"localParams\":[],\"resourceList\":[]}";
-
-        JSONObject jsonObjects = JSON.parseObject(taskDefinitionJson);
-        JSONObject json = jsonObjects.getJSONObject("json");
-        JSONObject job = json.getJSONObject("job");
-        job.getJSONArray("content").getJSONObject(0).getJSONObject("writer").getJSONObject("parameter").put("path", "/11111");
-
-        System.out.println("result------->" + jsonObjects.fluentPut("json", json.toString()).toString());
+        //String taskDefinitionJson = "{\"postStatements\":[],\"connParams\":\"\",\"segmentSeparator\":\"\",\"rawScript\":\"\",\"udfs\":\"\",\"type\":\"HIVE\",\"sql\":\"\",\"preStatements\":[],\"sqlType\":\"0\",\"customConfig\":1,\"displayRows\":10,\"json\":\"{\\\"job\\\":{\\\"setting\\\":{\\\"speed\\\":{\\\"channel\\\":3},\\\"errorLimit\\\":{\\\"record\\\":0,\\\"percentage\\\":0.02}},\\\"content\\\":[{\\\"reader\\\":{\\\"name\\\":\\\"oraclereader\\\",\\\"parameter\\\":{\\\"userPassword\\\":\\\"\\\",\\\"password\\\":\\\"ev\\\",\\\"address\\\":[],\\\"dbName\\\":\\\"oracle\\\",\\\"column\\\":[\\\"ID\\\",\\\"PARENT_ID\\\"],\\\"dbType\\\":\\\"5\\\",\\\"connection\\\":[{\\\"jdbcUrl\\\":[\\\"jdbc:oracle:thin:@//10.11.3.33:1521/evmsc\\\"],\\\"table\\\":[\\\"BASE_AREA\\\"]}],\\\"userName\\\":\\\"\\\",\\\"splitter\\\":\\\",\\\",\\\"collectionName\\\":\\\"\\\",\\\"username\\\":\\\"ev\\\"}},\\\"writer\\\":{\\\"name\\\":\\\"hdfswriter\\\",\\\"parameter\\\":{\\\"path\\\":\\\"/datacenter/default/default_table\\\",\\\"fileName\\\":\\\"ppp\\\",\\\"compress\\\":\\\"snappy\\\",\\\"dbName\\\":\\\"数据中台hive\\\",\\\"column\\\":[{\\\"name\\\":\\\"vin\\\",\\\"type\\\":\\\"STRING\\\"},{\\\"name\\\":\\\"veh_type\\\",\\\"type\\\":\\\"INT\\\"}],\\\"defaultFS\\\":\\\"hdfs://10.11.14.30:8020\\\",\\\"dbType\\\":\\\"2\\\",\\\"targetTableName\\\":\\\"dim_data_analysis_forecast_new_sy\\\",\\\"writeMode\\\":\\\"append\\\",\\\"fieldDelimiter\\\":\\\"\\\",\\\"splitter\\\":\\\",\\\",\\\"fileType\\\":\\\"orc\\\"}}}]}}\",\"localParams\":[],\"resourceList\":[]}";
+        //
+        //JSONObject jsonObjects = JSON.parseObject(taskDefinitionJson);
+        //JSONObject json = jsonObjects.getJSONObject("json");
+        //JSONObject job = json.getJSONObject("job");
+        //job.getJSONArray("content").getJSONObject(0).getJSONObject("writer").getJSONObject("parameter").put("path", "/11111");
+        //
+        //System.out.println("result------->" + jsonObjects.fluentPut("json", json.toString()).toString());
 
 
         //.getJSONObject("parameter").put("path", "/1111111111111");
