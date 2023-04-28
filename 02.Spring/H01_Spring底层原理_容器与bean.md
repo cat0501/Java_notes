@@ -75,82 +75,69 @@ component2=com.itheima.a01.Component2@3eba57a7
 
 - （3）ApplicationContext 比 BeanFactory 多点啥（扩展的功能主要体现在继承的4个父接口上）⭐️
   - 多语言能力（国际化能力）
+  
+    ```java
+    System.out.println(context.getMessage("hi", null, Locale.CHINA));
+    System.out.println(context.getMessage("hi", null, Locale.ENGLISH));
+    System.out.println(context.getMessage("hi", null, Locale.JAPANESE));
+    ```
+  
+    存在的未解决的问题
+  
+    Exception in thread "main" org.springframework.context.NoSuchMessageException: No message found under code 'hi' for locale 'zh_CN'.
+  
   - 通配符匹配资源的能力
-  - 发布事件对象
+  
+    ```java
+    Resource[] resources = context.getResources("classpath*:META-INF/spring.factories");
+    for (Resource resource : resources) {
+      	System.out.println(resource);
+    }
+    ```
+  
+    打印结果：
+  
+    ```java
+    URL [jar:file:/Users/cat/environment/repo/org/springframework/boot/spring-boot/2.5.5/spring-boot-2.5.5.jar!/META-INF/spring.factories]
+    URL [jar:file:/Users/cat/environment/repo/org/springframework/boot/spring-boot-autoconfigure/2.5.5/spring-boot-autoconfigure-2.5.5.jar!/META-INF/spring.factories]
+    URL [jar:file:/Users/cat/environment/repo/org/springframework/spring-beans/5.3.10/spring-beans-5.3.10.jar!/META-INF/spring.factories]
+    ```
+  
+  - 发布事件对象（如实现用户注册和发布事件的解耦）
+  
+    ```java
+    @EventListener
+    public void aaa(UserRegisteredEvent event) {
+        log.debug("{}", event);
+        log.debug("发送短信");
+    }
+    ```
+  
+    工作中的使用如下：[基于自定义注解、AOP和Spring事件发布实现日志记录](https://blog.51cto.com/u_15473389/5356183)
+  
   - 环境信息
+  
+    ```java
+    System.out.println(context.getEnvironment().getProperty("JAVA_8_HOME"));
+    System.out.println(context.getEnvironment().getProperty("JAVA_11_HOME"));
+    System.out.println(context.getEnvironment().getProperty("spring.messages.basename"));
+    ```
+  
+    打印结果
+  
+    ```java
+    /Library/Java/JavaVirtualMachines/jdk1.8.0_211.jdk/Contents/Home
+    /Library/Java/JavaVirtualMachines/jdk-11.0.14.jdk/Contents/Home
+    messages://messages_zh.properties
+    ```
+  
+    
 
-功能1
 
-```java
-System.out.println(context.getMessage("hi", null, Locale.CHINA));
-System.out.println(context.getMessage("hi", null, Locale.ENGLISH));
-System.out.println(context.getMessage("hi", null, Locale.JAPANESE));
-```
-
-
-
-存在的未解决的问题
-
-Exception in thread "main" org.springframework.context.NoSuchMessageException: No message found under code 'hi' for locale 'zh_CN'.
 
 <br>
 
-功能2
-
-```java
-Resource[] resources = context.getResources("classpath*:META-INF/spring.factories");
-for (Resource resource : resources) {
-  	System.out.println(resource);
-}
-```
-
-打印的结果
-
-```java
-URL [jar:file:/Users/cat/environment/repo/org/springframework/boot/spring-boot/2.5.5/spring-boot-2.5.5.jar!/META-INF/spring.factories]
-URL [jar:file:/Users/cat/environment/repo/org/springframework/boot/spring-boot-autoconfigure/2.5.5/spring-boot-autoconfigure-2.5.5.jar!/META-INF/spring.factories]
-URL [jar:file:/Users/cat/environment/repo/org/springframework/spring-beans/5.3.10/spring-beans-5.3.10.jar!/META-INF/spring.factories]
-```
-
-<br>
-
-功能3
-
-```java
-System.out.println(context.getEnvironment().getProperty("JAVA_8_HOME"));
-System.out.println(context.getEnvironment().getProperty("JAVA_11_HOME"));
-System.out.println(context.getEnvironment().getProperty("spring.messages.basename"));
-```
-
-打印的结果
-
-```bash
-/Library/Java/JavaVirtualMachines/jdk1.8.0_211.jdk/Contents/Home
-/Library/Java/JavaVirtualMachines/jdk-11.0.14.jdk/Contents/Home
-messages://messages_zh.properties
-```
-
-<br>
-
-
-
-功能4：发布事件（如实现用户注册和发布事件的解耦）
-
-```java
-@EventListener
-public void aaa(UserRegisteredEvent event) {
-    log.debug("{}", event);
-    log.debug("发送短信");
-}
-```
-
-工作中的使用如下
-
-[基于自定义注解、AOP和Spring事件发布实现日志记录](https://blog.51cto.com/u_15473389/5356183)
-
-<br>
-
-总结一下
+总结一下：
 
 a.  BeanFactory 与 ApplicationContext 并不仅仅是简单接口继承的关系, ApplicationContext 组合并扩展了 BeanFactory 的功能
 
@@ -167,7 +154,7 @@ b.  又新学一种代码之间解耦途径
 
 ### BeanFactory实现（了解DefaultListableBeanFactory就够了）
 
-原始功能并不丰富，扩展功能是通过后处理器完成。
+原始功能并不丰富，扩展功能是通过【后处理器】完成。
 
 ```java
 public static void main(String[] args) {
