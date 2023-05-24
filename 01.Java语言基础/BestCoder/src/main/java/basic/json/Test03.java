@@ -1,15 +1,95 @@
-package algorithm;
+package basic.json;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Test03 {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JsonProcessingException {
+        JSONObject jsonResult = new JSONObject();
+        String taskDefinitionJson = "{\"postStatements\":[],\"connParams\":\"\",\"segmentSeparator\":\"\",\"rawScript\":\"\",\"udfs\":\"\",\"type\":\"HIVE\",\"sql\":\"\",\"preStatements\":[],\"sqlType\":\"0\",\"customConfig\":1,\"displayRows\":10,\"json\":\"{\\\"job\\\":{\\\"content\\\":[{\\\"reader\\\":{\\\"parameter\\\":{\\\"schema\\\":\\\"\\\",\\\"userPassword\\\":\\\"\\\",\\\"password\\\":\\\"ev\\\",\\\"address\\\":[],\\\"dbName\\\":\\\"mysql_Test\\\",\\\"column\\\":[\\\"aaa\\\",\\\"id\\\"],\\\"dbType\\\":\\\"13\\\",\\\"connection\\\":[{\\\"jdbcUrl\\\":[\\\"jdbc:oracle:thin:@//10.11.3.33:1521/evmsc\\\"],\\\"table\\\":[\\\"aaa\\\"]}],\\\"userName\\\":\\\"\\\",\\\"splitter\\\":\\\",\\\",\\\"collectionName\\\":\\\"\\\",\\\"username\\\":\\\"ev\\\"},\\\"name\\\":\\\"oraclereader\\\"},\\\"writer\\\":{\\\"parameter\\\":{\\\"path\\\":\\\"/warehouse/tablespace/managed/hive/datacenter.db/ods_t_veh_product_info_statistic_all_sy\\\",\\\"fileName\\\":\\\"ppp\\\",\\\"compress\\\":\\\"snappy\\\",\\\"dbName\\\":\\\"123\\\",\\\"column\\\":[{\\\"name\\\":\\\"vin\\\",\\\"type\\\":\\\"string\\\"},{\\\"name\\\":\\\"id\\\"}],\\\"defaultFS\\\":\\\"hdfs://10.11.14.30:8020\\\",\\\"dbType\\\":\\\"2\\\",\\\"targetTableName\\\":\\\"ods_t_veh_product_info_statistic_all_sy\\\",\\\"writeMode\\\":\\\"append\\\",\\\"fieldDelimiter\\\":\\\"\\\\u0001\\\",\\\"splitter\\\":\\\",\\\",\\\"fileType\\\":\\\"parquet\\\"},\\\"name\\\":\\\"hdfswriter\\\"}}],\\\"setting\\\":{\\\"errorLimit\\\":{\\\"record\\\":0,\\\"percentage\\\":0.02},\\\"speed\\\":{\\\"channel\\\":3}}}}\",\"dependence\":{\"varPoolMap\":{},\"inputLocalParametersMap\":{},\"localParametersMap\":{},\"resources\":{\"resourceMap\":{}},\"resourceFilesList\":[]},\"localParams\":[],\"resourceList\":[]}";
 
-        String sql = "111111;";
-        sql = sql.substring(0, sql.length() - 1);
-        System.out.println(sql);
+        //(1)
+        JSONObject jsonObject = JSONObject.parseObject(taskDefinitionJson);
+        String jsons = JSONObject.parseObject(taskDefinitionJson).getString("json");
+        String jsonsGet = JSON.parseObject(jsons).toString();
+
+        String jobs = JSONObject.parseObject(jsonsGet).getString("job");
+        String jobsGet = JSON.parseObject(jobs).toString();
+
+        String contents = JSONObject.parseObject(jobsGet).getString("content");
+        String contentsGet = JSON.parseArray(contents).get(0).toString();
+
+        String writers = JSONObject.parseObject(contentsGet).getString("writer");
+        String parameters = JSONObject.parseObject(writers).getString("parameter");
+
+
+        JSONObject newParameters = JSONObject.parseObject(parameters).fluentPut("path", "/1111111111");
+
+        //(2)
+        String readers = JSONObject.parseObject(contentsGet).getString("reader");
+        String readersParameters = JSONObject.parseObject(readers).getString("parameter");
+        String connections = JSONObject.parseObject(readersParameters).getString("connection");
+
+
+        String jdbcUrlInfo = "jdbc://101.10";
+        List<String> stringList = new ArrayList<>();
+        stringList.add(jdbcUrlInfo);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(stringList);
+        JSONArray json2 = JSONArray.parseArray(json);
+
+        String contentsGets = JSON.parseArray(connections).get(0).toString();
+        JSONObject jdbcUrls = JSONObject.parseObject(contentsGets).fluentPut("jdbcUrl", json2);
+
+        System.out.println("拼装结果............");
+
+
+
+
+        JSONObject connectionJson = JSONObject.parseObject(readersParameters)
+                .fluentPut("connection", JSON.parseArray("[" + JSONObject.toJSONString(jdbcUrls) + "]"))
+                .fluentPut("username", "root")
+                .fluentPut("password", "1234456");
+        JSONObject readersJson = JSONObject.parseObject(readers)
+                .fluentPut("parameter", JSON.parseObject(JSONObject.toJSONString(connectionJson)))
+                .fluentPut("name", "mysqlreader");
+
+        JSONObject parameterJson = JSONObject.parseObject(writers).fluentPut("parameter", JSON.parseObject(JSONObject.toJSONString(newParameters)));
+        JSONObject writerJson = JSONObject.parseObject(contentsGet)
+                .fluentPut("writer", JSON.parseObject(JSONObject.toJSONString(parameterJson)))
+                .fluentPut("reader", JSON.parseObject(JSONObject.toJSONString(readersJson)));
+        JSONObject contentJson = JSONObject.parseObject(jobsGet).fluentPut("content", JSON.parseArray("[" + JSONObject.toJSONString(writerJson) + "]"));
+        JSONObject jobJson = JSONObject.parseObject(jsonsGet).fluentPut("job", JSON.parseObject(JSONObject.toJSONString(contentJson)));
+
+
+        System.out.println("jobJson----------->" + jobJson.toString());
+
+        //jsonResult = jsonObject.fluentPut("json", jobJson.toString());
+        //System.out.println("jsonResult----------->" + jsonResult);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //String sql = "111111;";
+        //sql = sql.substring(0, sql.length() - 1);
+        //System.out.println(sql);
 
         //JSONObject jsonObject = JSONObject.parseObject(taskDefinitionJson);
         //String path = "/111111111111111111111111";
@@ -22,7 +102,7 @@ public class Test03 {
         //System.out.println("new string------->" + jsonObject.toString());
 
         //String taskDefinitionJson = "{\"postStatements\":[],\"connParams\":\"\",\"segmentSeparator\":\"\",\"rawScript\":\"\",\"udfs\":\"\",\"type\":\"HIVE\",\"sql\":\"\",\"preStatements\":[],\"sqlType\":\"0\",\"customConfig\":1,\"displayRows\":10,\"json\":\"{\\\"job\\\":{\\\"setting\\\":{\\\"speed\\\":{\\\"channel\\\":3},\\\"errorLimit\\\":{\\\"record\\\":0,\\\"percentage\\\":0.02}},\\\"content\\\":[{\\\"reader\\\":{\\\"name\\\":\\\"oraclereader\\\",\\\"parameter\\\":{\\\"userPassword\\\":\\\"\\\",\\\"password\\\":\\\"ev\\\",\\\"address\\\":[],\\\"dbName\\\":\\\"oracle\\\",\\\"column\\\":[\\\"ID\\\",\\\"PARENT_ID\\\"],\\\"dbType\\\":\\\"5\\\",\\\"connection\\\":[{\\\"jdbcUrl\\\":[\\\"jdbc:oracle:thin:@//10.11.3.33:1521/evmsc\\\"],\\\"table\\\":[\\\"BASE_AREA\\\"]}],\\\"userName\\\":\\\"\\\",\\\"splitter\\\":\\\",\\\",\\\"collectionName\\\":\\\"\\\",\\\"username\\\":\\\"ev\\\"}},\\\"writer\\\":{\\\"name\\\":\\\"hdfswriter\\\",\\\"parameter\\\":{\\\"path\\\":\\\"/datacenter/default/default_table\\\",\\\"fileName\\\":\\\"ppp\\\",\\\"compress\\\":\\\"snappy\\\",\\\"dbName\\\":\\\"数据中台hive\\\",\\\"column\\\":[{\\\"name\\\":\\\"vin\\\",\\\"type\\\":\\\"STRING\\\"},{\\\"name\\\":\\\"veh_type\\\",\\\"type\\\":\\\"INT\\\"}],\\\"defaultFS\\\":\\\"hdfs://10.11.14.30:8020\\\",\\\"dbType\\\":\\\"2\\\",\\\"targetTableName\\\":\\\"dim_data_analysis_forecast_new_sy\\\",\\\"writeMode\\\":\\\"append\\\",\\\"fieldDelimiter\\\":\\\"\\\",\\\"splitter\\\":\\\",\\\",\\\"fileType\\\":\\\"orc\\\"}}}]}}\",\"localParams\":[],\"resourceList\":[]}";
-        //
+
         //JSONObject jsonObjects = JSON.parseObject(taskDefinitionJson);
         //JSONObject json = jsonObjects.getJSONObject("json");
         //JSONObject job = json.getJSONObject("job");
@@ -78,6 +158,18 @@ public class Test03 {
         //JSONObject newPages4 = jsonObject.fluentPut("json", newPages3.toString());
         //
         //System.out.println("task_params--------------------->" + newPages4.toString());
+
+
+
+
+
+
+
+
+
+
+
+
 
         // 今年五一期间，十大热门到达城市，分别为：北京、广州、上海、成都、武汉、杭州、西安、南京、长沙、重庆。
         //
