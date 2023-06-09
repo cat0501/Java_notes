@@ -1,8 +1,12 @@
 package basic.json;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.lang3.CharUtils;
 
 import java.time.LocalDate;
@@ -17,6 +21,95 @@ import java.util.List;
  */
 public class StringTest01 {
     public static void main(String[] args) {
+
+
+        String testJson = "{\n" +
+                "\t\"address\": [],\n" +
+                "\t\"column\": [\n" +
+                "\t\t\"audit_table_name\",\n" +
+                "\t\t\"audit_date\"\n" +
+                "\t],\n" +
+                "\t\"hadoopConfig\": {\n" +
+                "\t\t\"dfs.nameservices\": \"nameservice1\",\n" +
+                "\t\t\"dfs.ha.namenodes.nameservice1\": \"cnbjsjztpnn01,cnbjsjztpnn02\",\n" +
+                "\t\t\"dfs.namenode.rpc-address.nameservice1.cnbjsjztpnn01\": \"cnbjsjztpnn01:8020\",\n" +
+                "\t\t\"dfs.namenode.rpc-address.nameservice1.cnbjsjztpnn02\": \"cnbjsjztpnn02:8020\",\n" +
+                "\t\t\"dfs.client.failover.proxy.provider.nameservice1\": \"org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider\"\n" +
+                "\t},\n" +
+                "\t\"connection\": [{\n" +
+                "\t\t\"jdbcUrl\": [\n" +
+                "\t\t\t\"jdbc:mysql://10.11.14.10:3306/carbon\"\n" +
+                "\t\t],\n" +
+                "\t\t\"table\": [\n" +
+                "\t\t\t\"audit_result\"\n" +
+                "\t\t]\n" +
+                "\t}],\n" +
+                "\t\"username\": \"root\"\n" +
+                "}";
+
+        System.out.println(testJson);
+
+
+        System.out.println("chatGpt 给出的方法如下--------------------------");
+        // com.fasterxml.jackson.databind
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = null;
+        try {
+            jsonNode = objectMapper.readTree(testJson);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        // 获取 connection 数组节点
+        ArrayNode connectionNode = (ArrayNode) jsonNode.get("connection");
+
+        // 获取 connection 数组中的第一个元素
+        ObjectNode connectionElementNode = (ObjectNode) connectionNode.get(0);
+
+        // 获取 table 数组节点
+        ArrayNode tableNode = (ArrayNode) connectionElementNode.get("table");
+
+        // 将 table 数组中的值替换为 "zjl"
+        tableNode.removeAll();
+        tableNode.add("zjl");
+
+        // 将修改后的 JSON 输出
+        String modifiedJsonStr = null;
+        try {
+            //modifiedJsonStr = objectMapper.writeValueAsString(jsonNode);
+            modifiedJsonStr = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        System.out.println(modifiedJsonStr);
+
+        System.out.println("--------------------------------------------------------------------");
+        JSONObject jsonObject = JSONObject.parseObject(testJson);
+
+        System.out.println("获取三种不同的值：getString、getJSONObject、getJSONArray");
+        // string
+        String username = jsonObject.getString("username");
+        // object
+        String hadoopConfig1 = jsonObject.getJSONObject("hadoopConfig").getString("dfs.ha.namenodes.nameservice1");
+        System.out.println(hadoopConfig1);
+        // array
+        String jdbcUrl = jsonObject.getJSONArray("connection").getJSONObject(0).getString("jdbcUrl");
+        System.out.println(jdbcUrl);
+
+        System.out.println("尝试替换其中的值");
+        System.out.println("如替换table的值为zjl");
+
+        JSONObject object = JSONObject.parseObject(testJson).getJSONArray("connection")
+                .getJSONObject(0)
+                .fluentPut("table", "zjl");
+        System.out.println(object.toJSONString());
+
+
+        // 2023-06-09
+
+        String addressSub = "hdfs:" + "jdbc:hive2://10.11.14.30:10000".substring(11);
+        addressSub = addressSub.substring(0, addressSub.length() - 5) +"8020";
+        System.out.println(addressSub);
 
 
         String lyk = "\u0001";
