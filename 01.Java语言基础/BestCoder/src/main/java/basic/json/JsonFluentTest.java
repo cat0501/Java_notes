@@ -44,6 +44,10 @@ public class JsonFluentTest {
                 "\t\"localParams\": [],\n" +
                 "\t\"resourceList\": []\n" +
                 "}";
+
+        System.out.println(taskParams);
+
+
         JSONObject jsonObject = JSONObject.parseObject(taskParams);
 
         String contentJson = jsonObject.getJSONObject("json").getJSONObject("job").getJSONArray("content").getString(0);

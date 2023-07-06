@@ -1,18 +1,10 @@
-package basic.json;
+package basic.standard;
 
-import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.apache.commons.lang3.CharUtils;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Lemonade
@@ -23,31 +15,13 @@ public class StringTest01 {
     public static void main(String[] args) {
 
 
-        String testJson = "{\n" +
-                "\t\"address\": [],\n" +
-                "\t\"column\": [\n" +
-                "\t\t\"audit_table_name\",\n" +
-                "\t\t\"audit_date\"\n" +
-                "\t],\n" +
-                "\t\"hadoopConfig\": {\n" +
-                "\t\t\"dfs.nameservices\": \"nameservice1\",\n" +
-                "\t\t\"dfs.ha.namenodes.nameservice1\": \"cnbjsjztpnn01,cnbjsjztpnn02\",\n" +
-                "\t\t\"dfs.namenode.rpc-address.nameservice1.cnbjsjztpnn01\": \"cnbjsjztpnn01:8020\",\n" +
-                "\t\t\"dfs.namenode.rpc-address.nameservice1.cnbjsjztpnn02\": \"cnbjsjztpnn02:8020\",\n" +
-                "\t\t\"dfs.client.failover.proxy.provider.nameservice1\": \"org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider\"\n" +
-                "\t},\n" +
-                "\t\"connection\": [{\n" +
-                "\t\t\"jdbcUrl\": [\n" +
-                "\t\t\t\"jdbc:mysql://10.11.14.10:3306/carbon\"\n" +
-                "\t\t],\n" +
-                "\t\t\"table\": [\n" +
-                "\t\t\t\"audit_result\"\n" +
-                "\t\t]\n" +
-                "\t}],\n" +
-                "\t\"username\": \"root\"\n" +
-                "}";
+        String testJson = "{\"job\":{\"content\":[{\"reader\":{\"parameter\":{\"schema\":\"\",\"userPassword\":\"123456\",\"password\":\"ev\",\"address\":[\"10.11.9.7:27019\"],\"dbName\":\"nation-screen\",\"column\":[{\"name\":\"cityCode\",\"type\":\"String\"},{\"name\":\"authId\",\"type\":\"String\"}],\"dbType\":\"12\",\"splitPk\":\"\",\"userName\":\"screen\",\"splitter\":\",\",\"collectionName\":\"SYS_FACTORY\",\"username\":\"ev\"},\"name\":\"mongodbreader\"},\"writer\":{\"parameter\":{\"fileName\":\"ods_data_test0601_2023_06_13\",\"compress\":\"snappy\",\"dbName\":\"test_zjl123456\",\"column\":[{\"name\":\"vehiclescore\",\"type\":\"string\"},{\"name\":\"vin\",\"type\":\"string\"}],\"dbType\":\"2\",\"writeMode\":\"truncate\",\"fieldDelimiter\":\"\\u0001\",\"splitter\":\",\",\"path\":\"/warehouse/tablespace/external/hive/zjl.db/ods_data_test0601\",\"hadoopConfig\":{\"dfs.ha.namenodes.nameservice1\":\"cnbjsjztpnn01,cnbjsjztpnn02\",\"dfs.namenode.rpc-address.nameservice1.cnbjsjztpnn02\":\"cnbjsjztpnn02:8020\",\"dfs.namenode.rpc-address.nameservice1.cnbjsjztpnn01\":\"cnbjsjztpnn01:8020\",\"dfs.nameservices\":\"nameservice1\",\"dfs.client.failover.proxy.provider.nameservice1\":\"org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider\"},\"defaultFS\":\"hdfs://10.11.14.30:8020\",\"targetTableName\":\"ods_data_test0601\",\"fileType\":\"parquet\"},\"name\":\"hdfswriter\"}}],\"setting\":{\"errorLimit\":{\"record\":0,\"percentage\":0.02},\"speed\":{\"channel\":3}}}}";
 
         System.out.println(testJson);
+
+        // MONGODB 差异化字段处理
+        // "dbName": "mongodbTable",
+        // "column": ["cityCode", "authId"],
 
 
         System.out.println("chatGpt 给出的方法如下--------------------------");
@@ -60,22 +34,27 @@ public class StringTest01 {
             e.printStackTrace();
         }
 
-        // 获取 connection 数组节点
-        ArrayNode connectionNode = (ArrayNode) jsonNode.get("connection");
+        // Modify dbName
+        JsonNode dbNameNode = jsonNode.at("/job/content/0/reader/parameter/dbName");
+        ((ObjectNode) dbNameNode).put("dbName", "new_db_name");
 
-        // 获取 connection 数组中的第一个元素
-        ObjectNode connectionElementNode = (ObjectNode) connectionNode.get(0);
 
-        // 获取 table 数组节点
-        ArrayNode tableNode = (ArrayNode) connectionElementNode.get("table");
-
-        // 将 table 数组中的值替换为 "zjl"
-        tableNode.removeAll();
-        tableNode.add("zjl");
-
-        // 将 username的值替换为 "zjl"
-        ObjectNode objectNode = (ObjectNode) jsonNode;
-        objectNode.put("name", "zjl123456");
+        //// 获取 connection 数组节点
+        //ArrayNode connectionNode = (ArrayNode) jsonNode.get("connection");
+        //
+        //// 获取 connection 数组中的第一个元素
+        //ObjectNode connectionElementNode = (ObjectNode) connectionNode.get(0);
+        //
+        //// 获取 table 数组节点
+        //ArrayNode tableNode = (ArrayNode) connectionElementNode.get("table");
+        //
+        //// 将 table 数组中的值替换为 "zjl"
+        //tableNode.removeAll();
+        //tableNode.add("zjl");
+        //
+        //// 将 username的值替换为 "zjl"
+        //ObjectNode objectNode = (ObjectNode) jsonNode;
+        //objectNode.put("name", "zjl123456");
 
 
         // 将修改后的 JSON 输出
