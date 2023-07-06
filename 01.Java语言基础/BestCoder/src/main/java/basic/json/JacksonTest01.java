@@ -19,7 +19,7 @@ import java.util.List;
  * @description
  * @updateTime 2023/6/1 13:34
  */
-public class StringTest01 {
+public class JacksonTest01 {
     public static void main(String[] args) {
 
 
