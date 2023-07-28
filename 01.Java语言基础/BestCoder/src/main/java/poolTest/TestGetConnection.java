@@ -1,13 +1,8 @@
-package PoolTest;
+package poolTest;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-
-import java.sql.Connection;
-import java.sql.SQLException;
 
 /**
  * @author cat

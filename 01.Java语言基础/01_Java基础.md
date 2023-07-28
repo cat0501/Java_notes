@@ -1554,77 +1554,67 @@ false
 
 
 ```java
-public class StaticTest
-{
-   public static void main(String[] args)
-   {
-      // fill the staff array with three Employee objects
-      //var staff = new Employee[3];
-      Employee[] staff = new Employee[3];
+public class StaticTest {
+    public static void main(String[] args) {
+        // fill the staff array with three Employee objects
+        //var staff = new Employee[3];
+        Employee[] staff = new Employee[3];
 
-      staff[0] = new Employee("Tom", 40000);
-      staff[1] = new Employee("Dick", 60000);
-      staff[2] = new Employee("Harry", 65000);
+        staff[0] = new Employee("Tom", 40000);
+        staff[1] = new Employee("Dick", 60000);
+        staff[2] = new Employee("Harry", 65000);
 
-      // print out information about all Employee objects
-      for (Employee e : staff)
-      {
-         e.setId();
-         System.out.println("name=" + e.getName() + ",id=" + e.getId() + ",salary="
-            + e.getSalary());
-      }
+        // print out information about all Employee objects
+        for (Employee e : staff) {
+            e.setId();
+            System.out.println("name=" + e.getName() + ",id=" + e.getId() + ",salary="
+                    + e.getSalary());
+        }
 
-      int n = Employee.getNextId(); // calls static method
-      System.out.println("Next available id=" + n);
-   }
+        int n = Employee.getNextId(); // calls static method
+        System.out.println("Next available id=" + n);
+    }
 }
 
-class Employee
-{
-   private static int nextId = 1;
+class Employee {
+    private static int nextId = 1;
 
-   private String name;
-   private double salary;
-   private int id;
+    private String name;
+    private double salary;
+    private int id;
 
-   public Employee(String n, double s)
-   {
-      name = n;
-      salary = s;
-      id = 0;
-   }
+    public Employee(String n, double s) {
+        name = n;
+        salary = s;
+        id = 0;
+    }
 
-   public String getName()
-   {
-      return name;
-   }
+    public String getName() {
+        return name;
+    }
 
-   public double getSalary()
-   {
-      return salary;
-   }
+    public double getSalary() {
+        return salary;
+    }
 
-   public int getId()
-   {
-      return id;
-   }
+    public int getId() {
+        return id;
+    }
 
-   public void setId()
-   {
-      id = nextId; // set id to next available id
-      nextId++;
-   }
+    public void setId() {
+        id = nextId; // set id to next available id
+        nextId++;
+    }
 
-   public static int getNextId()
-   {
-      return nextId; // returns static field
-   }
+    public static int getNextId() {
+        return nextId; // returns static field
+    }
 
-   public static void main(String[] args) // unit test
-   {
-      Employee4 e = new Employee4("Harry", 50000);
-      System.out.println(e.getName() + " " + e.getSalary());
-   }
+    // unit test
+    public static void main(String[] args) {
+        Employee e = new Employee("Harry", 50000);
+        System.out.println(e.getName() + " " + e.getSalary());
+    }
 }
 
 ```
@@ -3920,7 +3910,7 @@ try {
 
 ## 何为反射？
 
-如果说大家研究过框架的底层原理或者咱们自己写过框架的话，一定对反射这个概念不陌生。
+框架的底层原理。
 
 反射之所以被称为框架的灵魂，主要是因为它赋予了我们在运行时分析类以及执行类中方法的能力。
 
@@ -3937,7 +3927,7 @@ try {
 
 ## 反射的应用场景
 
-像咱们平时大部分时候都是在写业务代码，很少会接触到直接使用反射机制的场景。
+平时大部分时候都是在写业务代码，很少会接触到直接使用反射机制的场景。
 
 但是，这并不代表反射没有用。相反，正是因为反射，你才能这么轻松地使用各种框架。像 Spring/Spring Boot、MyBatis 等等框架中都大量使用了反射机制。
 
@@ -4960,6 +4950,7 @@ public Son() {
 # 参考与推荐
 
 - [JDK8新特性详解](https://blog.csdn.net/LXYDSF/article/details/125919046)
+- 《Java 核心技术》
 
 
 

@@ -1,4 +1,4 @@
-package PoolTest;
+package poolTest;
 
 /**
  * @author cat
