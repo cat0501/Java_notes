@@ -3210,7 +3210,29 @@ HashSet(int initialCapacity, float loadFactor, boolean dummy) {
 
 
 
-## 5 map接口🎈
+## 5（三）Queue 接口
+
+### 什么是 BlockingQueue？
+
+`BlockingQueue` （阻塞队列）是一个接口，继承自 `Queue`。`BlockingQueue`阻塞的原因是其支持当队列没有元素时一直阻塞，直到有元素；还支持如果队列已满，一直等到队列可以放入新元素时再放入。
+
+
+
+![](./img/blocking-queue.png)
+
+### BlockingQueue 的实现类有哪些？
+
+
+
+![](./img/blocking-queue-hierarchy.png)
+
+
+
+
+
+
+
+## 6 map接口🎈
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220411225519826.png?w=600)
 
@@ -3249,6 +3271,48 @@ Map接口的常用实现类：`HashMap`（使用频率最高）、`TreeMap`、`L
 | Set keySet()                        | 返回所有key构成的Set集合                   |      |
 | Collection values()                 | 返回所有value构成的Collection集合          |      |
 | Set entrySet()                      | 返回所有key-value对构成的Set集合           |      |
+
+
+
+### 常见问题
+
+#### HashMap 的长度为什么是 2 的幂次方
+
+Hash 值的范围值-2147483648 到 2147483647，前后加起来大概 40 亿的映射空间，只要哈希函数映射得比较均匀松散，一般应用是很难出现碰撞的。但问题是一个 40 亿长度的数组，内存是放不下的。所以这个散列值是不能直接拿来用的。用之前还要先做对数组的长度取模运算，得到的余数才能用来要存放的位置也就是对应的数组下标。这个数组下标的计算方法是“ `(n - 1) & hash`”。（n 代表数组长度）。这也就解释了 HashMap 的长度为什么是 2 的幂次方。
+
+
+
+#### HashMap 多线程操作导致死循环问题
+
+JDK1.7 及之前版本的 `HashMap` 在多线程环境下扩容操作可能存在死循环问题，这是由于当一个桶位中有多个元素需要进行扩容时，多个线程同时对链表进行操作，头插法可能会导致链表中的节点指向错误的位置，从而形成一个环形链表，进而使得查询元素的操作陷入死循环无法结束。
+
+为了解决这个问题，JDK1.8 版本的 HashMap 采用了尾插法而不是头插法来避免链表倒置，使得插入的节点永远都是放在链表的末尾，避免了链表中的环形结构。但是还是不建议在多线程下使用 `HashMap`，因为多线程下使用 `HashMap` 还是会存在数据覆盖的问题。并发环境下，推荐使用 `ConcurrentHashMap` 。
+
+
+
+
+
+#### ConcurrentHashMap 线程安全的具体实现方式/底层具体实现
+
+
+
+![](./img/java7_concurrenthashmap.png)
+
+
+
+
+
+
+
+![](./img/java8_concurrenthashmap.png)
+
+Java 8 几乎完全重写了 `ConcurrentHashMap`，代码量从原来 Java 7 中的 1000 多行，变成了现在的 6000 多行。
+
+`ConcurrentHashMap` 取消了 `Segment` 分段锁，采用 `Node + CAS + synchronized` 来保证并发安全。数据结构跟 `HashMap` 1.8 的结构类似，数组+链表/红黑二叉树。Java 8 在链表长度超过一定阈值（8）时将链表（寻址时间复杂度为 O(N)）转换为红黑树（寻址时间复杂度为 O(log(N))）。
+
+Java 8 中，锁粒度更细，`synchronized` 只锁定当前链表或红黑二叉树的首节点，这样只要 hash 不冲突，就不会产生并发，就不会影响其他 Node 的读写，效率大幅提升。
+
+
 
 
 
@@ -3391,7 +3455,7 @@ https://juejin.cn/post/6844903744711163911
 
 
 
-## 6 Collections工具类（操作 Set、List 和 Map 等集合）
+## 7 Collections工具类（操作 Set、List 和 Map 等集合）
 
 - Collections 中提供了一系列静态的方法对集合元素进行排序、查询和修改等操作，
 - 还提供了对集合对象设置不可变、对集合对象实现同步控制等方法。
@@ -3420,7 +3484,7 @@ https://juejin.cn/post/6844903744711163911
 
 得益于JDK 8开始的新技术Lambda表达式，提供了一种更简单、更直接的遍历集合的方式。
 
-### 同步控制
+### 同步控制（不推荐）
 
 Collections 类中提供了多个 `synchronizedXxx()` 方法，该方法可使将指定集合包装成线程同步的集合，从而可以解决多线程并发访问集合时的线程安全问题
 

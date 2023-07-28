@@ -2,6 +2,7 @@ package basic.java8;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Lemonade
@@ -12,6 +13,8 @@ public class ExceptionTest01 {
 
         // 测试 Long[] 转 String
         Long[] along = {1L, 200L};
+        List<Long> list = Arrays.asList(along);
+        System.out.println(list);
         System.out.println(Arrays.toString(along));
 
         // 测试打印[]
