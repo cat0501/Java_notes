@@ -1,2 +1,8 @@
 # 泛型
 # 多线程
+
+mysql:
+  driverClassName: com.mysql.cj.jdbc.Driver
+  url: jdbc:mysql://101.43.250.159:3306
+  username: root
+  password: 20230429

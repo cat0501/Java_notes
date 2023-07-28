@@ -638,7 +638,6 @@ plugins、environments、databaseIdProvider、mappers
 /**
  * 根据用户id查询用户信息
  * @param id
- * @return
  */
 User getUserById(@Param("id") int id);
 ```
@@ -660,7 +659,6 @@ User getUserById(@Param("id") int id);
 ```java
 /**
  * 查询所有用户信息
- * @return
  */
 List<User> getUserList();
 ```
@@ -1499,6 +1497,51 @@ public void checkLoginByParam() {
 	mapper.CheckLoginByParam("admin","123456");
 }
 ```
+
+
+
+### 无法识别的参数
+
+
+
+```java
+List<Integer> getPermissionIds(List<Long> userIds);
+```
+
+```xml
+<select id="getPermissionIds" resultType="java.lang.Integer">
+    select id from t_ds_permission
+    WHERE auth_id IN
+    <foreach item="userId" collection="userIds" open="(" separator="," close=")">
+        #{userId}
+    </foreach>
+</select>
+```
+
+报错：
+
+```sh
+{
+    "msg": "nested exception is org.apache.ibatis.binding.BindingException: Parameter 'userIds' not found. Available parameters are [arg0, collection, list]",
+    "code": 500
+}
+```
+
+解决：
+
+```java
+List<Integer> getPermissionIds(@Param("userIds") List<Long> userIds);
+```
+
+
+
+
+
+
+
+
+
+
 
 ## 最后总结⭐️
 

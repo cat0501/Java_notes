@@ -10,10 +10,26 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class PlusOneDay {
     public static void main(String[] args) {
+
+        List<ArrayList<String>> bbb = new ArrayList<>();
+
+
+        List<String> aaa = new ArrayList<>();
+        aaa.add("[2,4]");
+        aaa.add("[2,4,100]");
+        aaa.add("[2,4,101]");
+        aaa.add("[2,4,101,10009]");
+        aaa.add("[2,4,101,10009,19099]");
+        aaa.add("[2,5]");
+
+        System.out.println(aaa);
+
 
         String fieldName = "_id";
         String fieldName2 = "1_id";
