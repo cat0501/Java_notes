@@ -2846,7 +2846,63 @@ JDK 提供了很多内置的注解（比如 `@Override` 、`@Deprecated`），�
 
 # 八、Collection接口系列集合、Map接口系列集合
 
-## 1 Collection接口🎈
+Java 集合， 也叫作容器，主要是由两大接口派生而来：一个是 `Collection`接口，主要用于存放单一元素；另一个是 `Map` 接口，主要用于存放键值对。对于`Collection` 接口，下面又有三个主要的子接口：`List`、`Set` 和 `Queue`。
+
+![](./img/java-collection-hierarchy.png)
+
+
+
+------
+
+## 0 集合概述
+
+### 说说 List, Set, Queue, Map 四者的区别？
+
+- `List`(对付顺序的好帮手): 存储的元素是有序的、可重复的。
+
+- `Set`(注重独一无二的性质): 存储的元素是不可重复的。
+
+- `Queue`(实现排队功能的叫号机): 按特定的排队规则来确定先后顺序，存储的元素是有序的、可重复的。
+
+- `Map`(用 key 来搜索的专家): 使用键值对（key-value）存储，类似于数学上的函数 y=f(x)，"x" 代表 key，"y" 代表 value，key 是无序的、不可重复的，value 是无序的、可重复的，每个键最多映射到一个值。
+
+
+
+### 集合框架底层数据结构总结
+
+#### [#](#list) List
+
+- `ArrayList`：`Object[]` 数组
+- `Vector`：`Object[]` 数组
+- `LinkedList`：双向链表(JDK1.6 之前为循环链表，JDK1.7 取消了循环)
+
+#### [#](#set) Set
+
+- `HashSet`(无序，唯一): 基于 `HashMap` 实现的，底层采用 `HashMap` 来保存元素
+- `LinkedHashSet`: `LinkedHashSet` 是 `HashSet` 的子类，并且其内部是通过 `LinkedHashMap` 来实现的。有点类似于我们之前说的 `LinkedHashMap` 其内部是基于 `HashMap` 实现一样，不过还是有一点点区别的
+- `TreeSet`(有序，唯一): 红黑树(自平衡的排序二叉树)
+
+#### [#](#queue) Queue
+
+- `PriorityQueue`: `Object[]` 数组来实现二叉堆
+- `ArrayQueue`: `Object[]` 数组 + 双指针
+
+再来看看 `Map` 接口下面的集合。
+
+#### [#](#map) Map
+
+- `HashMap`：JDK1.8 之前 `HashMap` 由数组+链表组成的，数组是 `HashMap` 的主体，链表则是主要为了解决哈希冲突而存在的（“拉链法”解决冲突）。JDK1.8 以后在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为 8）（将链表转换成红黑树前会判断，如果当前数组的长度小于 64，那么会选择先进行数组扩容，而不是转换为红黑树）时，将链表转化为红黑树，以减少搜索时间
+- `LinkedHashMap`：`LinkedHashMap` 继承自 `HashMap`，所以它的底层仍然是基于拉链式散列结构即由数组和链表或红黑树组成。另外，`LinkedHashMap` 在上面结构的基础上，增加了一条双向链表，使得上面的结构可以保持键值对的插入顺序。同时通过对链表进行相应的操作，实现了访问顺序相关逻辑。详细可以查看：[《LinkedHashMap 源码详细分析（JDK1.8）》](https://www.imooc.com/article/22931)
+- `Hashtable`：数组+链表组成的，数组是 `Hashtable` 的主体，链表则是主要为了解决哈希冲突而存在的
+- `TreeMap`：红黑树（自平衡的排序二叉树）
+
+
+
+
+
+
+
+## 1 Collection接口
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220411224715970.png)
 
@@ -2905,8 +2961,8 @@ Collection接口继承了java.lang.Iterable接口，该接口有一个iterator()
 
 **集合对象每次调用iterator()方法都得到一个全新的迭代器对象**，默认游标都在集合的第一个元素之前。
 
+## 3 （一）List接口（可重复）🎈
 
-## 3 （一）List接口（可重复）
 - 鉴于 Java 中数组用来存储数据的局限性，我们通常使用 List 替代数组。
 - List 集合类中**元素有序、且可重复**，集合中的每个元素都有其对应的顺序索引。
 - List 除了从 Collection 接口继承的方法外，List 集合里添加了一些根据索引来操作集合元素的方法。
@@ -3144,7 +3200,29 @@ HashSet(int initialCapacity, float loadFactor, boolean dummy) {
 
 
 
-## 5 map接口🎈
+## 5（三）Queue 接口
+
+### 什么是 BlockingQueue？
+
+`BlockingQueue` （阻塞队列）是一个接口，继承自 `Queue`。`BlockingQueue`阻塞的原因是其支持当队列没有元素时一直阻塞，直到有元素；还支持如果队列已满，一直等到队列可以放入新元素时再放入。
+
+
+
+![](./img/blocking-queue.png)
+
+### BlockingQueue 的实现类有哪些？
+
+
+
+![](./img/blocking-queue-hierarchy.png)
+
+
+
+
+
+
+
+## 6 map接口🎈
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220411225519826.png?w=600)
 
@@ -3183,6 +3261,48 @@ Map接口的常用实现类：`HashMap`（使用频率最高）、`TreeMap`、`L
 | Set keySet()                        | 返回所有key构成的Set集合                   |      |
 | Collection values()                 | 返回所有value构成的Collection集合          |      |
 | Set entrySet()                      | 返回所有key-value对构成的Set集合           |      |
+
+
+
+### 常见问题
+
+#### HashMap 的长度为什么是 2 的幂次方
+
+Hash 值的范围值-2147483648 到 2147483647，前后加起来大概 40 亿的映射空间，只要哈希函数映射得比较均匀松散，一般应用是很难出现碰撞的。但问题是一个 40 亿长度的数组，内存是放不下的。所以这个散列值是不能直接拿来用的。用之前还要先做对数组的长度取模运算，得到的余数才能用来要存放的位置也就是对应的数组下标。这个数组下标的计算方法是“ `(n - 1) & hash`”。（n 代表数组长度）。这也就解释了 HashMap 的长度为什么是 2 的幂次方。
+
+
+
+#### HashMap 多线程操作导致死循环问题
+
+JDK1.7 及之前版本的 `HashMap` 在多线程环境下扩容操作可能存在死循环问题，这是由于当一个桶位中有多个元素需要进行扩容时，多个线程同时对链表进行操作，头插法可能会导致链表中的节点指向错误的位置，从而形成一个环形链表，进而使得查询元素的操作陷入死循环无法结束。
+
+为了解决这个问题，JDK1.8 版本的 HashMap 采用了尾插法而不是头插法来避免链表倒置，使得插入的节点永远都是放在链表的末尾，避免了链表中的环形结构。但是还是不建议在多线程下使用 `HashMap`，因为多线程下使用 `HashMap` 还是会存在数据覆盖的问题。并发环境下，推荐使用 `ConcurrentHashMap` 。
+
+
+
+
+
+#### ConcurrentHashMap 线程安全的具体实现方式/底层具体实现
+
+
+
+![](./img/java7_concurrenthashmap.png)
+
+
+
+
+
+
+
+![](./img/java8_concurrenthashmap.png)
+
+Java 8 几乎完全重写了 `ConcurrentHashMap`，代码量从原来 Java 7 中的 1000 多行，变成了现在的 6000 多行。
+
+`ConcurrentHashMap` 取消了 `Segment` 分段锁，采用 `Node + CAS + synchronized` 来保证并发安全。数据结构跟 `HashMap` 1.8 的结构类似，数组+链表/红黑二叉树。Java 8 在链表长度超过一定阈值（8）时将链表（寻址时间复杂度为 O(N)）转换为红黑树（寻址时间复杂度为 O(log(N))）。
+
+Java 8 中，锁粒度更细，`synchronized` 只锁定当前链表或红黑二叉树的首节点，这样只要 hash 不冲突，就不会产生并发，就不会影响其他 Node 的读写，效率大幅提升。
+
+
 
 
 
@@ -3325,7 +3445,7 @@ https://juejin.cn/post/6844903744711163911
 
 
 
-## 6 Collections工具类（操作 Set、List 和 Map 等集合）
+## 7 Collections工具类（操作 Set、List 和 Map 等集合）
 
 - Collections 中提供了一系列静态的方法对集合元素进行排序、查询和修改等操作，
 - 还提供了对集合对象设置不可变、对集合对象实现同步控制等方法。
@@ -3354,7 +3474,7 @@ https://juejin.cn/post/6844903744711163911
 
 得益于JDK 8开始的新技术Lambda表达式，提供了一种更简单、更直接的遍历集合的方式。
 
-### 同步控制
+### 同步控制（不推荐）
 
 Collections 类中提供了多个 `synchronizedXxx()` 方法，该方法可使将指定集合包装成线程同步的集合，从而可以解决多线程并发访问集合时的线程安全问题
 

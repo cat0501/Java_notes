@@ -12,14 +12,14 @@ import java.sql.SQLException;
 public class TestGetConnectionController {
 
     @Autowired
-    ConnectionHivePool connectionHivePoolConfig;
+    ConnectionHivePool connectionHivePool;
 
     @GetMapping("/test/connection")
     public void test(){
         Connection connection;
 
         try {
-            connection = connectionHivePoolConfig.dataSource.getConnection();
+            connection = connectionHivePool.dataSource.getConnection();
             System.out.println(connection);
         } catch (SQLException e) {
             throw new RuntimeException(e);
