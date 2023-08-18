@@ -8,8 +8,21 @@
 # 切换用户
 sudo su
 
-# 添加用户
-useradd 选项 用户名
+# 删除用户
+userdel sjzn
+
+# 添加用户/用户对应的组
+useradd sjzn
+
+# 添加用户到对应的组
+usermod -a -G sjzt zhangjianlin
+
+# 查看用户所属的组
+[root@cnbjsjztpdn01 yunwei]# groups zhangjianlin
+zhangjianlin : zhangjianlin sjzt
+
+# /etc/group 是一个系统文件，包含了组（Group）的配置信息，用于管理用户组的权限和组成员
+cat /etc/group
 ```
 
 
