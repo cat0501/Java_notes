@@ -1,0 +1,57 @@
+{
+  "job": {
+    "setting": {
+      "speed": {
+        "channel": 3
+      }
+    },
+    "content": [
+      {
+        "reader": {
+          "name": "mysqlreader",
+          "parameter": {
+            "username": "root",
+            "password": "root",
+            "column": [
+              "id",
+              "name"
+            ],
+            "splitPk": "db_id",
+            "connection": [
+              {
+                "table": [
+                  "table"
+                ],
+                "jdbcUrl": [
+                  "jdbc:mysql://127.0.0.1:3306/database"
+                ]
+              }
+            ]
+          }
+        },
+        "writer": {
+          "name": "hdfswriter",
+          "parameter": {
+            "defaultFS": "hdfs://xxx:port",
+            "fileType": "orc",
+            "path": "/user/hive/warehouse/writerorc.db/orcfull",
+            "fileName": "xxxx",
+            "column": [
+              {
+                "name": "col3",
+                "type": "INT"
+              },
+              {
+                "name": "col8",
+                "type": "VARCHAR"
+              }
+            ],
+            "writeMode": "append",
+            "fieldDelimiter": "\t",
+            "compress": "NONE"
+          }
+        }
+      }
+    ]
+  }
+}
