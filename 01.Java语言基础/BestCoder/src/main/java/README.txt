@@ -1,6 +1,6 @@
 -----------------------------------说明
-basic 主要为 Java 基础代码
-algorithm 主要为 Leetcode 刷题
+com.bs.basic 主要为 Java 基础代码
+com.bs.algorithm 主要为 Leetcode 刷题
 
 -----------------------------------刷题
 M54 螺旋矩阵 spiral-matrix
