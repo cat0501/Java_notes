@@ -154,6 +154,23 @@ $ git config core.ignorecase false
 $ git config --global core.quotepath false
 ```
 
+已经 push 的提交信息修改（如用户名、邮箱）
+
+```sh
+# n为提交次数
+git rebase -i HEAD~n
+
+# 按`i`编辑，把`pick` 改成 `edit`，按'Esc'退出编辑，按`:wq`保存退出
+git commit --amend --author="zhangjianlin zhangjianlin@bitnei.cn" --no-edit
+
+git rebase --continue
+git push --force
+```
+
+
+
+
+
 
 
 # Tools

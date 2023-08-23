@@ -3,6 +3,7 @@ package com.bs.basic.java8;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Lemonade
@@ -10,6 +11,14 @@ import java.util.List;
  */
 public class ExceptionTest01 {
     public static void main(String[] args) {
+
+        long timestamp = System.currentTimeMillis();
+
+        System.out.println(timestamp/1000);
+
+
+
+
 
         // 测试 Long[] 转 String
         Long[] along = {1L, 200L};
