@@ -417,7 +417,7 @@ static class WebConfig {
 
 ### bean 生命周期
 
-- 生命周期的4个方法（执行顺序亦如下）
+- 生命周期的4个方法（按执行顺序）
   - 构造
   - 依赖注入
   - 初始化
@@ -463,7 +463,7 @@ public class LifeCycleBean {
 
 
 
-- bean后处理器提供bean生命周期各个阶段的一些扩展
+- bean后处理器：提供bean生命周期各个阶段的一些扩展
 
 ```java
 @Component
@@ -488,7 +488,7 @@ public class MyBeanPostProcessor implements InstantiationAwareBeanPostProcessor,
     public boolean postProcessAfterInstantiation(Object bean, String beanName) throws BeansException {
         if (beanName.equals("lifeCycleBean")) {
             log.debug("<<<<<< 实例化之后执行, 这里如果返回 false 会跳过依赖注入阶段");
-//            return false;
+						// return false;
         }
         return true;
     }
@@ -522,8 +522,10 @@ public class MyBeanPostProcessor implements InstantiationAwareBeanPostProcessor,
 com.itheima.a03.MyBeanPostProcessor      : <<<<<< 实例化之前执行, 这里返回的对象会替换掉原本的 bean
 com.itheima.a03.LifeCycleBean            : 构造
 com.itheima.a03.MyBeanPostProcessor      : <<<<<< 实例化之后执行, 这里如果返回 false 会跳过依赖注入阶段
+
 com.itheima.a03.MyBeanPostProcessor      : <<<<<< 依赖注入阶段执行, 如 @Autowired、@Value、@Resource
 com.itheima.a03.LifeCycleBean            : 依赖注入: /Library/Java/JavaVirtualMachines/jdk-11.0.14.jdk/Contents/Home
+
 com.itheima.a03.MyBeanPostProcessor      : <<<<<< 初始化之前执行, 这里返回的对象会替换掉原本的 bean, 如 @PostConstruct、@ConfigurationProperties
 com.itheima.a03.LifeCycleBean            : 初始化
 com.itheima.a03.MyBeanPostProcessor      : <<<<<< 初始化之后执行, 这里返回的对象会替换掉原本的 bean, 如代理增强
@@ -563,6 +565,8 @@ public class TestMethodTemplate {
             Object bean = new Object();
             System.out.println("构造 " + bean);
             System.out.println("依赖注入 " + bean); // @Autowired, @Resource
+          
+          	// 动的部分
             for (BeanPostProcessor processor : processors) {
                 System.out.println("---------> " + processor);
                 processor.inject(bean);
@@ -571,6 +575,7 @@ public class TestMethodTemplate {
             return bean;
         }
 
+        // 设置一个集合
         private List<BeanPostProcessor> processors = new ArrayList<>();
 
         public void addBeanPostProcessor(BeanPostProcessor processor) {
@@ -604,6 +609,54 @@ public class TestMethodTemplate {
 
 - Bean 后处理器的作用：为bean生命周期各个阶段提供扩展
 - 常见的后处理器
+
+
+
+```java
+// ⬇️GenericApplicationContext 是一个【干净】的容器
+GenericApplicationContext context = new GenericApplicationContext();
+
+context.registerBean("bean1", Bean1.class);
+context.registerBean("bean2", Bean2.class);
+
+context.getDefaultListableBeanFactory().setAutowireCandidateResolver(new ContextAnnotationAutowireCandidateResolver());
+context.registerBean(AutowiredAnnotationBeanPostProcessor.class); // 解析@Autowired @Value 的bean后处理器
+
+context.registerBean(CommonAnnotationBeanPostProcessor.class); // @Resource @PostConstruct @PreDestroy
+
+ConfigurationPropertiesBindingPostProcessor.register(context.getDefaultListableBeanFactory());// 初始化前进行属性绑定
+// ⬇️初始化容器
+context.refresh(); // 执行beanFactory后处理器, 添加bean后处理器, 初始化所有单例
+
+System.out.println(context.getBean(Bean4.class));
+```
+
+
+
+## @Autowired bean后处理器执行分析
+
+```java
+// 1. 查找哪些属性、方法加了 @Autowired, 这称之为 InjectionMetadata
+AutowiredAnnotationBeanPostProcessor processor = new AutowiredAnnotationBeanPostProcessor();
+processor.setBeanFactory(beanFactory);
+
+Bean1 bean1 = new Bean1();
+
+Method findAutowiringMetadata = AutowiredAnnotationBeanPostProcessor.class.getDeclaredMethod("findAutowiringMetadata", String.class, Class.class, PropertyValues.class);
+findAutowiringMetadata.setAccessible(true);
+InjectionMetadata metadata = (InjectionMetadata) findAutowiringMetadata.invoke(processor, "bean1", Bean1.class, null);// 获取 Bean1 上加了 @Value @Autowired 的成员变量，方法参数信息
+System.out.println(metadata);
+
+// 2. 调用 InjectionMetadata 来进行依赖注入, 注入时按类型查找值
+metadata.inject(bean1, "bean1", null);
+System.out.println(bean1);
+```
+
+
+
+
+
+
 
 
 
