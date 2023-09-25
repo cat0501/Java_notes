@@ -652,9 +652,8 @@ taskkill -f -t -im "进程名称"
 
 ## 8. 多环境开发
 
-- 多环境开发需要设置若干种常用环境，例如**开发、生产、测试环境**
-  - 每种环境的区别在于加载的配置属性不同
-  - 指定启动时使用某种环境
+- **开发、测试、生产环境**，区别在于加载的配置属性不同，需要指定启动时使用某种环境。
+- 主配置文件中设置公共配置（全局），环境分类配置文件中常用于设置冲突属性（局部）。
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220304131844961.png)
 
@@ -662,23 +661,10 @@ taskkill -f -t -im "进程名称"
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220304132614555.png)
 
-- 配置文件书写
-
-  - 主配置文件中设置公共配置（全局）
-
-  - 环境分类配置文件中常用于设置冲突属性（局部）
-
-- 配置文件可拆分：可以根据功能对配置文件中的信息进行拆分，并制作成独立的配置文件，
-
-  - 如下
-
-  ```bash
-  application-devDB.yml
-  application-devRedis.yml
-  application-devMVC.yml
-  ```
+- 其它说明
 
   - `include` 属性：在激活指定环境的情况下，使用 `include` 属性同时对多个环境进行加载使其生效，多个环境间使用逗号分隔
+  - 当主环境dev与其他环境有相同属性时，主环境属性生效；其他环境中有相同属性时，最后加载的环境属性生效
 
   ```yaml
   spring:
@@ -687,20 +673,16 @@ taskkill -f -t -im "进程名称"
       include: devDB,devRedis,devMVC
   ```
 
-- 其它说明
-  - 当主环境dev与其他环境有相同属性时，主环境属性生效；其他环境中有相同属性时，最后加载的环境属性生效
   - 从 Spring2.4  版开始使用 `group` 属性替代 `include` 属性，降低了配置书写量，使用 group属性定义多种主环境与子环境的包含关系。多环境开发使用 group 属性设置配置文件分组，便于线上维护管理。
 
-
-```yaml
-spring:
-  profiles:
-    active: dev
-    group:
-      "dev": devDB,devRedis,devMVC
-      "pro": proDB,proRedis,proMVC
-      "test": testDB,testRedis,testMVC
-```
+  ```yaml
+  spring:
+    profiles:
+      active: dev
+      group:
+        "dev": devDB,devRedis,devMVC
+        "pro": proDB,proRedis,proMVC
+        "test": testDB,testRedis,testMVC
 
 
 

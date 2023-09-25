@@ -1,7 +1,9 @@
 package com.bs.basic.java8;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * @author cat
@@ -12,6 +14,10 @@ public class LambdaTest
 {
     public static void main(String[] args)
     {
+
+        List<Object> list = new ArrayList<>();
+        //list.set();
+
         String[] planets = new String[] { "Mercury", "Venus", "Earth", "Mars",
                 "Jupiter", "Saturn", "Uranus", "Neptune" };
         //System.out.println(Arrays.toString(planets));
