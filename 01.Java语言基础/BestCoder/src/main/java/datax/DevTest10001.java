@@ -10,13 +10,13 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class DevTest10001 {
@@ -94,6 +94,36 @@ public class DevTest10001 {
             "</html>";
 
     public static void main(String[] args) {
+
+        String name = UUID.randomUUID() + "";
+        System.out.println(name);
+
+
+        String name2 = "aaa" + System.currentTimeMillis();
+        System.out.println(name2);
+
+        Integer ldapAccount = null;
+        if (ldapAccount != null && ldapAccount == 1){
+            System.out.println(1);
+        } else {
+            System.out.println(2);
+        }
+
+
+
+        // 登录失效时间修改为每天的03:00
+        long expireTime; // 从当前登录时间到下一次凌晨3点的时间差（毫秒）
+        // 获取登录时间
+        long loginTime = System.currentTimeMillis();
+        LocalDateTime loginDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(loginTime), ZoneId.systemDefault());
+        LocalDateTime next3AM = loginDateTime.with(LocalTime.of(3, 0, 0)).plusDays(1);
+        // 获取时间差
+        expireTime = Duration.between(loginDateTime, next3AM).toMillis();
+        System.out.println(expireTime);
+
+        System.out.println((int)Duration.between(loginDateTime, next3AM).toMinutes());
+
+
 
         // String template = "<p><strong>\"{0} + '（责任人名称）'\">[责任人名称]，您的线上周期任务在运行时发生错误，以下是出错信息：</strong></p>";
         // HashMap<Integer, Object> values = new HashMap<>();

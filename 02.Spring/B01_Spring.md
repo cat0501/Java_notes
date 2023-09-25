@@ -1453,12 +1453,12 @@ BookDao bookDao = ctx.getBean(BookDao.class);
 ## 11 IOC/DI 注解开发
 
 ```bash
-# 要想真正简化开发，就需要用到Spring的注解开发，Spring对注解支持的版本历程:
+# Spring的系列注解，简化了开发。Spring对注解支持的版本历程:
 2.0版开始支持注解
 2.5版注解功能趋于完善
 3.0版支持纯注解开发
 
-# 关于注解开发，我们会讲解两块内容：注解开发定义bean和纯注解开发。
+# 关于注解开发分为两块：注解开发定义bean和纯注解开发。
 注解开发定义bean用的是2.5版提供的注解，纯注解开发用的是3.0版提供的注解。
 ```
 
@@ -1468,7 +1468,7 @@ BookDao bookDao = ctx.getBean(BookDao.class);
 
 ### 11.1 注解开发定义bean Spring 2.5
 
-添加注解
+1. 添加注解
 
 ```java
 //@Component定义bean
@@ -1482,11 +1482,11 @@ public class BookDaoImpl implements BookDao {
 }
 ```
 
-> @Component注解如果不起名称，会有一个默认值就是当前类名首字母小写，所以也可以按照名称获取
+> `@Component` 注解如果不起名称，会有一个默认值即当前类名首字母小写，所以也可以按照名称获取。
 
 
 
-配置Spring的注解包扫描
+2. 配置Spring的注解包扫描
 
 ```xml
 <context:component-scan base-package="com.itheima"/>
@@ -1496,25 +1496,21 @@ public class BookDaoImpl implements BookDao {
 
 
 
-<br>
-
-对于@Component注解，还衍生出了其他三个注解@Controller、@Service、@Repository
+3. `@Component` 注解衍生的其它三个注解 @Controller、@Service、@Repository
 
 通过查看源码会发现：
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220427234712777.png)
 
-这三个注解和@Component注解的作用是一样的，为什么要衍生出这三个呢?
-
-方便我们后期在编写类的时候能很好的区分出这个类是属于表现层、业务层还是数据层的类。
+这三个注解和 `@Component` 注解的作用是一样的，主要是为了区分类属于表现层、业务层还是数据层。
 
 
 
 ### 11.2 纯注解开发 Spring 3.0
 
-上面已经可以使用注解来配置bean,但是依然有用到配置文件，在配置文件中对包进行了扫描，Spring在3.0版已经支持纯注解开发。
+如上可以使用注解来配置bean，但是依然有用到配置文件（对包扫描路径的配置），Spring在3.0版已经支持纯注解开发。
 
-**Spring3.0开启了纯注解开发模式，使用Java类替代配置文件，开启了Spring快速开发赛道**。
+**Spring3.0开启了纯注解开发模式，使用 Java 类替代配置文件，进一步开启了Spring快速开发**。
 
 
 
@@ -1532,14 +1528,14 @@ public class SpringConfig {
 
 
 ```bash
-@Configuration注解用于设定当前类为配置类
-@ComponentScan注解用于设定扫描路径，此注解只能添加一次，多个数据请用数组格式
+@Configuration注解 用于设定当前类为配置类
+@ComponentScan注解 用于设定扫描路径，此注解只能添加一次，多个数据请用数组格式
 - @ComponentScan({com.itheima.service","com.itheima.dao"})
 ```
 
 
 
-- 读取Spring核心配置文件初始化容器对象切换为读取Java配置类初始化容器对象
+- 读取Spring核心配置文件初始化容器对象，切换为读取Java配置类初始化容器对象
 
 ```java
 //加载配置文件初始化容器 
@@ -1552,7 +1548,7 @@ ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfig.cla
 
 ### 11.3 注解开发bean作用范围与生命周期管理
 
-使用注解已经完成了bean的管理，接下来按照前面所学习的内容，将通过配置实现的内容都换成对应的注解实现，包含两部分内容: bean作用范围和bean生命周期。
+如上，使用注解完成了bean的管理。接下来按照前面所学习的内容，将通过配置实现的内容都换成对应的注解实现，包含两部分内容: bean作用范围和bean生命周期。
 
 
 
