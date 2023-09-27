@@ -1,5 +1,3 @@
-
-
 # Command
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220327224143107.png)
@@ -123,10 +121,6 @@ git push --set-upstream origin develop
 
 
 
-
-
-
-
 ## 其它
 
 1. 查看提交历史
@@ -169,10 +163,6 @@ git push --force
 
 
 
-
-
-
-
 # Tools
 
 1. 命令行
@@ -180,17 +170,30 @@ git push --force
 
 2. IDEA Git 插件
 
-   日常使用这个就够了。具体教程可参考 [《IntelliJ IDEA 下的使用 git》](https://blog.csdn.net/huangfan322/article/details/53220060) 。
+   可参考 [《IntelliJ IDEA 下的使用 git》](https://blog.csdn.net/huangfan322/article/details/53220060) 。
 
 3. SourceTree
 
-   一个图形化的 Git 增强工具，其最好用的功能就在于它集成了 GitFlow ，让开发者可以更简单、更规范的去做一些 Git 操作；
+   一个图形化的 Git 增强工具，其最好用的功能在于它集成了 GitFlow ，让开发者可以更简单、更规范的去做一些 Git 操作；
+
    另外它还提供了更友好的 merge 界面，但是操作起来不是很顺手，因为它只支持整行删除。
 
 4. 其它
    - [SmartGit](https://www.syntevo.com/smartgit/)
    - [Tower](https://www.git-tower.com/mac)
    - Atom
+
+
+
+# Github
+
+提交的记录并没有统计在GitHub首页的Contributions Graph里
+
+原因：是因为提交时填写的邮箱与GitHub账号里的邮箱不一致导致，而GitHub是以邮箱关联GitHub账号的。
+
+解决：在GitHub中添加提交代码的邮箱之后，贡献图里就统计到了数据！
+
+
 
 # Introduction&Concept
 
