@@ -2,9 +2,9 @@
 
 # 写在前面
 
-## question
-
-
+- 整个 Java 体系最核心的框架
+- 面试必备 / 热点（从Spring的核心原理，到SpringMVC的执行流程，再到SpringBoot的自动配置）
+- 技术、思想提升（大量设计模式的应用和体现）（应用了很多技术）
 
 ```bash
 # 容器与bean（01-08）
@@ -14,79 +14,49 @@
 
 # AOP（09-19）
 
-
 # Web MVC（20-36）
 
-
 # Spring Boot（37-42）
-
 
 # 其它（43-49）
 ```
 
 
 
-
-
 ## 推荐
 
-### 黑马程序员
+- [基础框架 SSM](https://www.bilibili.com/video/BV1Fi4y1S7ix)
+  - Spring、SpringMVC、Maven、SpringBoot、MyBatisPlus
 
-[spring 高级49讲220323](https://www.bilibili.com/video/BV1P44y1N7QG?spm_id_from=333.999.0.0)
-
-- 整个 Java 体系最核心的框架，没有之一	
-
-- 面试必备 / 热点（从Spring的核心原理，到SpringMVC的执行流程，再到SpringBoot的自动配置）
-
-- 技术、思想提升（大量设计模式的应用和体现）（应用了很多技术）
-
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220408211450426.png)
-
-- 步骤（重在梳理线索，源码自己阅读）
-  - 了解欲研究的组件（类）的基本使用
-  - 用单元测试研究组件的特性
-  - 试着自己实现类似功能
-  - 最后再深入阅读该组件的源码
-- 内容（五大篇章，49讲）
+- [Spring高级49讲220323](https://www.bilibili.com/video/BV1P44y1N7QG)（五大篇章、49讲）
   - 容器与Bean（1-8）
   - AOP（9-19）
   - Web MVC（20-36）
   - Spring Boot（37-42）
   - 其它（43-49）
 
+- 官方文档
+  - `spring4` 官方文档：https://docs.spring.io/spring-framework/docs/4.3.9.RELEASE/spring-framework-reference/html/overview.html
+  - `spring5.2.19` 官方文档：https://docs.spring.io/spring-framework/docs/5.2.19.RELEASE/spring-framework-reference/index.html
 
 
-[黑马程序员20220420最新SSM框架教程_Spring+SpringMVC+Maven高级+SpringBoot+MyBatisPlus企业实用开发技术](https://www.bilibili.com/video/BV1Fi4y1S7ix?spm_id_from=333.999.0.0)
-
-
-
-### 官方文档
-
-`spring4`官方文档
-
-https://docs.spring.io/spring-framework/docs/4.3.9.RELEASE/spring-framework-reference/html/overview.html
-
-`spring5.2.19` 官方文档
-
-https://docs.spring.io/spring-framework/docs/5.2.19.RELEASE/spring-framework-reference/index.html
-
-
-
-### 极客时间丁雪丰
+- 极客时间
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220416172241777.png)
 
 
 
-<br>
+- 关于阅读源码步骤（重在梳理线索，源码自己阅读）
 
+  - 了解欲研究的组件（类）的基本使用
 
-```bash
-掌握Spring相关概念
-完成IOC/DI的入门案例编写
-掌握IOC的相关配置与使用
-掌握DI的相关配置与使用
-```
+  - 用单元测试研究组件的特性
+
+  - 试着自己实现类似功能
+
+  - 最后再深入阅读该组件的源码
+
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220408211450426.png)
 
 
 
@@ -379,7 +349,7 @@ public class BookServiceImpl implements BookService {
 
 
 
-#### 7.1.3 scope 配置bean作用范围
+#### 7.1.3 scope 属性配置bean作用范围
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220427104611627.png)
 
@@ -2066,11 +2036,8 @@ Junit 运行后是基于Spring环境运行的，所以Spring提供了一个专�
 
 - AOP（Aspect Oriented Programming）面向切面编程，是一种程序设计范式。
   - 不同于 OOP（Object Oriented Programming）面向对象编程的一种编程思想
-
-- 用于在不修改原有代码的情况下，将横切关注点（如日志、事务管理等）与核心业务逻辑分离开来，以提高代码的复用性和可维护性。
-
-- 不惊动原始设计的基础上为其进行功能增强，基于代理模式实现。
-- AOP 实现的关键是切面（Aspect），切面可以定义通用的横切逻辑，并将其应用于应用程序的特定点（如方法调用、异常处理等）。
+- 用于在不修改原有代码的情况下，将横切关注点（如日志、事务管理等）与核心业务逻辑分离开来，以提高代码的复用性和可维护性。即不惊动原始设计的基础上为其进行功能增强，基于代理模式实现。
+- AOP 实现的关键是切面（Aspect），切面可以定义通用的横切逻辑，并将其应用于应用程序的特定点（如方法调用、异常处理等）。  
 
 ### AOP核心概念
 
@@ -2163,15 +2130,8 @@ public class BookDaoImpl implements BookDao {
 
 ## 17 AOP入门案例
 
-### 需求分析
-
-测算接口执行效率。
-
-在方法执行前输出当前系统时间。
-
-
-
-### 思路分析
+- 需求：测算接口执行效率。在方法执行前输出当前系统时间。
+- 思路
 
 ```bash
 1.导入坐标(pom.xml)
@@ -2186,12 +2146,12 @@ public class BookDaoImpl implements BookDao {
 
 
 
-### 环境准备和AOP实现
+### 实现
 
 - 依赖
-  - 因为 spring-context 中已经导入了 spring-aop ，所以不需要再单独导入spring-aop。
-  - 直接采用Spring整合ApsectJ的方式进行AOP开发。
-    - 导入AspectJ的jar包，AspectJ 是 AOP 思想的一个具体实现，Spring有自己的AOP实现，但是相比于AspectJ来说比较麻烦。
+  - 因为 `spring-context` 中已经包含了 `spring-aop` ，所以不需要再单独导入spring-aop。
+  - 直接采用 Spring 整合 `ApsectJ` 的方式进行 AOP开发。导入 AspectJ 的jar包。
+    - AspectJ 是 AOP 思想的一个具体实现，Spring 有自己的 AOP 实现，但是相比于 AspectJ 来说比较麻烦。
 
 ```xml
 <dependency>
@@ -2199,6 +2159,7 @@ public class BookDaoImpl implements BookDao {
     <artifactId>spring-context</artifactId>
     <version>5.2.10.RELEASE</version>
 </dependency>
+
 <dependency>
     <groupId>org.aspectj</groupId>
     <artifactId>aspectjweaver</artifactId>
@@ -2222,7 +2183,8 @@ public class MyAdvice {
 // 【核心概念2,切入点Pointcut（哪些方法要追加功能）（匹配连接点的式子）】
 // 设置切入点，要求配置在方法上方
 @Pointcut("execution(void com.itheima.dao.BookDao.update())")
-private void pt(){}
+private void pt(){
+}
 ```
 
 - 将通知类配给容器并标识其为切面类
@@ -2235,13 +2197,14 @@ private void pt(){}
 @Component
 // 设置当前类为切面类
 @Aspect
-
 //【核心概念4,通知类（通知方法所在的类）】
 public class MyAdvice {
     //【核心概念2,切入点Pointcut（哪些方法要追加功能）（匹配连接点的式子）】
     //设置切入点，要求配置在方法上方
     @Pointcut("execution(void com.itheima.dao.BookDao.update())")
-    private void pt(){}
+    private void pt(){
+      
+    }
 
     //【核心概念5,切面Aspect（通知和切入点之间的关系描述）】
     //设置在切入点pt()的前面运行当前操作（前置通知）
@@ -2256,7 +2219,7 @@ public class MyAdvice {
 
 
 
-- 开启注解格式AOP功能：@EnableAspectJAutoProxy
+- 开启注解格式AOP功能：`@EnableAspectJAutoProxy`
 
 ```java
 @Configuration
@@ -2271,7 +2234,7 @@ public class SpringConfig {
 
 ### AOP工作流程
 
-由于AOP是基于Spring容器管理的bean做的增强，所以整个工作过程需要从Spring加载bean说起：
+由于AOP是基于Spring容器管理的 bean 做的增强，所以整个工作过程需要从Spring 加载 bean 说起。
 
 ```bash
 # 流程1:Spring容器启动
@@ -2305,7 +2268,7 @@ public class SpringConfig {
 如果目标对象中的方法不被增强，那么容器中将存入的是目标对象本身。
 ```
 
-通过这一节中，我们需要掌握的内容有：
+- 总结：
 
 ```bash
 能说出AOP的工作流程
