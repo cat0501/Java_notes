@@ -2032,103 +2032,34 @@ Junit 运行后是基于Spring环境运行的，所以Spring提供了一个专�
 
 
 
-## 16 AOP概述
+## 16-17 AOP
 
 - AOP（Aspect Oriented Programming）面向切面编程，是一种程序设计范式。
   - 不同于 OOP（Object Oriented Programming）面向对象编程的一种编程思想
 - 用于在不修改原有代码的情况下，将横切关注点（如日志、事务管理等）与核心业务逻辑分离开来，以提高代码的复用性和可维护性。即不惊动原始设计的基础上为其进行功能增强，基于代理模式实现。
 - AOP 实现的关键是切面（Aspect），切面可以定义通用的横切逻辑，并将其应用于应用程序的特定点（如方法调用、异常处理等）。  
 
-### AOP核心概念
+### 核心概念
 
 ```bash
 - 连接点（原始方法）
 - 切入点Pointcut（哪些方法要追加功能）（匹配连接点的式子）
-- 通知Advice（存放共性功能的方法）
-- 通知类（通知方法所在的类）
+- 通知Advice（存放共性功能的方法）、通知类（通知方法所在的类）
 - 切面Aspect（通知和切入点之间的关系描述）
 ```
 
 
 
-```java
-@Repository
-public class BookDaoImpl implements BookDao {
-    
-	// 计算万次执行消耗的时间
-    public void save() {
-        
-        Long startTime = System.currentTimeMillis(); // 记录程序当前执行时间（开始时间）
-        for (int i = 0;i<10000;i++) {	//业务执行万次
-            System.out.println("book dao save ...");
-        }
-        Long endTime = System.currentTimeMillis(); // 记录程序当前执行时间（结束时间）
-        // 计算时间差，记录耗时
-        Long totalTime = endTime-startTime;
-        System.out.println("执行万次消耗时间：" + totalTime + "ms");
-    }
-
-    public void update(){
-        System.out.println("book dao update ...");
-    }
-    public void delete(){
-        System.out.println("book dao delete ...");
-    }
-    public void select(){
-        System.out.println("book dao select ...");
-    }
-}
-```
-
-- 分别执行其 save , delete , update 和 select 方法后，打印结果如下
-
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220428113123545.png)
-
-- 对于计算万次执行消耗的时间，只有 `save`方法有相应代码逻辑，为什么`delete` 和 `update` 方法也会有呢?
-
-  为什么 `select` 方法为什么又没有呢？
-
-  - Spring的AOP，在不改动原有设计(代码)的前提下，想给谁添加功能就给谁添加。（无入侵式）
-
-
-- Spring到底是如何实现的呢?
-
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220428112331678.png)
 
-- 核心概念
-
-（1）类中的方法叫**连接点**。如上 BookServiceImpl 中的save 、update 、delete 和 select方法。
-
-（2）需要增强的方法叫**切入点**。如上的 update 和delete 方法。（会有多个）
-
-（3）存放共性功能的方法叫**通知**。执行BookServiceImpl的update和delete方法的时候，都被添加了一个计算万次执行消耗时间的功能（共性功能）。（会有多个）
-
-（4）通知和切入点之间的关系描述叫**切面**。哪个切入点需要添加哪个通知。
-
-（5）通知是一个方法，方法不能独立存在需要被写在一个类中，这个类我们也给起了个名字叫**通知类**。
+- 连接点：方法调用的地方就是连接点。（方法调用、方法执行时抛出异常和字段的访问等）
+- 切入点：定义了在哪些连接点上应该执行切面的逻辑。基于切入点表达式（可以匹配多个）。
+- 通知(Advice)/通知类：存放共性功能的方法/类，即在切入点处执行的操作。如计算万次执行消耗时间的功能（共性功能）。
+- 切面：通知和切入点之间的关系描述。哪个切入点需要添加哪个通知。
 
 
 
-```bash
-# 连接点(JoinPoint)：程序执行过程中的任意位置，粒度为执行方法、抛出异常、设置变量等
-- 在SpringAOP中，理解为方法的执行
-
-# 切入点(Pointcut):匹配连接点的式子
-- 在SpringAOP中，一个切入点可以描述一个具体方法，也可也匹配多个方法
-		- 一个具体的方法:如com.itheima.dao包下的BookDao接口中的无形参无返回值的save方法
-		- 匹配多个方法:所有的save方法，所有的get开头的方法，所有以Dao结尾的接口中的任意方法，所有带有一个# 参数的方法
-- 连接点范围要比切入点范围大，是切入点的方法也一定是连接点，但是是连接点的方法就不一定要被增强，所以可能不是切入点。
-
-# 通知(Advice):在切入点处执行的操作，也就是共性功能
-- 在SpringAOP中，功能最终以方法的形式呈现
-
-# 通知类：定义通知的类
-# 切面(Aspect):描述通知与切入点的对应关系。
-```
-
-
-
-## 17 AOP入门案例
+### 实现/入门案例
 
 - 需求：测算接口执行效率。在方法执行前输出当前系统时间。
 - 思路
@@ -2145,8 +2076,6 @@ public class BookDaoImpl implements BookDao {
 ```
 
 
-
-### 实现
 
 - 依赖
   - 因为 `spring-context` 中已经包含了 `spring-aop` ，所以不需要再单独导入spring-aop。
@@ -2232,6 +2161,41 @@ public class SpringConfig {
 
 
 
+```java
+@Repository
+public class BookDaoImpl implements BookDao {
+    
+	  // 计算万次执行消耗的时间
+    public void save() {
+        
+        Long startTime = System.currentTimeMillis(); // 记录程序当前执行时间（开始时间）
+        for (int i = 0;i<10000;i++) {	//业务执行万次
+            System.out.println("book dao save ...");
+        }
+        Long endTime = System.currentTimeMillis(); // 记录程序当前执行时间（结束时间）
+        // 计算时间差，记录耗时
+        Long totalTime = endTime-startTime;
+        System.out.println("执行万次消耗时间：" + totalTime + "ms");
+    }
+
+    public void update(){
+        System.out.println("book dao update ...");
+    }
+    public void delete(){
+        System.out.println("book dao delete ...");
+    }
+    public void select(){
+        System.out.println("book dao select ...");
+    }
+}
+```
+
+- 分别执行其 save , delete , update 和 select 方法后，打印结果如下
+
+![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220428113123545.png)
+
+
+
 ### AOP工作流程
 
 由于AOP是基于Spring容器管理的 bean 做的增强，所以整个工作过程需要从Spring 加载 bean 说起。
@@ -2268,23 +2232,9 @@ public class SpringConfig {
 如果目标对象中的方法不被增强，那么容器中将存入的是目标对象本身。
 ```
 
-- 总结：
-
-```bash
-能说出AOP的工作流程
-AOP的核心概念
-- 目标对象、连接点、切入点
-- 通知类、通知
-- 切面
-- 代理
-SpringAOP的本质或者可以说底层实现是通过代理模式。
-```
 
 
-
-### AOP配置管理
-
-#### AOP 切入点表达式
+### AOP 切入点表达式
 
 - 语法格式
 
@@ -2330,16 +2280,16 @@ execution(* com.itheima.*.*Service.save*(..))
 通常不使用异常作为匹配规则
 ```
 
-#### AOP通知类型
 
-AOP通知描述了抽取的共性功能，根据共性功能抽取的位置不同，最终运行代码时要将其加入到合理的位置。
 
-通知具体要添加到切入点的哪里？共提供了5种通知类型：
+### AOP 通知类型5种
+
+通知具体要添加到切入点的哪里？
 
 - 前置通知：追加功能到方法执行前
 - 后置通知：追加功能到方法执行后，不管方法执行的过程中有没有抛出异常都会执行。
 - 环绕通知 [ 重点 ]：环绕通知功能比较强大，它可以追加功能到方法执行的前后，这也是比较常用的方式。
-  - 它可以实现其他四种通知类型的功能
+  - 它可以实现其它四种通知类型的功能。
 
 - 返回后通知（了解）：追加功能到方法执行后，只有方法正常执行结束后才进行。
 - 抛出异常后通知（了解）：只有方法执行出异常才进行。
@@ -2412,15 +2362,15 @@ public class MyAdvice {
   - 由于无法预知原始方法运行后是否会抛出异常，因此环绕通知方法必须要处理 Throwable异常
 
 ```java
-    //@Around：环绕通知，在原始方法运行的前后执行
-    //@Around("pt()")
-    public Object around(ProceedingJoinPoint pjp) throws Throwable {
-        System.out.println("around before advice ...");
-        //表示对原始操作的调用
-        Object ret = pjp.proceed();
-        System.out.println("around after advice ...");
-        return ret;
-    }
+//@Around：环绕通知，在原始方法运行的前后执行
+//@Around("pt()")
+public Object around(ProceedingJoinPoint pjp) throws Throwable {
+    System.out.println("around before advice ...");
+    //表示对原始操作的调用
+    Object ret = pjp.proceed();
+    System.out.println("around after advice ...");
+    return ret;
+}
 ```
 
 
@@ -2745,12 +2695,12 @@ public class SpringConfig {
 
 
 
-### 18.2 Spring事务角色
+### 18.2 Spring事务角色 @Transactional
 
 重点要理解两个概念，分别是事务管理员和事务协调员。
 
 ```bash
-事务管理员：发起事务方，在Spring中通常指代业务层开启事务的方法
+事务管理员（Transaction Manager）：发起事务方，在Spring中通常指代业务层开启事务的方法
 事务协调员：加入事务方，在Spring中通常指代数据层方法，也可以是业务层方法
 ```
 
@@ -2765,8 +2715,7 @@ AccountDao的outMoney因为是修改操作，会开启一个事务T1
 AccountDao的inMoney因为是修改操作，会开启一个事务T2
 AccountService的transfer没有事务，
 - 运行过程中如果没有抛出异常，则T1和T2都正常提交，数据正确
-- 如果在两个方法中间抛出异常，T1因为执行成功提交事务，T2因为抛异常不会被执行
-- 就会导致数据出现错误
+- 如果在两个方法中间抛出异常，T1因为执行成功提交事务，T2因为抛异常不会被执行。就会导致数据出现错误。
 ```
 
 2. 开启Spring的事务管理后
@@ -2774,7 +2723,7 @@ AccountService的transfer没有事务，
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220428210228581.png)
 
 ```bash
-transfer上添加了@Transactional注解，在该方法上就会有一个事务T
+transfer上添加了@Transactional注解，在该方法上就会有一个事务 T
 
 AccountDao的outMoney方法的事务T1加入到transfer的事务T中
 AccountDao的inMoney方法的事务T2加入到transfer的事务T中
@@ -2790,7 +2739,7 @@ AccountDao的inMoney方法的事务T2加入到transfer的事务T中
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220428171708917.png)
 
-上面这些属性都可以在@Transactional注解的参数上进行设置。
+这些属性在 `@Transactional` 注解的参数上进行设置。
 
 ```bash
 readOnly：true只读事务，false读写事务，增删改要设为false,查询设为true。
@@ -2825,7 +2774,7 @@ public void transfer(String out, String in, Double money) throws IOException {
 }
 ```
 
-出现这个问题的原因是，Spring的事务只会对**Error异常**和**RuntimeException异常及其子类**进行事务回滚，其他的异常类型是不会回滚的，对应 IOException 不符合上述条件所以不回滚
+出现这个问题的原因是，Spring的事务只会对 **Error异常** 和 **RuntimeException异常及其子类** 进行事务回滚，其他的异常类型是不会回滚的，对应 IOException 不符合上述条件所以不回滚。
 
 
 
@@ -2891,7 +2840,7 @@ public class AccountServiceImpl implements AccountService {
 
 
 
-#### 事务传播行为 🎈
+#### 事务传播行为 propagation属性🎈
 
 - 事务传播行为：事务协调员对事务管理员所携带事务的处理态度。（propagation 属性）
 
