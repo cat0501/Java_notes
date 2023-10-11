@@ -37,7 +37,7 @@ SpringBoot 是由 `Pivotal` 团队提供的全新框架，其设计目的是用�
 
 
 
-## 1. 四种创建方式
+## 1. boot 应用四种创建方式
 - 1）基于IDEA
 - 2）基于官网：https://start.spring.io/
 - 3）基于阿里云：https://start.aliyun.com
@@ -49,19 +49,13 @@ SpringBoot 是由 `Pivotal` 团队提供的全新框架，其设计目的是用�
 
 详见：https://juejin.cn/post/7132483144501952525
 
-## 2. IDEA中隐藏指定文件/文件夹
-
-```bash
-Setting → File Types → Ignored Files and Folders
-
-输入要隐藏的文件名，支持*号通配符，回车确认添加。
-```
 
 
+## 2. 核心概念
 
-## 3. 核心概念
+`parent` 和 `stater` 主要解决配置问题。
 
-### 3.1 parent
+### 2.1 parent
 
 - SpringBoot 程序继承 `spring-boot-starter-parent`，各个版本包含的相应坐标版本不同（进行依赖管理，版本"统一"，避免版本冲突）。
 - 继承 parent 也可以采用引入依赖的形式，即使用 <dependencyManagement> 依赖 `spring-boot-dependencies`。
@@ -91,28 +85,17 @@ Setting → File Types → Ignored Files and Folders
 
 
 
-### 3.2 starter
+### 2.2 starter
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220302173752751.png?w=600)
 
-
-
-```bash
-# parent 和 stater 主要解决配置问题！！！
-
-# 实际开发
 使用任意坐标时，仅书写 GAV中的G和A，V由SpringBoot提供，除非SpringBoot未提供对应版本V。
-如发生坐标错误，再指定 Version（要小心版本冲突）。
 
-# starter
-1. 开发 SpringBoot 程序需要导入坐标时通常导入对应的 starter；
-2. 每个不同的 starter 根据功能不同，通常包含多个依赖坐标；
-3. 使用 starter 可以实现快速配置的效果，达到简化配置的目的。
-```
+添加依赖通常导入对应的 `starter`（包含多个依赖坐标），使用 starter 可以实现快速配置的效果，达到简化配置的目的。
 
 
 
-### 3.3 引导类
+### 2.3 引导类
 
 ```java
 // SpringBoot的引导类是Boot工程的执行入口，运行main方法就可以启动项目。
@@ -127,7 +110,7 @@ public class Springboot01QuickstartApplication {
 
 
 
-### 3.4 内嵌tomcat
+### 2.4 内嵌tomcat
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220326181954751.png)
 
@@ -149,34 +132,14 @@ public class Springboot01QuickstartApplication {
   - 变更内嵌服务器思想是去除现有服务器，添加全新的服务器。
 
 
+## 3. 基础配置
 
-## 4. 基础配置
+- SpringBoot 默认配置文件 `application.properties`，通过键值对配置对应属性。[SpringBoot内置属性查询（官方文档中参考文档第一项：Application Properties）](https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html#application-properties)
+- SpringBoot 提供了3种配置文件格式，可共存，加载顺序为：`application.properties`（传统/默认格式） > `application.yml` （主流格式）> `application.yaml`
 
-- SpringBoot 默认配置文件 `application.properties`，通过键值对配置对应属性。
-  - [SpringBoot内置属性查询（官方文档中参考文档第一项：Application Properties）](https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html#application-properties)
+### 3.1 yaml（YAML Ain't Markup Language）
 
-- SpringBoot 提供了3种配置文件格式，可共存，加载顺序为：
-  - `application.properties`（传统/默认格式） > `application.yml` （主流格式）> application.yaml
-
-- 自动提示功能消失解决方案
-  - Setting → Project Structure → Facets → 选中对应项目/工程 → Customize Spring Boot → 选择配置文件
-
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220302195211634.png)
-
-
-
-### 4.1 yaml（YAML Ain't Markup Language）
-
-```bash
-# 介绍
-一种数据序列化格式。
-
-# 优点
-容易阅读；容易与脚本语言交互；以数据为核心，重数据轻格式。
-
-# YAML文件扩展名
-.yml（主流）和 .yaml
-```
+一种数据序列化格式。扩展名为`.yml`和 `.yaml`。
 
 
 
@@ -202,27 +165,23 @@ public class Springboot01QuickstartApplication {
 
 
 
-#### 痛点1：读取数据过多
+#### 两个技巧
 
-> 读取数据过多
+- 读取数据过多（如上读取多少值需要 `@Value`获取多少次），可以直接注入`org.springframework.core.env.Environment` ，通过 `getProperty(xxx)` 获取对应值。
 
-![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220302200800230.png?w=600)
+```java
+@Autowired
+private Environment environment;
+
+log.info("{}", environment.getProperty("lesson"));
+log.info("{}", environment.getProperty("server.port"));
+```
 
 
-
-解决：封装全部数据到 Environment 对象。
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220302200833382.png?w=600)
 
-
-
-#### 痛点2：前缀长
-
-> 统一定义前缀
->
-> 使用 `@ConfigurationProperties` 注解绑定配置信息到封装类中
->
-> 封装类需要定义为 Spring 管理的 bean，否则无法进行属性注入
+- 前缀长，可通过`@ConfigurationProperties` 注解配置统一前缀。注意要定义为 Spring 管理的 bean。
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220302202542461.png)
 
@@ -232,7 +191,13 @@ public class Springboot01QuickstartApplication {
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220302202643245.png?w=600)
 
+### 3.2 IDEA中隐藏指定文件/文件夹
 
+```
+Setting → File Types → Ignored Files and Folders
+
+输入要隐藏的文件名，支持*号通配符，回车确认添加。
+```
 
 ## 4. 整合第三方技术
 
@@ -242,18 +207,13 @@ public class Springboot01QuickstartApplication {
 - 整合Druid
 - 基于SpringBoot的SSMP整合案例
 
-
-
-### 4.1 整合Junit
-
-`@SpringBootTest` 测试类注解，测试类定义上方。作用是设置 JUnit 加载的SpringBoot启动类。
+### 4.1 整合 Junit
 
 ```bash
 1. 导入测试对应的starter
-2. 测试类使用 @SpringBootTest注解修饰
+2. 测试类使用 @SpringBootTest注解修饰（设置 JUnit 加载的SpringBoot启动类）
 3. 使用自动装配的形式添加要测试的对象
 ```
-
 
 
 ```java
@@ -272,14 +232,10 @@ class Springboot07JunitApplicationTests {
 
 
 ### 4.2 整合 swagger 接口文档
-
 - 官网：https://swagger.io/docs/
-
 - 详见：https://juejin.cn/post/7132483144501952525/#heading-8
 
-
-
-### 4.3 整合Mybatis
+### 4.3 整合 Mybatis
 
 ```bash
 # 思考🤔
@@ -293,9 +249,7 @@ class Springboot07JunitApplicationTests {
 4.测试类中注入dao接口，测试功能
 ```
 
-
-
-> （1）导入MyBatis对应的starter
+- 添加依赖：引入 MyBatis 对应的 starter
 
 ```xml
 <dependency>
@@ -305,17 +259,15 @@ class Springboot07JunitApplicationTests {
 </dependency>
 ```
 
+- 配置数据源信息
 
-
-> （2）设置数据源参数
-
-```properties
+```yaml
 spring:
-	datasource:
-		driver-class-name: com.mysql.cj.jdbc.Driver
-		url: jdbc:mysql://localhost:3306/ssm_db
-		username: root
-		password: root
+  datasource:
+	driver-class-name: com.mysql.cj.jdbc.Driver
+	url: jdbc:mysql://localhost:3306/ssm_db
+	username: root
+	password: root
 ```
 
 
@@ -327,23 +279,19 @@ jdbc:mysql://localhost:3306/ssm_db?serverTimezone=UTC
 或在MySQL数据库端配置时区解决此问题
 ```
 
+- 定义数据层接口与映射配置
 
-
-> （3）定义数据层接口与映射配置
->
 > 数据库SQL映射需要添加 @Mapper 被容器识别到
 
 ```java
 @Mapper
 public interface UserDao {
-		@Select("select * from user")
-		public List<User> getAll();
+    @Select("select * from user")
+    public List<User> getAll();
 }
 ```
 
-
-
-> （4）测试类中注入 dao 接口，测试功能
+- 测试
 
 ```java
 @SpringBootTest
@@ -361,23 +309,11 @@ class Springboot08MybatisApplicationTests {
 
 
 
-### 4.4 整合Mybatis-Plus
+### 4.4 整合 Mybatis-Plus
 
-```bash
-# MyBatis-Plus与MyBatis区别
-- 导入坐标不同
-- 数据层实现简化
+MyBatis-Plus 相比 MyBatis，数据层实现简化。
 
-# 整合步骤
-1.手动添加SpringBoot整合MyBatis-Plus的坐标，可以通过mvn repository获取
-- 由于SpringBoot中未收录MyBatis-Plus的坐标版本，需要指定对应的Version
-2.定义数据层接口与映射配置，继承 BaseMapper
-3.其他同SpringBoot整合MyBatis
-```
-
-
-
-> ① 添加坐标👈🏻
+> ① 添加坐标👈🏻（由于SpringBoot中未收录MyBatis-Plus的坐标版本，需要指定对应的Version）
 
 ```xml
 <dependency> 
@@ -389,9 +325,9 @@ class Springboot08MybatisApplicationTests {
 
 
 
-> ② 定义数据层接口与映射配置，继承**BaseMapper**
+> ② 定义数据层接口与映射配置，继承 **BaseMapper**
 >
-> ③ 其他同SpringBoot整合MyBatis
+> ③ 其它同SpringBoot整合MyBatis
 
 ```java
 @Mapper
@@ -402,17 +338,7 @@ public interface UserDao extends BaseMapper<User> {
 
 
 
-### 4.5 整合Druid
-
-```bash
-# 整合步骤
-1. 指定数据源类型
-2. 导入Druid对应的starter
-
-# 可以变更Druid的配置方式
-```
-
-
+### 4.5 整合 Druid
 
 > ① 指定数据源类型
 
@@ -432,15 +358,15 @@ spring:
 
 ```xml
 <dependency> 
-  	<groupId>com.alibaba</groupId> 
-  	<artifactId>druid-spring-boot-starter</artifactId> 
-  	<version>1.2.6</version>
+    <groupId>com.alibaba</groupId> 
+    <artifactId>druid-spring-boot-starter</artifactId> 
+    <version>1.2.6</version>
 </dependency>
 ```
 
 
 
-> 变更Druid的配置方式
+> 可以变更 Druid 的配置方式
 
 ```yaml
 spring:
@@ -495,7 +421,6 @@ spring:
 ## 6. 打包与运行
 
 - SpringBoot 打包插件，参考：https://blog.csdn.net/iss_jin/article/details/122463390
-
 ```xml
 <build>
     <plugins>
@@ -506,17 +431,13 @@ spring:
     </plugins>
 </build>
 ```
-
 - SpringBoot 应用可以基于 `java` 环境下独立运行 `jar` 文件启动服务
-- 一般流程
-
 ```bash
-mvn -v clean package -DskipTests
+mvn clean install package -Dmaven.test.skip=true
 
-java –jar xxx.jar
+nohup java –jar xxx.jar &
 ```
-
-- 可执行 jar 包目录结构
+- 可执行 `jar` 包目录结构
 
 ![](https://notes2021.oss-cn-beijing.aliyuncs.com/2021/image-20220304123510884.png?w=600)
 
@@ -665,12 +586,22 @@ taskkill -f -t -im "进程名称"
 
 ### 9.1 日志基础
 
-> 日志作用
-> - 编程期调试代码
-> - 运行期记录信息
->   - 记录日常运营重要信息（峰值流量、平均响应时长……） 
->   - 记录应用报错信息（错误堆栈）
->   - 记录运维过程数据（扩容、宕机、报警……）
+- 编程期调试代码
+- 运行期记录信息
+  - 记录日常运营重要信息（峰值流量、平均响应时长……） 
+  - 记录应用报错信息（错误堆栈）
+  - 记录运维过程数据（扩容、宕机、报警……）
+
+```
+日志级别6类
+
+- TRACE：运行堆栈信息，使用率低
+- DEBUG：程序员调试代码使用
+- INFO：记录运维过程数据
+- WARN：记录运维过程报警数据
+- ERROR：记录错误堆栈信息
+- FATAL：灾难信息，合并计入ERROR
+```
 
 
 
@@ -696,17 +627,6 @@ public class BookController extends BaseController {
 }
 ```
 
-```bash
-日志级别
-
-- TRACE：运行堆栈信息，使用率低
-- DEBUG：程序员调试代码使用
-- INFO：记录运维过程数据
-- WARN：记录运维过程报警数据
-- ERROR：记录错误堆栈信息
-- FATAL：灾难信息，合并计入ERROR
-```
-
 
 
 > ②：设置日志输出级别
@@ -723,7 +643,7 @@ logging:
 
 
 
-> ③：设置日志组，控制指定包对应的日志输出级别，也可以直接控制指定包对应的日志输出级别
+> ③：设置日志组，指定包对应的日志输出级别
 
 ```yaml
 logging:
@@ -739,10 +659,7 @@ logging:
     com.itheima.controller: debug
 ```
 
-- 总结一下
-  - 日志用于记录开发调试与运维过程消息
-  - 日志的级别共6种，通常使用4种即可，分别是 DEBUG，INFO, WARN, ERROR
-  - 可以通过**日志组**或**代码包**的形式进行日志显示级别的控制
+
 
 #### @Slf4j 注解优化日志对象创建
 
