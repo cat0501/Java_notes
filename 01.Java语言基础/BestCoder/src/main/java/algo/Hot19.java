@@ -2,7 +2,7 @@ package algo;
 
 /**
  * @author cat
- * @description
+ * @description 删除链表倒数第n个结点
  * @date 2023/9/28 19:17
  */
 public class Hot19 {
