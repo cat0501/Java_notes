@@ -296,6 +296,16 @@ git push --force
 
 # 	Q&A
 
+## 代理
+
+```sh
+git config --global http.proxy 'http://127.0.0.1:http端口号'
+ 
+git config --global https.proxy 'https://127.0.0.1:https端口号'
+```
+
+
+
 ## 一个本地库能不能既关联 GitHub，又关联 Gitee 呢？
 
 > 答案是肯定的，因为 git 本身是分布式版本控制系统，可以同步到另外一个远程库，当然也可以同步到另外两个远程库。
