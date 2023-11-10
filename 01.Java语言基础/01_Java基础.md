@@ -3230,13 +3230,10 @@ HashSet(int initialCapacity, float loadFactor, boolean dummy) {
 
 ### 概述
 
-- 与 `Collection` 接口并列存在。用于保存具有**映射关系**的 `key-value` 数据。
-
-- key 和 value 可以是任何引用类型的数据。常用 `String` 类作为Map的“键”。
-- key 用Set来存放，**不允许重复**。
+- 与 `Collection` 接口并列存在。保存 `key-value` 数据。
+- key （常用 `String` ）和 value 可以是任何引用类型的数据。
+- key 用 Set 来存放，**不允许重复**。对于指定 key，存在唯一确定的 value。（单向一对一关系）
   - 即同一个 Map 对象所对应的类，须重写 hashCode() 和 equals() 方法。
-
-- key 和 value 之间存在单向一对一关系，即通过指定的 key 总能找到唯一的、确定的 value。
 
 Map接口的常用实现类：`HashMap`（使用频率最高）、`TreeMap`、`LinkedHashMap` 和 `Properties`。
 
