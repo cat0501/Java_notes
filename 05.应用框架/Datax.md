@@ -58,7 +58,35 @@ channel中的一条数据为一个Record的对象，Record中可以放多个Colu
 
 
 
+```sh
+2024-01-08 10:04:45.855 [job-0] INFO  StandAloneJobContainerCommunicator - Total 5636608 records, 1135806841 bytes | Speed 3.24MB/s, 16963 records/s | Error 0 records, 0 bytes |  All Task WaitWriterTime 116.061s |  All Task WaitReaderTime 193.444s | Percentage 0.00%
+2024-01-08 10:04:55.908 [job-0] INFO  StandAloneJobContainerCommunicator - Total 5818976 records, 1172218334 bytes | Speed 3.47MB/s, 18236 records/s | Error 0 records, 0 bytes |  All Task WaitWriterTime 120.122s |  All Task WaitReaderTime 199.688s | Percentage 0.00%
 
+
+
+2024-01-08 10:19:00.501 [0-0-0-reader] INFO  CommonRdbmsReader$Task - Finished read record by Sql: [SELECT * FROM bitnei_ods.ods_dcsy_nation_screen_t_veh_product_info_statistic
+] jdbcUrl:[jdbc:hive2://cnbjfcysjztzk01:2181,cnbjfcysjztzk02:2181,cnbjfcysjztzk03:2181/default;password=root;serviceDiscoveryMode=zooKeeper;user=root;zooKeeperNamespace=hiveserver2&principal=hive/_HOST@SJZT.COM].
+2024-01-08 10:19:01.760 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] taskId[0] is successed, used[1176142]ms
+2024-01-08 10:19:01.761 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] completed it's tasks.
+2024-01-08 10:19:06.092 [job-0] INFO  StandAloneJobContainerCommunicator - Total 21614558 records, 4540357942 bytes | Speed 3.48MB/s, 17459 records/s | Error 0 records, 0 bytes |  All Task WaitWriterTime 446.948s |  All Task WaitReaderTime 718.978s | Percentage 100.00%
+
+
+
+2024-01-08 10:19:06.098 [job-0] INFO  JobContainer - 
+任务启动时刻                    : 2024-01-08 09:59:23
+任务结束时刻                    : 2024-01-08 10:19:06
+任务总计耗时                    :               1182s
+任务平均流量                    :            3.67MB/s
+记录写入速度                    :          18317rec/s
+读出记录总数                    :            21614558
+读写失败总数                    :                   0
+```
+
+
+
+
+
+![](.\img\datax_chuanshu.png)
 
 
 
