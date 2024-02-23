@@ -8,15 +8,60 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class TaskParamsHandle {
     public static void main(String[] args) {
+        List<String> aaaaaa = new ArrayList<>();
+        aaaaaa.add("last_run_time,last_use_time,pdate,vin");
+
+        List<String> resultList = new ArrayList<>();
+        for (String str : aaaaaa) {
+            String[] splitValues = str.split(",");
+            resultList.addAll(Arrays.asList(splitValues));
+        }
+        System.out.println(resultList);
+        System.out.println(resultList.size());
+
+        System.out.println(aaaaaa.contains("vin"));
+
+        System.out.println("--------------------------------");
+        List<String> columnList2 = new ArrayList<String>();
+        columnList2.add("a,a2");
+        columnList2.add("a1");
+        System.out.println(columnList2.contains("a2"));
+        System.out.println("--------------------------------");
+
+
+
+        Set<String> fieldNames = new HashSet<>();
+        fieldNames.add("fieldName".toLowerCase());
+        // fieldNames.add("fieldNamE".toLowerCase());
+        System.out.println(fieldNames.contains("fieldNamE".toLowerCase().toLowerCase()));
+
+        List<String> permissionStrList = new ArrayList<>();
+        permissionStrList.add("write");
+        permissionStrList.add("select");
+
+        List<String> distinctSortedPermissionStrList = permissionStrList.stream()
+                .distinct()
+                .sorted((s1, s2) -> {
+                    if (s1.equals("select") && s2.equals("write")) {
+                        return -1; // 先 select 后 write
+                    } else if (s1.equals("write") && s2.equals("select")) {
+                        return 1; // 先 select 后 write
+                    } else {
+                        return s1.compareTo(s2); // 其他情况按字符串正序排序
+                    }
+                })
+                .collect(Collectors.toList());
+
+        System.out.println(distinctSortedPermissionStrList);
+
+
+
         String aaa = "area_dept,city_dept,drive_mode,entry_date,first_reg,fule_consume_quantity,license_plate,power,power_amount,province_dept,un_name,unit_name,unloadad_weight,update_time,veh_category,veh_category_2,veh_level,veh_model_name";
         List<String> list = new ArrayList<>();
         list.add(aaa);
